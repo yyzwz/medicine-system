@@ -1,4 +1,3 @@
-// 统一请求路径前缀在libs/axios.js中修改
 import { getRequest, postRequest, putRequest, postBodyRequest, getNoAuthRequest, postNoAuthRequest } from '@/libs/axios';
 
 
@@ -15,7 +14,6 @@ export const getDictData = "/xboot/dictData/getByType/"
 // Websocket
 export const ws = "/xboot/ws"
 
-// 自己写的开始
 export const deleteOne = (params) => {
     return getRequest('/roster/deleteOne', params)
 }
@@ -52,12 +50,6 @@ export const chongZhi = (params) => {
 export const getMedicineList = (params) => {
     return getRequest('/medicine/getByPage', params)
 }
-
-
-// 自己写的结束
-
-
-
 // 登陆
 export const login = (params) => {
     return postNoAuthRequest('/login', params)
@@ -143,24 +135,6 @@ export const getNotice = (params) => {
     return getNoAuthRequest('/setting/notice', params)
 }
 
-
-
-// github登录
-export const githubLogin = (params) => {
-    return getNoAuthRequest('/social/github/login', params)
-}
-// qq登录
-export const qqLogin = (params) => {
-    return getNoAuthRequest('/social/qq/login', params)
-}
-// 微博登录
-export const weiboLogin = (params) => {
-    return getNoAuthRequest('/social/weibo/login', params)
-}
-// 微信登录
-export const wechatLogin = (params) => {
-    return getNoAuthRequest('/social/wechat/login', params)
-}
 // 绑定账号
 export const relate = (params) => {
     return postNoAuthRequest('/social/relate', params)
@@ -169,8 +143,6 @@ export const relate = (params) => {
 export const getJWT = (params) => {
     return getNoAuthRequest('/social/getJWT', params)
 }
-
-
 
 // 获取绑定账号信息
 export const relatedInfo = (username, params) => {
@@ -184,8 +156,6 @@ export const unRelate = (params) => {
 export const getRelatedListData = (params) => {
     return getRequest('/relate/findByCondition', params)
 }
-
-
 
 // 获取用户数据 多条件
 export const getUserListData = (params) => {
@@ -231,9 +201,6 @@ export const importUserData = (params) => {
 export const resetUserPass = (params) => {
     return postRequest('/user/resetPass', params)
 }
-
-
-
 // 获取一级部门
 export const initDepartment = (params) => {
     return getRequest('/department/getByParentId/0', params)
@@ -258,8 +225,6 @@ export const deleteDepartment = (params) => {
 export const searchDepartment = (params) => {
     return getRequest('/department/search', params)
 }
-
-
 
 // 获取全部角色数据
 export const getAllRoleList = (params) => {
@@ -294,8 +259,6 @@ export const deleteRole = (params) => {
     return postRequest('/role/delByIds', params)
 }
 
-
-
 // 获取全部权限数据
 export const getAllPermissionList = (params) => {
     return getRequest('/permission/getAllList', params)
@@ -316,8 +279,6 @@ export const deletePermission = (params) => {
 export const searchPermission = (params) => {
     return getRequest('/permission/search', params)
 }
-
-
 
 // 获取全部字典
 export const getAllDictList = (params) => {
@@ -360,8 +321,6 @@ export const getDictDataByType = (type, params) => {
     return getRequest(`/dictData/getByType/${type}`, params)
 }
 
-
-
 // 分页获取日志数据
 export const getLogListData = (params) => {
     return getRequest('/log/getAllByPage', params)
@@ -374,7 +333,6 @@ export const deleteLog = (params) => {
 export const deleteAllLog = (params) => {
     return postRequest('/log/delAll', params)
 }
-
 
 // 分页获取Redis数据
 export const getRedisData = (params) => {
@@ -408,70 +366,6 @@ export const deleteRedis = (params) => {
 export const deleteAllRedis = (params) => {
     return postRequest('/redis/delAll', params)
 }
-
-
-
-// 分页获取定时任务数据
-export const getQuartzListData = (params) => {
-    return getRequest('/quartzJob/getAllByPage', params)
-}
-// 添加定时任务
-export const addQuartz = (params) => {
-    return postRequest('/quartzJob/add', params)
-}
-// 编辑定时任务
-export const editQuartz = (params) => {
-    return postRequest('/quartzJob/edit', params)
-}
-// 暂停定时任务
-export const pauseQuartz = (params) => {
-    return postRequest('/quartzJob/pause', params)
-}
-// 恢复定时任务
-export const resumeQuartz = (params) => {
-    return postRequest('/quartzJob/resume', params)
-}
-// 删除定时任务
-export const deleteQuartz = (params) => {
-    return postRequest('/quartzJob/delByIds', params)
-}
-
-
-
-// 分页获取消息数据
-export const getMessageData = (params) => {
-    return getRequest('/message/getByCondition', params)
-}
-// 获取单个消息详情
-export const getMessageDataById = (id, params) => {
-    return getRequest(`/message/get/${id}`, params)
-}
-// 添加消息
-export const addMessage = (params) => {
-    return postRequest('/message/add', params)
-}
-// 编辑消息
-export const editMessage = (params) => {
-    return postRequest('/message/edit', params)
-}
-// 删除消息
-export const deleteMessage = (params) => {
-    return postRequest('/message/delByIds', params)
-}
-// 分页获取消息推送数据
-export const getMessageSendData = (params) => {
-    return getRequest('/messageSend/getByCondition', params)
-}
-// 编辑发送消息
-export const editMessageSend = (params) => {
-    return putRequest('/messageSend/update', params)
-}
-// 删除发送消息
-export const deleteMessageSend = (params) => {
-    return postRequest('/messageSend/delByIds', params)
-}
-
-
 
 // 分页获取文件数据
 export const getFileListData = (params) => {

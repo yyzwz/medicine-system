@@ -107,21 +107,15 @@ import {
   getAllInsurance
 } from '../../../api/index.js';
 import { 
-  selectNo,
-  getGuiShuList,
-  getAllRoleList, addUser, editUser,addDingDingDepartment,updateDingDept,addHuaOnDing,editHuaOnDing,checkTel,getAllShangBao,getAllSheBao,newaddHuaOnDing,newaddHuaOnDing1} from "./index";
+  getAllRoleList, editHuaOnDing,checkTel,getAllShangBao,getAllSheBao,newaddHuaOnDing1} from "./index";
 import {
-  validateUsername,
   validateMobile,
-  validatePassword
 } from "@/libs/validate";
-import departmentTreeChoose from "@/views/my-components/xboot/multDepartment-tree-choose";
-import uploadPicInput from "@/views/my-components/xboot/upload-pic-input";
-import SetPassword from "@/views/my-components/xboot/set-password";
+import uploadPicInput from "@/views/my-components/zwz/upload-pic-input";
+import SetPassword from "@/views/my-components/zwz/set-password";
 export default {
   name: "user",
   components: {
-    departmentTreeChoose,
     uploadPicInput,
     SetPassword
   },

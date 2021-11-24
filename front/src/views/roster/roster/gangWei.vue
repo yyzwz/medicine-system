@@ -52,13 +52,11 @@ import {
   validateMobile,
   validatePassword
 } from "@/libs/validate";
-import {getDepartmentList,getUserByDepId,deleteDingUser,updateDingUser,getOneHua,addHua,editHuaOnDing,getCityByIdcard} from "./index";
-import addEditUser from './addEditUser';
+import {getCityByIdcard} from "./index";
 // 编辑保安管理范围列表组件
 export default {
   name: "anbao-fanwei",
   components: {
-    addEditUser
   },
   data() {
     return {

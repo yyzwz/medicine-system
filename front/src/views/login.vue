@@ -142,20 +142,18 @@
 import {
   login,
   userInfo,
-  getJWT,
   sendLoginTxSms,
   sendLoginInTxSms,
   initCaptcha,
   drawCodeImage,
-  getOtherSet,
 } from "@/api/index";
 import { validateMobile } from "@/libs/validate";
 import Cookies from "js-cookie";
 import Header from "@/views/main-components/header";
 import Footer from "@/views/main-components/footer";
 import LangSwitch from "@/views/main-components/lang-switch";
-import RectLoading from "@/views/my-components/xboot/rect-loading";
-import CountDownButton from "@/views/my-components/xboot/count-down-button";
+import RectLoading from "@/views/my-components/zwz/rect-loading";
+import CountDownButton from "@/views/my-components/zwz/count-down-button";
 import util from "@/libs/util.js";
 export default {
   components: {

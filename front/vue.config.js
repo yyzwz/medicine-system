@@ -1,24 +1,22 @@
 const CompressionPlugin = require('compression-webpack-plugin');
-
+const webpack = require('webpack')
 module.exports = {
     devServer: {
-        host: '127.0.0.1',
+        host: '0.0.0.0',
         port: 8080,
         proxy: {
             '/xboot': {
-                target: 'http://127.0.0.1:8888',  // 请求本地 需要xboot后端项目
+                target: 'http://127.0.0.1:8888',
                 ws: true
             },
             '/foo': {
                 target: '<other_url>'
             }
-        }
+        },
+        disableHostCheck: true
     },
-    // 打包时不生成.map文件 避免看到源码
     productionSourceMap: false,
-    // 部署优化
     configureWebpack: {
-        // 使用CDN
         externals: {
             vue: 'Vue',
             'vue-i18n': 'VueI18n',
@@ -44,11 +42,10 @@ module.exports = {
             vuedraggable: 'vuedraggable',
             viewerjs: 'Viewer'
         },
-        // GZIP压缩
         plugins: [
             new CompressionPlugin({
-                test: /\.js$|\.html$|\.css/, // 匹配文件
-                threshold: 10240 // 对超过10k文件压缩
+                test: /\.js$|\.html$|\.css/,
+                threshold: 10240
             })
         ]
     }

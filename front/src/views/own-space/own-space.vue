@@ -128,73 +128,6 @@
                 </div>
               </div>
             </div>
-            <div v-show="currMenu=='第三方账号绑定'" class="safe">
-              <div class="item">
-                <div style="display:flex;align-items:center">
-                  <Icon type="logo-github" size="42" color="#181617" style="margin-right: 16px;" />
-                  <div>
-                    <div class="title">Github</div>
-                    <div class="desc">
-                      <span v-if="relate.github">已绑定Github账号：{{relate.githubUsername}}</span>
-                      <span v-else>当前未绑定Github账号</span>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <a v-if="!relate.github" @click="toRelateGithub()">立即绑定</a>
-                  <a v-else @click="unRelateGithub()">解除绑定</a>
-                </div>
-              </div>
-              <div class="item">
-                <div style="display:flex;align-items:center">
-                  <img src="@/assets/QQ.png" width="42px" style="margin-right: 16px"/>
-                  <div>
-                    <div class="title">QQ</div>
-                    <div class="desc">
-                      <span v-if="relate.qq">已绑定QQ账号：{{relate.qqUsername}}</span>
-                      <span v-else>当前未绑定QQ账号</span>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <a v-if="!relate.qq" @click="toRelateQQ()">立即绑定</a>
-                  <a v-else @click="unRelateQQ()">解除绑定</a>
-                </div>
-              </div>
-              <div class="item">
-                <div style="display:flex;align-items:center">
-                  <icon name="brands/weixin" scale="2.5" style="margin: 0 16px 0 2px;color:#60c126"></icon>
-                  <div>
-                    <div class="title">微信</div>
-                    <div class="desc">
-                      <span v-if="relate.wechat">已绑定微信账号：{{relate.wechatUsername}}</span>
-                      <span v-else>当前未绑定微信账号</span>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <a v-if="!relate.wechat" @click="toRelateWechat()">立即绑定</a>
-                  <a v-else @click="unRelateWechat()">解除绑定</a>
-                </div>
-              </div>
-              <div class="item">
-                <div style="display:flex;align-items:center">
-                  <img src="@/assets/weibo.png" width="41px" style="margin-right: 16px"/>
-                  <div>
-                    <div class="title">微博</div>
-                    <div class="desc">
-                      <span v-if="relate.weibo">已绑定微博账号：{{relate.weiboUsername}}</span>
-                      <span v-else>当前未绑定微博账号</span>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <a v-if="!relate.weibo" @click="toRelateWeibo()">立即绑定</a>
-                  <a v-else @click="unRelateWeibo()">解除绑定</a>
-                </div>
-              </div>
-              <Spin fix v-if="jumping">跳转中...</Spin>
-            </div>
             <div v-show="currMenu=='消息通知'" class="safe">
               <div class="item">
                 <div>
@@ -302,22 +235,16 @@ import {
   userInfo,
   userInfoEdit,
   relatedInfo,
-  unRelate,
-  githubLogin,
-  qqLogin,
-  weiboLogin,
-  wechatLogin,
   sendEditEmail,
   editEmail,
   sendEditMobileSms,
   changeMobile
 } from "@/api/index";
 import { validateMobile } from "@/libs/validate";
-import CountDownButton from "@/views/my-components/xboot/count-down-button";
-import uploadPicThumb from "@/views/my-components/xboot/upload-pic-thumb";
-import checkPassword from "@/views/my-components/xboot/check-password";
+import CountDownButton from "@/views/my-components/zwz/count-down-button";
+import uploadPicThumb from "@/views/my-components/zwz/upload-pic-thumb";
+import checkPassword from "@/views/my-components/zwz/check-password";
 import Cookies from "js-cookie";
-import messageVue from "../message/message.vue";
 export default {
   components: {
     uploadPicThumb,
@@ -357,7 +284,7 @@ export default {
       saveLoading: false,
       sending: false,
       getSms: "获取验证码",
-      canSendMobileCode: true, // 是否可点获取验证码
+      canSendMobileCode: true,
       checkCodeLoading: false,
       checkPassLoading: false,
       editEmailLoading: false,
@@ -373,7 +300,7 @@ export default {
           { type: "email", message: "邮箱格式不正确" }
         ]
       },
-      editMobileVisible: false, // 显示填写验证码box
+      editMobileVisible: false,
       editEmailVisible: false,
       canSendEditEmail: true,
       relate: {},
@@ -385,7 +312,6 @@ export default {
   methods: {
     init() {
       let v = JSON.parse(Cookies.get("userInfo"));
-      // 转换null为""
       for (let attr in v) {
         if (v[attr] == null) {
           v[attr] = "";
@@ -433,122 +359,6 @@ export default {
     },
     changeMenu(v) {
       this.currMenu = v;
-    },
-    toRelateGithub() {
-      this.jumping = true;
-      githubLogin().then(res => {
-        if (res.success) {
-          window.location.href = res.result;
-        } else {
-          this.jumping = false;
-        }
-      });
-    },
-    toRelateQQ() {
-      this.jumping = true;
-      qqLogin().then(res => {
-        if (res.success) {
-          window.location.href = res.result;
-        } else {
-          this.jumping = false;
-        }
-      });
-    },
-    toRelateWeibo() {
-      this.jumping = true;
-      weiboLogin().then(res => {
-        if (res.success) {
-          window.location.href = res.result;
-        } else {
-          this.jumping = false;
-        }
-      });
-    },
-    toRelateWechat() {
-      this.jumping = true;
-      wechatLogin().then(res => {
-        if (res.success) {
-          window.location.href = res.result;
-        } else {
-          this.jumping = false;
-        }
-      });
-    },
-    unRelateGithub() {
-      this.$Modal.confirm({
-        title: "确认解绑Github账号",
-        content: "您确认要解除绑定 " + this.relate.githubUsername + " ?",
-        loading: true,
-        onOk: () => {
-          let params = {
-            ids: [this.relate.githubId]
-          };
-          unRelate(params).then(res => {
-            this.$Modal.remove();
-            if (res.success) {
-              this.$Message.success("操作成功");
-              this.relate.github = false;
-            }
-          });
-        }
-      });
-    },
-    unRelateQQ() {
-      this.$Modal.confirm({
-        title: "确认解绑QQ账号",
-        content: "您确认要解除绑定 " + this.relate.qqUsername + " ?",
-        loading: true,
-        onOk: () => {
-          let params = {
-            ids: [this.relate.qqId]
-          };
-          unRelate(params).then(res => {
-            this.$Modal.remove();
-            if (res.success) {
-              this.$Message.success("操作成功");
-              this.relate.qq = false;
-            }
-          });
-        }
-      });
-    },
-    unRelateWeibo() {
-      this.$Modal.confirm({
-        title: "确认解绑微博账号",
-        content: "您确认要解除绑定 " + this.relate.weiboUsername + " ?",
-        loading: true,
-        onOk: () => {
-          let params = {
-            ids: [this.relate.weiboId]
-          };
-          unRelate(params).then(res => {
-            this.$Modal.remove();
-            if (res.success) {
-              this.$Message.success("操作成功");
-              this.relate.weibo = false;
-            }
-          });
-        }
-      });
-    },
-    unRelateWechat() {
-      this.$Modal.confirm({
-        title: "确认解绑微信账号",
-        content: "您确认要解除绑定 " + this.relate.wechatUsername + " ?",
-        loading: true,
-        onOk: () => {
-          let params = {
-            ids: [this.relate.wechatId]
-          };
-          unRelate(params).then(res => {
-            this.$Modal.remove();
-            if (res.success) {
-              this.$Message.success("操作成功");
-              this.relate.wechat = false;
-            }
-          });
-        }
-      });
     },
     showChangeMobile() {
       this.$refs.checkPassMobile.show();
@@ -694,13 +504,10 @@ export default {
       });
     },
     updateUserInfo() {
-      // 更新用户信息
       userInfo().then(res => {
         if (res.success) {
-          // 避免超过大小限制
           delete res.result.permissions;
           if (this.getStore("saveLogin")) {
-            // 保存7天
             Cookies.set("userInfo", JSON.stringify(res.result), {
               expires: 7
             });

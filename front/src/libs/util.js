@@ -445,7 +445,7 @@ util.initRouterNode = function (routers, data) {
         let meta = {};
         // 给页面添加权限、标题、第三方网页链接
         meta.permTypes = menu.permTypes ? menu.permTypes : null;
-        meta.title = menu.title ? menu.title + " - 城乡居民大病保险管理系统 By: 唐倩" : null;
+        meta.title = menu.title ? menu.title + " - 城乡居民大病保险管理系统 By: 郑为中" : null;
         meta.url = menu.url ? menu.url : null;
         menu.meta = meta;
 

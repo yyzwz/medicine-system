@@ -1,8 +1,8 @@
 {
-  "name": "xboot-plus-front",
+  "name": "insurance-system",
   "version": "2.0.0",
   "description": "城乡居民大病保险管理系统",
-  "author": "唐倩 <1012139570@qq.com>",
+  "author": "郑为中 <916077357@qq.com>",
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve",

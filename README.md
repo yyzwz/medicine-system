@@ -54,6 +54,3 @@ redis-server.exe redis.windows.conf
 
 ### 欢迎光临我的博客：https://zwz99.blog.csdn.net/   
 ![我的CSDN博客](https://images.gitee.com/uploads/images/2021/0604/100703_32e14138_7525468.jpeg "132246_599dbf21_7525468.jpeg")
-
-### 和我的公众号：元培ACM社团   
-![我的微信公众号](https://images.gitee.com/uploads/images/2021/0604/100801_30c6572c_7525468.jpeg "aaaaaa.jpg")

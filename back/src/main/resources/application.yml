@@ -1,4 +1,3 @@
-# 配置文件加密key 生产环境中可通过环境变量、命令行等形式进行设置
 jasypt:
   encryptor:
     password: xboot
@@ -11,17 +10,14 @@ server:
     uri-encoding: UTF-8
     max-threads: 1000
     min-spare-threads: 30
-
 spring:
   # 数据源
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/medicine?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/medicine?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
     username: root
-    # Jasypt加密 可到common-utils中找到JasyptUtil加解密工具类生成加密结果 格式为ENC(加密结果) 以下解密结果为123456
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
-    # Druid StatViewServlet配置
     druid:
       stat-view-servlet:
         # 默认true 内置监控页面首页/druid/index.html

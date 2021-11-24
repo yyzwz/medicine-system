@@ -152,12 +152,10 @@ import breadcrumbNav from "./main-components/breadcrumb-nav.vue";
 import fullScreen from "./main-components/fullscreen.vue";
 import lockScreen from "./main-components/lockscreen/lockscreen.vue";
 import messageTip from "./main-components/message-tip.vue";
-import circleLoading from "@/views/my-components/xboot/circle-loading.vue";
+import circleLoading from "@/views/my-components/zwz/circle-loading.vue";
 import Cookies from "js-cookie";
 import util from "@/libs/util.js";
-import { ws, getMessageSendData, getOtherSet } from "@/api/index";
-import SockJS from "sockjs-client";
-var client;
+import { getOtherSet } from "@/api/index";
 export default {
   components: {
     shrinkableMenu,

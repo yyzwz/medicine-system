@@ -1,17 +1,17 @@
 <template>
   <div class="foot">
-    <!-- <Row type="flex" justify="space-around" class="help">
-      <a class="item" href="https://blog.csdn.net/qq_41464123" target="_blank">CSDN</a>
-      <a class="item" href="https://gitee.com/yyzwz" target="_blank">码云</a>
-      <a class="item" href="https://space.bilibili.com/417412814" target="_blank">B站</a>
-    </Row> -->
     <Row type="flex" justify="center" class="copyright">
-      绍兴文理学院元培学院 网络1701
+      郑为中
       <a
         href="https://blog.csdn.net/qq_41464123"
         target="_blank"
         style="margin:0 5px;"
-      >唐倩</a>
+      >CSDN博客</a>
+      <a
+        href="https://gitee.com/yyzwz"
+        target="_blank"
+        style="margin:0 5px;"
+      >GitEE</a>
     </Row>
   </div>
 </template>
