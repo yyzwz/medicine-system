@@ -1,10 +1,10 @@
 package ${entity.controllerPackage};
 
-import cn.exrick.xboot.common.constant.CommonConstant;
-import cn.exrick.xboot.common.redis.RedisTemplateHelper;
-import cn.exrick.xboot.common.utils.CommonUtil;
-import cn.exrick.xboot.common.utils.ResultUtil;
-import cn.exrick.xboot.common.vo.Result;
+import cn.zwz.common.constant.CommonConstant;
+import cn.zwz.common.redis.RedisTemplateHelper;
+import cn.zwz.common.utils.CommonUtil;
+import cn.zwz.common.utils.ResultUtil;
+import cn.zwz.common.vo.Result;
 import ${entity.entityPackage}.${entity.className};
 import ${entity.servicePackage}.${entity.className}Service;
 import cn.hutool.core.util.StrUtil;
@@ -28,7 +28,7 @@ import java.util.Set;
 @Slf4j
 @RestController
 @Api(description = "${entity.description}管理接口")
-@RequestMapping("/xboot/${entity.classNameLowerCase}")
+@RequestMapping("/zwz/${entity.classNameLowerCase}")
 @CacheConfig(cacheNames = "${entity.classNameLowerCase}")
 @Transactional
 public class ${entity.className}Controller {

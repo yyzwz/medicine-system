@@ -39,19 +39,22 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Problems" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/cn/zwz/config/mybatisplus" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15527344" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="File.Encoding" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\java\git\medicineSystem\back\src\main\java\cn\zwz\config\mybatisplus" />
+      <recent name="C:\java\git\medicineSystem\back\src\main\resources\static" />
       <recent name="D:\GIT\medicineSystem\back\src\main\java\cn\exrick\xboot\modules\base\utils" />
       <recent name="D:\GIT\medicineSystem\back\src\main\java\cn\exrick\xboot\modules\your\utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.XbootApplication">
+  <component name="RunManager" selected="Spring Boot.ZwzApplication">
     <configuration name="XbootMPGenerator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="cn.exrick.xboot.generator.XbootMPGenerator" />
       <module name="xboot-plus" />
@@ -67,9 +70,22 @@
     </configuration>
     <configuration name="XbootApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="xboot-plus" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="cn.exrick.xboot.XbootApplication" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="cn.zwz.XbootApplication" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="SHORTEN_COMMAND_LINE" value="NONE" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ZwzApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="xboot-plus" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="cn.zwz.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="cn.zwz.ZwzApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -77,9 +93,11 @@
     <list>
       <item itemvalue="Application.XbootMPGenerator" />
       <item itemvalue="Spring Boot.XbootApplication" />
+      <item itemvalue="Spring Boot.ZwzApplication" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.ZwzApplication" />
         <item itemvalue="Application.XbootMPGenerator" />
       </list>
     </recent_temporary>
@@ -117,7 +135,8 @@
       <workItem from="1612066517788" duration="647000" />
       <workItem from="1612071042382" duration="514000" />
       <workItem from="1623637228122" duration="1295000" />
-      <workItem from="1637730390124" duration="2975000" />
+      <workItem from="1637730390124" duration="3602000" />
+      <workItem from="1637818968233" duration="8729000" />
     </task>
     <servers />
   </component>

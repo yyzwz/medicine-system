@@ -193,7 +193,6 @@ export default {
             this.getDataList();
         },
         pass(e) {
-            // console.log(e);
             this.$Modal.confirm({
                 title: "审核通过?",
                 content: "确认审核通过?",
@@ -217,7 +216,6 @@ export default {
             this.isShowTuiFlag = true;
         },
         notPass(e) {
-            // console.log(e);
             notPass({
                 id: this.eid,
                 msg: this.tuiMessage
@@ -272,7 +270,6 @@ export default {
         getDataList() {
             this.loading = true;
             getMeetingList(this.searchForm).then(res => {
-                console.log(res);
                 this.loading = false;
                 if (res.success) {
                     this.data = res.result.records;

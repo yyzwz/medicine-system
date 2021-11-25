@@ -120,7 +120,6 @@ export default {
                                 on: {
                                     input: event => {
                                         this.huaData[params.index].number = event; //双向绑定
-                                        // console.log(event,this.huaData);
                                     }
                                 }
                             }),
@@ -148,7 +147,6 @@ export default {
         },
         saveNow() {
             var that = this;
-            // console.log(that.selectNewData);
             that.selectNewData.forEach(function (e) {
                 that.saveSelectNewData.push(e);
             })
@@ -163,7 +161,6 @@ export default {
             this.selectUserName = '';
         },
         huashowHuaSelect(e) {
-            // console.log(e);
             this.selectNewData = e;
         },
         setCurrentValue(value) {
@@ -210,7 +207,6 @@ export default {
                 content: "您确认要导入所选的数据?",
                 loading: true,
                 onOk: () => {
-                    // console.log(this.selectNewData);
                     this.$emit("on-change", this.saveSelectNewData);
                     this.$Modal.remove();
                     this.$Message.success("导入成功");

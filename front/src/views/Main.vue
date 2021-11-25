@@ -300,14 +300,11 @@ export default {
       }
     },
     handleSubmenuChange(val) {
-      // console.log(val)
     },
     beforePush(name) {
-      // console.log(name)
       return true;
     },
     fullscreenChange(isFullScreen) {
-      // console.log(isFullScreen);
     },
     resize() {
       let currWidth = document.body.clientWidth;

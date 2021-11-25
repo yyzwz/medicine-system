@@ -257,9 +257,7 @@ export default {
         },
         getUserList() {
             this.loading = true;
-            console.log(this.searchForm);
             getRosterList(this.searchForm).then(res => {
-                console.log(res);
                 this.loading = false;
                 this.data = res.result.records;
                 this.total = res.result.total;

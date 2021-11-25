@@ -245,7 +245,6 @@ export default {
         init() {},
         getOneUserData(e) {
             var that = this;
-            // console.log(e);
             this.nowUser = e.name;
             this.form.userName = e.name;
             this.form.userId = e.id;
@@ -253,26 +252,20 @@ export default {
             getInsuranceOne({
                 id: e.insuranceType
             }).then(res => {
-                // console.log(res);
                 that.dazheList = res.result;
                 that.dazheList.one = 100 - parseInt(that.dazheList.one);
                 that.dazheList.two = 100 - parseInt(that.dazheList.two);
                 that.dazheList.three = 100 - parseInt(that.dazheList.three);
-                // that.dazheList.mine = that.accAdd(that.dazheList.mine,0.1);
-                // that.dazheList.common = that.accAdd(that.dazheList.common,0.1);
-                // that.dazheList.big = that.accAdd(that.dazheList.big,0.1);
                 that.dazheList.mine = 100 - parseInt(that.dazheList.mine);
                 that.dazheList.common = 100 - parseInt(that.dazheList.common);
                 that.dazheList.big = 100 - parseInt(that.dazheList.big);
                 that.form.name = that.dazheList.name;
-                // console.log(that.dazheList);
             })
         },
         getMedicineData(e) {
             var that = this;
             var priceNum = 0;
             var medicineOldPrice = 0;
-            // console.log(e);
             that.nowMedicine = "";
             e.forEach(function (ee) {
                 that.nowMedicine += '(' + ee.name + ')=' + ee.number + '次*' + ee.price;

@@ -92,7 +92,6 @@ export default {
             getRosterOne({
                 id: this.departmentNameData
             }).then(res => {
-                console.log(res);
                 this.form = res.result;
             })
         },

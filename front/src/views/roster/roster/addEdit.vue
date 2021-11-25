@@ -196,7 +196,6 @@ export default {
     getAllInsuranceFx(){
       getAllInsurance().then(res => {
         this.baoXianLeiList = res.result;
-        console.log(res);
       })
     },
     changeShiYong(){
@@ -263,7 +262,6 @@ export default {
         if(i == 0) this.form.departmentIdsNew += array[i];
         else this.form.departmentIdsNew += "," + array[i];
       }
-      // console.log(this.departmentIdsNew);
     },
     changeAddress(v) {
       this.form.address = JSON.stringify(this.form.addressArray);

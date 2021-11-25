@@ -232,19 +232,7 @@ export default {
             this.departmentNameData = newVal;
             this.getUserList();
         },
-        // editGongHaoRole(val){
-        //   console.log("editGongHaoRole");
-        //   console.log(val);
-        //   console.log(this.isEdit);
-        //   if(val == true && this.isEdit == false){
-        //     this.canEditGongHao = true;
-        //   }
-        //   else{
-        //     this.canEditGongHao = false;
-        //   }
-        // },
         isEdit(val) {
-            console.log(this.editGongHaoRole);
             if (val == false && this.editGongHaoRole == true) {
                 this.canEditGongHao = true;
             } else {

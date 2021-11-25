@@ -58,7 +58,7 @@
                     <DropdownItem name="reset">重置用户密码</DropdownItem>
                     <DropdownItem name="exportData">导出所选数据</DropdownItem>
                     <DropdownItem name="exportAll">导出全部数据</DropdownItem>
-                    <DropdownItem name="importData">导入数据(付费)</DropdownItem>
+                    <DropdownItem name="importData">导入数据</DropdownItem>
                 </DropdownMenu>
             </Dropdown>
             <Button type="dashed" @click="openSearch=!openSearch">{{openSearch ? "关闭搜索" : "开启搜索"}}</Button>
@@ -540,11 +540,11 @@ export default {
                 }
                 this.exportType = "part";
                 this.exportModalVisible = true;
-                this.exportTitle = "确认导出 " + this.selectCount + " 条数据(付费)";
+                this.exportTitle = "确认导出 " + this.selectCount + " 条数据";
             } else if (name == "exportAll") {
                 this.exportType = "all";
                 this.exportModalVisible = true;
-                this.exportTitle = "确认导出全部 " + this.total + " 条数据(付费)";
+                this.exportTitle = "确认导出全部 " + this.total + " 条数据";
                 getAllUserData().then(res => {
                     if (res.success) {
                         this.exportData = res.result;

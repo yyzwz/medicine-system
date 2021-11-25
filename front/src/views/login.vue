@@ -320,7 +320,6 @@ export default {
             this.loading = true;
             this.form.saveLogin = this.saveLogin;
             sendLoginInTxSms({mobile:this.form.mobile,code:this.form.code}).then(res => {
-              // console.log(res);
               if (res.result) {
                 that.afterLogin(res);
               } else {

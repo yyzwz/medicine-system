@@ -202,7 +202,6 @@ export default {
                 cid: that.sendMessageCid,
                 message: that.sendMessageContext
             }).then(res => {
-                // console.log(res);
                 if (res.success) {
                     this.$Message.success("充值成功了");
                     this.isShowAddMessageFlag = false;

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 <%
 if(!entity.isTree){
 %>
-import cn.exrick.xboot.common.vo.SearchVo;
+import cn.zwz.common.vo.SearchVo;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import org.springframework.data.domain.Page;

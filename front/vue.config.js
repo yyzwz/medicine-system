@@ -3,10 +3,10 @@ const webpack = require('webpack')
 module.exports = {
     devServer: {
         host: '0.0.0.0',
-        port: 8080,
+        port: 60002,
         proxy: {
-            '/xboot': {
-                target: 'http://127.0.0.1:8888',
+            '/zwz': {
+                target: 'http://127.0.0.1:60001',
                 ws: true
             },
             '/foo': {

@@ -17,7 +17,6 @@
 
 <template>
 <div>
-    <!--  loader  -->
     <div id="myloader">
         <div class="loader">
             <div class="grid">
@@ -33,11 +32,8 @@
             </div>
         </div>
     </div>
-    <!--  Main Wrap  -->
     <div id="main-wrap">
-        <!--  Page Content  -->
         <div id="page-content" class="header-static">
-            <!--  Slider  -->
             <div id="flexslider-nav" class="fullpage-wrap small">
                 <ul class="slides">
                     <li class="background1">

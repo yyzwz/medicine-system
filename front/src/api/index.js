@@ -4,15 +4,15 @@ import { getRequest, postRequest, putRequest, postBodyRequest, getNoAuthRequest,
 // Vaptcha ID
 export const vaptchaID = "5dce36188713b71e70a41eb7"
 // 文件上传接口
-export const uploadFile = "/xboot/upload/file"
+export const uploadFile = "/zwz/upload/file"
 // 验证码渲染图片接口
-export const drawCodeImage = "/xboot/common/captcha/draw/"
+export const drawCodeImage = "/zwz/common/captcha/draw/"
 // 获取菜单
-export const getMenuList = "/xboot/permission/getMenuList"
+export const getMenuList = "/zwz/permission/getMenuList"
 // 获取数据字典
-export const getDictData = "/xboot/dictData/getByType/"
+export const getDictData = "/zwz/dictData/getByType/"
 // Websocket
-export const ws = "/xboot/ws"
+export const ws = "/zwz/ws"
 
 export const deleteOne = (params) => {
     return getRequest('/roster/deleteOne', params)

@@ -207,7 +207,6 @@ export default {
         getDataList() {
             this.loading = true;
             getMeetingList(this.searchForm).then(res => {
-                // console.log(res);
                 this.loading = false;
                 if (res.success) {
                     this.data = res.result.records;

@@ -118,7 +118,6 @@ export default {
             getRosterList(this.searchUserForm).then(res => {
                 this.userLoading = false;
                 if (res.success) {
-                    // console.log(res);
                     this.userData = res.result.records;
                     this.totalUser = res.result.total;
                 }
