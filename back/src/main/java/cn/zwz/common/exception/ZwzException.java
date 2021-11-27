@@ -6,11 +6,11 @@ import lombok.Data;
  * @author 郑为中
  */
 @Data
-public class XbootException extends RuntimeException {
+public class ZwzException extends RuntimeException {
 
     private String msg;
 
-    public XbootException(String msg){
+    public ZwzException(String msg){
         super(msg);
         this.msg = msg;
     }

@@ -1,6 +1,6 @@
 package cn.zwz.generator;
 
-import cn.zwz.common.exception.XbootException;
+import cn.zwz.common.exception.ZwzException;
 import cn.zwz.generator.bean.Entity;
 import cn.zwz.generator.bean.Item;
 import cn.hutool.core.util.StrUtil;
@@ -403,7 +403,7 @@ public class ZwzGenerator {
     public static String name(String name, boolean isFirstUpper){
 
         if(StrUtil.isBlank(name)){
-            throw new XbootException("name不能为空");
+            throw new ZwzException("name不能为空");
         }
 
         if(name.length()==1){

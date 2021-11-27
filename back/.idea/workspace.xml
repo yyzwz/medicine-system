@@ -41,7 +41,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/cn/zwz/config/mybatisplus" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15527344" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="File.Encoding" />
@@ -57,7 +57,7 @@
   <component name="RunManager" selected="Spring Boot.ZwzApplication">
     <configuration name="XbootMPGenerator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="cn.exrick.xboot.generator.XbootMPGenerator" />
-      <module name="xboot-plus" />
+      <module name="medicine-system" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="cn.exrick.xboot.generator.*" />
@@ -68,8 +68,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="medicine-system" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="medicine-system" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="XbootApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="xboot-plus" />
+      <module name="medicine-system" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="cn.zwz.XbootApplication" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="SHORTEN_COMMAND_LINE" value="NONE" />
@@ -78,7 +91,7 @@
       </method>
     </configuration>
     <configuration name="ZwzApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
-      <module name="xboot-plus" />
+      <module name="medicine-system" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="cn.zwz.*" />
@@ -136,7 +149,8 @@
       <workItem from="1612071042382" duration="514000" />
       <workItem from="1623637228122" duration="1295000" />
       <workItem from="1637730390124" duration="3602000" />
-      <workItem from="1637818968233" duration="8729000" />
+      <workItem from="1637818968233" duration="10731000" />
+      <workItem from="1637976347914" duration="1573000" />
     </task>
     <servers />
   </component>

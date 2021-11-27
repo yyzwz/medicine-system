@@ -1,12 +1,10 @@
 package cn.zwz.modules.base.controller;
 
-import cn.zwz.common.annotation.SystemLog;
+import cn.zwz.common.exception.ZwzException;
 import cn.zwz.common.redis.RedisTemplateHelper;
 import cn.zwz.common.utils.*;
 import cn.zwz.config.security.SecurityUserDetails;
 import cn.zwz.common.constant.CommonConstant;
-import cn.zwz.common.enums.LogType;
-import cn.zwz.common.exception.XbootException;
 import cn.zwz.common.vo.PageVo;
 import cn.zwz.common.vo.Result;
 import cn.zwz.common.vo.SearchVo;
@@ -97,7 +95,7 @@ public class UserController {
     public Result<Object> QCloudSmsLogin(@RequestParam(value = "mobile") String mobile, HttpServletRequest request){
         User u = userService.findByMobile(mobile);
         if(u==null){
-            throw new XbootException("手机号不存在");
+            throw new ZwzException("手机号不存在");
         }
         HttpSession session = request.getSession();
         // 短信应用 SDK AppID
@@ -147,38 +145,6 @@ public class UserController {
             return ResultUtil.data(accessToken);
         }
         return ResultUtil.data(false,"NO");
-    }
-
-    @RequestMapping(value = "/smsLogin", method = RequestMethod.POST)
-    @SystemLog(description = "短信登录", type = LogType.LOGIN)
-    @ApiOperation(value = "短信登录接口")
-    public Result<Object> smsLogin(@RequestParam String mobile,
-                                   @RequestParam(required = false) Boolean saveLogin){
-
-        User u = userService.findByMobile(mobile);
-        if(u==null){
-            throw new XbootException("手机号不存在");
-        }
-        String accessToken = securityUtil.getToken(u.getUsername(), saveLogin);
-        // 记录日志使用
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(new SecurityUserDetails(u), null, null);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return ResultUtil.data(accessToken);
-    }
-
-    @RequestMapping(value = "/resetByMobile", method = RequestMethod.POST)
-    @ApiOperation(value = "通过短信重置密码")
-    public Result<Object> resetByMobile(@RequestParam String mobile,
-                                        @RequestParam String password,
-                                        @RequestParam String passStrength){
-
-        User u = userService.findByMobile(mobile);
-        String encryptPass = new BCryptPasswordEncoder().encode(password);
-        u.setPassword(encryptPass).setPassStrength(passStrength);
-        userService.update(u);
-        // 删除缓存
-        redisTemplate.delete("user::"+u.getUsername());
-        return ResultUtil.success("重置密码成功");
     }
 
     @RequestMapping(value = "/regist", method = RequestMethod.POST)
@@ -245,7 +211,7 @@ public class UserController {
             User u = userService.get(id);
             // 在线DEMO所需
             if("test".equals(u.getUsername())||"test2".equals(u.getUsername())||"admin".equals(u.getUsername())){
-                throw new XbootException("测试账号及管理员账号不得重置");
+                throw new ZwzException("测试账号及管理员账号不得重置");
             }
             u.setPassword(new BCryptPasswordEncoder().encode("123456"));
             userService.update(u);
@@ -565,13 +531,13 @@ public class UserController {
         CommonUtil.stopwords(username);
 
         if(StrUtil.isNotBlank(username)&&userService.findByUsername(username)!=null){
-            throw new XbootException("该登录账号已被注册");
+            throw new ZwzException("该登录账号已被注册");
         }
         if(StrUtil.isNotBlank(email)&&userService.findByEmail(email)!=null){
-            throw new XbootException("该邮箱已被注册");
+            throw new ZwzException("该邮箱已被注册");
         }
         if(StrUtil.isNotBlank(mobile)&&userService.findByMobile(mobile)!=null){
-            throw new XbootException("该手机号已被注册");
+            throw new ZwzException("该手机号已被注册");
         }
     }
 }

@@ -2,7 +2,7 @@ package cn.zwz.modules.file.controller;
 
 import cn.zwz.common.constant.CommonConstant;
 import cn.zwz.common.constant.SettingConstant;
-import cn.zwz.common.exception.XbootException;
+import cn.zwz.common.exception.ZwzException;
 import cn.zwz.common.utils.*;
 import cn.zwz.modules.base.entity.User;
 import cn.zwz.modules.base.service.SettingService;
@@ -174,7 +174,7 @@ public class FileController {
 
         File file = fileService.get(id);
         if(file==null){
-            throw new XbootException("文件ID："+id+"不存在");
+            throw new ZwzException("文件ID："+id+"不存在");
         }
         if(StrUtil.isBlank(filename)){
             filename =  file.getFKey();

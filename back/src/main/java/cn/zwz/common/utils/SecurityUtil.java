@@ -2,7 +2,7 @@ package cn.zwz.common.utils;
 
 import cn.zwz.common.constant.CommonConstant;
 import cn.zwz.common.constant.SecurityConstant;
-import cn.zwz.common.exception.XbootException;
+import cn.zwz.common.exception.ZwzException;
 import cn.zwz.common.vo.TokenUser;
 import cn.zwz.config.properties.XbootTokenProperties;
 import cn.zwz.modules.base.entity.*;
@@ -51,7 +51,7 @@ public class SecurityUtil {
     public String getToken(String username, Boolean saveLogin){
 
         if(StrUtil.isBlank(username)){
-            throw new XbootException("username不能为空");
+            throw new ZwzException("username不能为空");
         }
         Boolean saved = false;
         if(saveLogin==null||saveLogin){
@@ -120,7 +120,7 @@ public class SecurityUtil {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if("anonymousUser".equals(principal.toString())){
-            throw new XbootException("未检测到登录用户");
+            throw new ZwzException("未检测到登录用户");
         }
         UserDetails user = (UserDetails) principal;
         return userService.findByUsername(user.getUsername());

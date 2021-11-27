@@ -1,7 +1,7 @@
 package cn.zwz.generator.vue;
 
 import cn.zwz.common.exception.LimitException;
-import cn.zwz.common.exception.XbootException;
+import cn.zwz.common.exception.ZwzException;
 import cn.zwz.common.limit.RedisRaterLimiter;
 import cn.zwz.common.utils.IpInfoUtil;
 import cn.zwz.common.utils.ResultUtil;
@@ -253,7 +253,7 @@ public class ZwzVueGenerator {
                 tableTemplate.binding("rowNum", 1);
             }
         }else{
-            throw new XbootException("rowNum仅支持数字1-4");
+            throw new ZwzException("rowNum仅支持数字1-4");
         }
         // 生成代码
         String result = tableTemplate.render();

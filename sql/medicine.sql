@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- 主机:                           127.0.0.1
--- 服务器版本:                        5.7.30-log - MySQL Community Server (GPL)
+-- 服务器版本:                        8.0.26 - MySQL Community Server - GPL
 -- 服务器操作系统:                      Win64
--- HeidiSQL 版本:                  10.3.0.5771
+-- HeidiSQL 版本:                  11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -10,1063 +10,30 @@
 /*!50503 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
 -- 导出 medicine 的数据库结构
 DROP DATABASE IF EXISTS `medicine`;
-CREATE DATABASE IF NOT EXISTS `medicine` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_croatian_ci */;
+CREATE DATABASE IF NOT EXISTS `medicine` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_croatian_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `medicine`;
-
--- 导出  表 medicine.act_evt_log 结构
-DROP TABLE IF EXISTS `act_evt_log`;
-CREATE TABLE IF NOT EXISTS `act_evt_log` (
-  `LOG_NR_` bigint(20) NOT NULL AUTO_INCREMENT,
-  `TYPE_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `TIME_STAMP_` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-  `USER_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `DATA_` longblob,
-  `LOCK_OWNER_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `LOCK_TIME_` timestamp(3) NULL DEFAULT NULL,
-  `IS_PROCESSED_` tinyint(4) DEFAULT '0',
-  PRIMARY KEY (`LOG_NR_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_evt_log 的数据：~0 rows (大约)
-DELETE FROM `act_evt_log`;
-/*!40000 ALTER TABLE `act_evt_log` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_evt_log` ENABLE KEYS */;
-
--- 导出  表 medicine.act_ge_bytearray 结构
-DROP TABLE IF EXISTS `act_ge_bytearray`;
-CREATE TABLE IF NOT EXISTS `act_ge_bytearray` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `DEPLOYMENT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `BYTES_` longblob,
-  `GENERATED_` tinyint(4) DEFAULT NULL,
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_FK_BYTEARR_DEPL` (`DEPLOYMENT_ID_`),
-  CONSTRAINT `ACT_FK_BYTEARR_DEPL` FOREIGN KEY (`DEPLOYMENT_ID_`) REFERENCES `act_re_deployment` (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_ge_bytearray 的数据：~0 rows (大约)
-DELETE FROM `act_ge_bytearray`;
-/*!40000 ALTER TABLE `act_ge_bytearray` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_ge_bytearray` ENABLE KEYS */;
-
--- 导出  表 medicine.act_ge_property 结构
-DROP TABLE IF EXISTS `act_ge_property`;
-CREATE TABLE IF NOT EXISTS `act_ge_property` (
-  `NAME_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `VALUE_` varchar(300) COLLATE utf8_bin DEFAULT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  PRIMARY KEY (`NAME_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_ge_property 的数据：~3 rows (大约)
-DELETE FROM `act_ge_property`;
-/*!40000 ALTER TABLE `act_ge_property` DISABLE KEYS */;
-INSERT INTO `act_ge_property` (`NAME_`, `VALUE_`, `REV_`) VALUES
-	('next.dbid', '1', 1),
-	('schema.history', 'create(5.22.0.0)', 1),
-	('schema.version', '5.22.0.0', 1);
-/*!40000 ALTER TABLE `act_ge_property` ENABLE KEYS */;
-
--- 导出  表 medicine.act_hi_actinst 结构
-DROP TABLE IF EXISTS `act_hi_actinst`;
-CREATE TABLE IF NOT EXISTS `act_hi_actinst` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `ACT_ID_` varchar(255) COLLATE utf8_bin NOT NULL,
-  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `CALL_PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `ACT_NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `ACT_TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
-  `ASSIGNEE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `START_TIME_` datetime(3) NOT NULL,
-  `END_TIME_` datetime(3) DEFAULT NULL,
-  `DURATION_` bigint(20) DEFAULT NULL,
-  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_IDX_HI_ACT_INST_START` (`START_TIME_`),
-  KEY `ACT_IDX_HI_ACT_INST_END` (`END_TIME_`),
-  KEY `ACT_IDX_HI_ACT_INST_PROCINST` (`PROC_INST_ID_`,`ACT_ID_`),
-  KEY `ACT_IDX_HI_ACT_INST_EXEC` (`EXECUTION_ID_`,`ACT_ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_hi_actinst 的数据：~0 rows (大约)
-DELETE FROM `act_hi_actinst`;
-/*!40000 ALTER TABLE `act_hi_actinst` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_hi_actinst` ENABLE KEYS */;
-
--- 导出  表 medicine.act_hi_attachment 结构
-DROP TABLE IF EXISTS `act_hi_attachment`;
-CREATE TABLE IF NOT EXISTS `act_hi_attachment` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `USER_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `DESCRIPTION_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `URL_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `CONTENT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `TIME_` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_hi_attachment 的数据：~0 rows (大约)
-DELETE FROM `act_hi_attachment`;
-/*!40000 ALTER TABLE `act_hi_attachment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_hi_attachment` ENABLE KEYS */;
-
--- 导出  表 medicine.act_hi_comment 结构
-DROP TABLE IF EXISTS `act_hi_comment`;
-CREATE TABLE IF NOT EXISTS `act_hi_comment` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `TIME_` datetime(3) NOT NULL,
-  `USER_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `ACTION_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `MESSAGE_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `FULL_MSG_` longblob,
-  PRIMARY KEY (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_hi_comment 的数据：~0 rows (大约)
-DELETE FROM `act_hi_comment`;
-/*!40000 ALTER TABLE `act_hi_comment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_hi_comment` ENABLE KEYS */;
-
--- 导出  表 medicine.act_hi_detail 结构
-DROP TABLE IF EXISTS `act_hi_detail`;
-CREATE TABLE IF NOT EXISTS `act_hi_detail` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
-  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `ACT_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `NAME_` varchar(255) COLLATE utf8_bin NOT NULL,
-  `VAR_TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `TIME_` datetime(3) NOT NULL,
-  `BYTEARRAY_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `DOUBLE_` double DEFAULT NULL,
-  `LONG_` bigint(20) DEFAULT NULL,
-  `TEXT_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `TEXT2_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_IDX_HI_DETAIL_PROC_INST` (`PROC_INST_ID_`),
-  KEY `ACT_IDX_HI_DETAIL_ACT_INST` (`ACT_INST_ID_`),
-  KEY `ACT_IDX_HI_DETAIL_TIME` (`TIME_`),
-  KEY `ACT_IDX_HI_DETAIL_NAME` (`NAME_`),
-  KEY `ACT_IDX_HI_DETAIL_TASK_ID` (`TASK_ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_hi_detail 的数据：~0 rows (大约)
-DELETE FROM `act_hi_detail`;
-/*!40000 ALTER TABLE `act_hi_detail` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_hi_detail` ENABLE KEYS */;
-
--- 导出  表 medicine.act_hi_identitylink 结构
-DROP TABLE IF EXISTS `act_hi_identitylink`;
-CREATE TABLE IF NOT EXISTS `act_hi_identitylink` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `GROUP_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `USER_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_IDX_HI_IDENT_LNK_USER` (`USER_ID_`),
-  KEY `ACT_IDX_HI_IDENT_LNK_TASK` (`TASK_ID_`),
-  KEY `ACT_IDX_HI_IDENT_LNK_PROCINST` (`PROC_INST_ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_hi_identitylink 的数据：~0 rows (大约)
-DELETE FROM `act_hi_identitylink`;
-/*!40000 ALTER TABLE `act_hi_identitylink` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_hi_identitylink` ENABLE KEYS */;
-
--- 导出  表 medicine.act_hi_procinst 结构
-DROP TABLE IF EXISTS `act_hi_procinst`;
-CREATE TABLE IF NOT EXISTS `act_hi_procinst` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `BUSINESS_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `START_TIME_` datetime(3) NOT NULL,
-  `END_TIME_` datetime(3) DEFAULT NULL,
-  `DURATION_` bigint(20) DEFAULT NULL,
-  `START_USER_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `START_ACT_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `END_ACT_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `SUPER_PROCESS_INSTANCE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `DELETE_REASON_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
-  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`ID_`),
-  UNIQUE KEY `PROC_INST_ID_` (`PROC_INST_ID_`),
-  KEY `ACT_IDX_HI_PRO_INST_END` (`END_TIME_`),
-  KEY `ACT_IDX_HI_PRO_I_BUSKEY` (`BUSINESS_KEY_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_hi_procinst 的数据：~0 rows (大约)
-DELETE FROM `act_hi_procinst`;
-/*!40000 ALTER TABLE `act_hi_procinst` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_hi_procinst` ENABLE KEYS */;
-
--- 导出  表 medicine.act_hi_taskinst 结构
-DROP TABLE IF EXISTS `act_hi_taskinst`;
-CREATE TABLE IF NOT EXISTS `act_hi_taskinst` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `TASK_DEF_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `PARENT_TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `DESCRIPTION_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `OWNER_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `ASSIGNEE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `START_TIME_` datetime(3) NOT NULL,
-  `CLAIM_TIME_` datetime(3) DEFAULT NULL,
-  `END_TIME_` datetime(3) DEFAULT NULL,
-  `DURATION_` bigint(20) DEFAULT NULL,
-  `DELETE_REASON_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `PRIORITY_` int(11) DEFAULT NULL,
-  `DUE_DATE_` datetime(3) DEFAULT NULL,
-  `FORM_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `CATEGORY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_IDX_HI_TASK_INST_PROCINST` (`PROC_INST_ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_hi_taskinst 的数据：~0 rows (大约)
-DELETE FROM `act_hi_taskinst`;
-/*!40000 ALTER TABLE `act_hi_taskinst` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_hi_taskinst` ENABLE KEYS */;
-
--- 导出  表 medicine.act_hi_varinst 结构
-DROP TABLE IF EXISTS `act_hi_varinst`;
-CREATE TABLE IF NOT EXISTS `act_hi_varinst` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `NAME_` varchar(255) COLLATE utf8_bin NOT NULL,
-  `VAR_TYPE_` varchar(100) COLLATE utf8_bin DEFAULT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `BYTEARRAY_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `DOUBLE_` double DEFAULT NULL,
-  `LONG_` bigint(20) DEFAULT NULL,
-  `TEXT_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `TEXT2_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `CREATE_TIME_` datetime(3) DEFAULT NULL,
-  `LAST_UPDATED_TIME_` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_IDX_HI_PROCVAR_PROC_INST` (`PROC_INST_ID_`),
-  KEY `ACT_IDX_HI_PROCVAR_NAME_TYPE` (`NAME_`,`VAR_TYPE_`),
-  KEY `ACT_IDX_HI_PROCVAR_TASK_ID` (`TASK_ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_hi_varinst 的数据：~0 rows (大约)
-DELETE FROM `act_hi_varinst`;
-/*!40000 ALTER TABLE `act_hi_varinst` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_hi_varinst` ENABLE KEYS */;
-
--- 导出  表 medicine.act_id_group 结构
-DROP TABLE IF EXISTS `act_id_group`;
-CREATE TABLE IF NOT EXISTS `act_id_group` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_id_group 的数据：~0 rows (大约)
-DELETE FROM `act_id_group`;
-/*!40000 ALTER TABLE `act_id_group` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_id_group` ENABLE KEYS */;
-
--- 导出  表 medicine.act_id_info 结构
-DROP TABLE IF EXISTS `act_id_info`;
-CREATE TABLE IF NOT EXISTS `act_id_info` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `USER_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `TYPE_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `VALUE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `PASSWORD_` longblob,
-  `PARENT_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_id_info 的数据：~0 rows (大约)
-DELETE FROM `act_id_info`;
-/*!40000 ALTER TABLE `act_id_info` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_id_info` ENABLE KEYS */;
-
--- 导出  表 medicine.act_id_membership 结构
-DROP TABLE IF EXISTS `act_id_membership`;
-CREATE TABLE IF NOT EXISTS `act_id_membership` (
-  `USER_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `GROUP_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`USER_ID_`,`GROUP_ID_`),
-  KEY `ACT_FK_MEMB_GROUP` (`GROUP_ID_`),
-  CONSTRAINT `ACT_FK_MEMB_GROUP` FOREIGN KEY (`GROUP_ID_`) REFERENCES `act_id_group` (`ID_`),
-  CONSTRAINT `ACT_FK_MEMB_USER` FOREIGN KEY (`USER_ID_`) REFERENCES `act_id_user` (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_id_membership 的数据：~0 rows (大约)
-DELETE FROM `act_id_membership`;
-/*!40000 ALTER TABLE `act_id_membership` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_id_membership` ENABLE KEYS */;
-
--- 导出  表 medicine.act_id_user 结构
-DROP TABLE IF EXISTS `act_id_user`;
-CREATE TABLE IF NOT EXISTS `act_id_user` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `FIRST_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `LAST_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `EMAIL_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `PWD_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `PICTURE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_id_user 的数据：~0 rows (大约)
-DELETE FROM `act_id_user`;
-/*!40000 ALTER TABLE `act_id_user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_id_user` ENABLE KEYS */;
-
--- 导出  表 medicine.act_procdef_info 结构
-DROP TABLE IF EXISTS `act_procdef_info`;
-CREATE TABLE IF NOT EXISTS `act_procdef_info` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `INFO_JSON_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`ID_`),
-  UNIQUE KEY `ACT_UNIQ_INFO_PROCDEF` (`PROC_DEF_ID_`),
-  KEY `ACT_IDX_INFO_PROCDEF` (`PROC_DEF_ID_`),
-  KEY `ACT_FK_INFO_JSON_BA` (`INFO_JSON_ID_`),
-  CONSTRAINT `ACT_FK_INFO_JSON_BA` FOREIGN KEY (`INFO_JSON_ID_`) REFERENCES `act_ge_bytearray` (`ID_`),
-  CONSTRAINT `ACT_FK_INFO_PROCDEF` FOREIGN KEY (`PROC_DEF_ID_`) REFERENCES `act_re_procdef` (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_procdef_info 的数据：~0 rows (大约)
-DELETE FROM `act_procdef_info`;
-/*!40000 ALTER TABLE `act_procdef_info` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_procdef_info` ENABLE KEYS */;
-
--- 导出  表 medicine.act_re_deployment 结构
-DROP TABLE IF EXISTS `act_re_deployment`;
-CREATE TABLE IF NOT EXISTS `act_re_deployment` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `CATEGORY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
-  `DEPLOY_TIME_` timestamp(3) NULL DEFAULT NULL,
-  PRIMARY KEY (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_re_deployment 的数据：~0 rows (大约)
-DELETE FROM `act_re_deployment`;
-/*!40000 ALTER TABLE `act_re_deployment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_re_deployment` ENABLE KEYS */;
-
--- 导出  表 medicine.act_re_model 结构
-DROP TABLE IF EXISTS `act_re_model`;
-CREATE TABLE IF NOT EXISTS `act_re_model` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `CATEGORY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `CREATE_TIME_` timestamp(3) NULL DEFAULT NULL,
-  `LAST_UPDATE_TIME_` timestamp(3) NULL DEFAULT NULL,
-  `VERSION_` int(11) DEFAULT NULL,
-  `META_INFO_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `DEPLOYMENT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `EDITOR_SOURCE_VALUE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `EDITOR_SOURCE_EXTRA_VALUE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_FK_MODEL_SOURCE` (`EDITOR_SOURCE_VALUE_ID_`),
-  KEY `ACT_FK_MODEL_SOURCE_EXTRA` (`EDITOR_SOURCE_EXTRA_VALUE_ID_`),
-  KEY `ACT_FK_MODEL_DEPLOYMENT` (`DEPLOYMENT_ID_`),
-  CONSTRAINT `ACT_FK_MODEL_DEPLOYMENT` FOREIGN KEY (`DEPLOYMENT_ID_`) REFERENCES `act_re_deployment` (`ID_`),
-  CONSTRAINT `ACT_FK_MODEL_SOURCE` FOREIGN KEY (`EDITOR_SOURCE_VALUE_ID_`) REFERENCES `act_ge_bytearray` (`ID_`),
-  CONSTRAINT `ACT_FK_MODEL_SOURCE_EXTRA` FOREIGN KEY (`EDITOR_SOURCE_EXTRA_VALUE_ID_`) REFERENCES `act_ge_bytearray` (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_re_model 的数据：~0 rows (大约)
-DELETE FROM `act_re_model`;
-/*!40000 ALTER TABLE `act_re_model` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_re_model` ENABLE KEYS */;
-
--- 导出  表 medicine.act_re_procdef 结构
-DROP TABLE IF EXISTS `act_re_procdef`;
-CREATE TABLE IF NOT EXISTS `act_re_procdef` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `CATEGORY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `KEY_` varchar(255) COLLATE utf8_bin NOT NULL,
-  `VERSION_` int(11) NOT NULL,
-  `DEPLOYMENT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `RESOURCE_NAME_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `DGRM_RESOURCE_NAME_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `DESCRIPTION_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `HAS_START_FORM_KEY_` tinyint(4) DEFAULT NULL,
-  `HAS_GRAPHICAL_NOTATION_` tinyint(4) DEFAULT NULL,
-  `SUSPENSION_STATE_` int(11) DEFAULT NULL,
-  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
-  PRIMARY KEY (`ID_`),
-  UNIQUE KEY `ACT_UNIQ_PROCDEF` (`KEY_`,`VERSION_`,`TENANT_ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_re_procdef 的数据：~0 rows (大约)
-DELETE FROM `act_re_procdef`;
-/*!40000 ALTER TABLE `act_re_procdef` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_re_procdef` ENABLE KEYS */;
-
--- 导出  表 medicine.act_ru_event_subscr 结构
-DROP TABLE IF EXISTS `act_ru_event_subscr`;
-CREATE TABLE IF NOT EXISTS `act_ru_event_subscr` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `EVENT_TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
-  `EVENT_NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `ACTIVITY_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `CONFIGURATION_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `CREATED_` timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_IDX_EVENT_SUBSCR_CONFIG_` (`CONFIGURATION_`),
-  KEY `ACT_FK_EVENT_EXEC` (`EXECUTION_ID_`),
-  CONSTRAINT `ACT_FK_EVENT_EXEC` FOREIGN KEY (`EXECUTION_ID_`) REFERENCES `act_ru_execution` (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_ru_event_subscr 的数据：~0 rows (大约)
-DELETE FROM `act_ru_event_subscr`;
-/*!40000 ALTER TABLE `act_ru_event_subscr` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_ru_event_subscr` ENABLE KEYS */;
-
--- 导出  表 medicine.act_ru_execution 结构
-DROP TABLE IF EXISTS `act_ru_execution`;
-CREATE TABLE IF NOT EXISTS `act_ru_execution` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `BUSINESS_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `PARENT_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `SUPER_EXEC_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `ACT_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `IS_ACTIVE_` tinyint(4) DEFAULT NULL,
-  `IS_CONCURRENT_` tinyint(4) DEFAULT NULL,
-  `IS_SCOPE_` tinyint(4) DEFAULT NULL,
-  `IS_EVENT_SCOPE_` tinyint(4) DEFAULT NULL,
-  `SUSPENSION_STATE_` int(11) DEFAULT NULL,
-  `CACHED_ENT_STATE_` int(11) DEFAULT NULL,
-  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
-  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `LOCK_TIME_` timestamp(3) NULL DEFAULT NULL,
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_IDX_EXEC_BUSKEY` (`BUSINESS_KEY_`),
-  KEY `ACT_FK_EXE_PROCINST` (`PROC_INST_ID_`),
-  KEY `ACT_FK_EXE_PARENT` (`PARENT_ID_`),
-  KEY `ACT_FK_EXE_SUPER` (`SUPER_EXEC_`),
-  KEY `ACT_FK_EXE_PROCDEF` (`PROC_DEF_ID_`),
-  CONSTRAINT `ACT_FK_EXE_PARENT` FOREIGN KEY (`PARENT_ID_`) REFERENCES `act_ru_execution` (`ID_`),
-  CONSTRAINT `ACT_FK_EXE_PROCDEF` FOREIGN KEY (`PROC_DEF_ID_`) REFERENCES `act_re_procdef` (`ID_`),
-  CONSTRAINT `ACT_FK_EXE_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `ACT_FK_EXE_SUPER` FOREIGN KEY (`SUPER_EXEC_`) REFERENCES `act_ru_execution` (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_ru_execution 的数据：~0 rows (大约)
-DELETE FROM `act_ru_execution`;
-/*!40000 ALTER TABLE `act_ru_execution` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_ru_execution` ENABLE KEYS */;
-
--- 导出  表 medicine.act_ru_identitylink 结构
-DROP TABLE IF EXISTS `act_ru_identitylink`;
-CREATE TABLE IF NOT EXISTS `act_ru_identitylink` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `GROUP_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `USER_ID_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_IDX_IDENT_LNK_USER` (`USER_ID_`),
-  KEY `ACT_IDX_IDENT_LNK_GROUP` (`GROUP_ID_`),
-  KEY `ACT_IDX_ATHRZ_PROCEDEF` (`PROC_DEF_ID_`),
-  KEY `ACT_FK_TSKASS_TASK` (`TASK_ID_`),
-  KEY `ACT_FK_IDL_PROCINST` (`PROC_INST_ID_`),
-  CONSTRAINT `ACT_FK_ATHRZ_PROCEDEF` FOREIGN KEY (`PROC_DEF_ID_`) REFERENCES `act_re_procdef` (`ID_`),
-  CONSTRAINT `ACT_FK_IDL_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`),
-  CONSTRAINT `ACT_FK_TSKASS_TASK` FOREIGN KEY (`TASK_ID_`) REFERENCES `act_ru_task` (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_ru_identitylink 的数据：~0 rows (大约)
-DELETE FROM `act_ru_identitylink`;
-/*!40000 ALTER TABLE `act_ru_identitylink` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_ru_identitylink` ENABLE KEYS */;
-
--- 导出  表 medicine.act_ru_job 结构
-DROP TABLE IF EXISTS `act_ru_job`;
-CREATE TABLE IF NOT EXISTS `act_ru_job` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
-  `LOCK_EXP_TIME_` timestamp(3) NULL DEFAULT NULL,
-  `LOCK_OWNER_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `EXCLUSIVE_` tinyint(1) DEFAULT NULL,
-  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PROCESS_INSTANCE_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `RETRIES_` int(11) DEFAULT NULL,
-  `EXCEPTION_STACK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `EXCEPTION_MSG_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `DUEDATE_` timestamp(3) NULL DEFAULT NULL,
-  `REPEAT_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `HANDLER_TYPE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `HANDLER_CFG_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_FK_JOB_EXCEPTION` (`EXCEPTION_STACK_ID_`),
-  CONSTRAINT `ACT_FK_JOB_EXCEPTION` FOREIGN KEY (`EXCEPTION_STACK_ID_`) REFERENCES `act_ge_bytearray` (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_ru_job 的数据：~0 rows (大约)
-DELETE FROM `act_ru_job`;
-/*!40000 ALTER TABLE `act_ru_job` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_ru_job` ENABLE KEYS */;
-
--- 导出  表 medicine.act_ru_task 结构
-DROP TABLE IF EXISTS `act_ru_task`;
-CREATE TABLE IF NOT EXISTS `act_ru_task` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_DEF_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `NAME_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `PARENT_TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `DESCRIPTION_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `TASK_DEF_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `OWNER_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `ASSIGNEE_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `DELEGATION_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PRIORITY_` int(11) DEFAULT NULL,
-  `CREATE_TIME_` timestamp(3) NULL DEFAULT NULL,
-  `DUE_DATE_` datetime(3) DEFAULT NULL,
-  `CATEGORY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `SUSPENSION_STATE_` int(11) DEFAULT NULL,
-  `TENANT_ID_` varchar(255) COLLATE utf8_bin DEFAULT '',
-  `FORM_KEY_` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_IDX_TASK_CREATE` (`CREATE_TIME_`),
-  KEY `ACT_FK_TASK_EXE` (`EXECUTION_ID_`),
-  KEY `ACT_FK_TASK_PROCINST` (`PROC_INST_ID_`),
-  KEY `ACT_FK_TASK_PROCDEF` (`PROC_DEF_ID_`),
-  CONSTRAINT `ACT_FK_TASK_EXE` FOREIGN KEY (`EXECUTION_ID_`) REFERENCES `act_ru_execution` (`ID_`),
-  CONSTRAINT `ACT_FK_TASK_PROCDEF` FOREIGN KEY (`PROC_DEF_ID_`) REFERENCES `act_re_procdef` (`ID_`),
-  CONSTRAINT `ACT_FK_TASK_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_ru_task 的数据：~0 rows (大约)
-DELETE FROM `act_ru_task`;
-/*!40000 ALTER TABLE `act_ru_task` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_ru_task` ENABLE KEYS */;
-
--- 导出  表 medicine.act_ru_variable 结构
-DROP TABLE IF EXISTS `act_ru_variable`;
-CREATE TABLE IF NOT EXISTS `act_ru_variable` (
-  `ID_` varchar(64) COLLATE utf8_bin NOT NULL,
-  `REV_` int(11) DEFAULT NULL,
-  `TYPE_` varchar(255) COLLATE utf8_bin NOT NULL,
-  `NAME_` varchar(255) COLLATE utf8_bin NOT NULL,
-  `EXECUTION_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `PROC_INST_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `TASK_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `BYTEARRAY_ID_` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `DOUBLE_` double DEFAULT NULL,
-  `LONG_` bigint(20) DEFAULT NULL,
-  `TEXT_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  `TEXT2_` varchar(4000) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`ID_`),
-  KEY `ACT_IDX_VARIABLE_TASK_ID` (`TASK_ID_`),
-  KEY `ACT_FK_VAR_EXE` (`EXECUTION_ID_`),
-  KEY `ACT_FK_VAR_PROCINST` (`PROC_INST_ID_`),
-  KEY `ACT_FK_VAR_BYTEARRAY` (`BYTEARRAY_ID_`),
-  CONSTRAINT `ACT_FK_VAR_BYTEARRAY` FOREIGN KEY (`BYTEARRAY_ID_`) REFERENCES `act_ge_bytearray` (`ID_`),
-  CONSTRAINT `ACT_FK_VAR_EXE` FOREIGN KEY (`EXECUTION_ID_`) REFERENCES `act_ru_execution` (`ID_`),
-  CONSTRAINT `ACT_FK_VAR_PROCINST` FOREIGN KEY (`PROC_INST_ID_`) REFERENCES `act_ru_execution` (`ID_`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- 正在导出表  medicine.act_ru_variable 的数据：~0 rows (大约)
-DELETE FROM `act_ru_variable`;
-/*!40000 ALTER TABLE `act_ru_variable` DISABLE KEYS */;
-/*!40000 ALTER TABLE `act_ru_variable` ENABLE KEYS */;
-
--- 导出  表 medicine.app_member 结构
-DROP TABLE IF EXISTS `app_member`;
-CREATE TABLE IF NOT EXISTS `app_member` (
-  `id` bigint(20) unsigned NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime(6) DEFAULT NULL,
-  `del_flag` tinyint(1) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime(6) DEFAULT NULL,
-  `avatar` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `mobile` varchar(255) DEFAULT NULL,
-  `nickname` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `platform` tinyint(1) DEFAULT NULL,
-  `sex` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL,
-  `type` tinyint(1) DEFAULT NULL,
-  `username` varchar(255) NOT NULL,
-  `vip_end_time` datetime(6) DEFAULT NULL,
-  `vip_start_time` datetime(6) DEFAULT NULL,
-  `permissions` varchar(255) DEFAULT NULL,
-  `vip_status` tinyint(1) DEFAULT NULL,
-  `birth` datetime(6) DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL,
-  `invite_code` varchar(255) DEFAULT NULL,
-  `grade` int(11) unsigned DEFAULT NULL,
-  `position` varchar(255) DEFAULT NULL,
-  `invite_by` varchar(255) DEFAULT NULL,
-  `description` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `mobile` (`mobile`) USING BTREE,
-  UNIQUE KEY `invite_code` (`invite_code`) USING BTREE,
-  KEY `create_time` (`create_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  medicine.app_member 的数据：~3 rows (大约)
-DELETE FROM `app_member`;
-/*!40000 ALTER TABLE `app_member` DISABLE KEYS */;
-INSERT INTO `app_member` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `avatar`, `email`, `mobile`, `nickname`, `password`, `platform`, `sex`, `status`, `type`, `username`, `vip_end_time`, `vip_start_time`, `permissions`, `vip_status`, `birth`, `address`, `invite_code`, `grade`, `position`, `invite_by`, `description`) VALUES
-	(255227305549369344, '', '2020-03-25 21:14:32.000000', 0, 'admin', '2020-04-27 17:20:45.307000', 'https://i.loli.net/2020/04/18/NmF3IP4TOoVbLf5.png', '', '18782059031', '187****9031', NULL, -1, '', 0, 1, '1251014922381430800', '2030-04-30 00:00:00.000000', '2020-04-01 00:00:00.000000', 'MEMBER', 1, NULL, '中国 北京市 北京市 朝阳区 酒仙桥路 3号 电子城．国际电子总部', '12N3VE6CK440G', 0, '30.5681733200,104.0666198700', '', NULL),
-	(1251783645962833920, 'admin', '2020-04-19 16:04:12.000000', 0, 'admin', '2020-04-27 17:24:23.091000', 'https://i.loli.net/2020/04/18/NmF3IP4TOoVbLf5.png', '', '18782059092', '187****9092', NULL, 1, '', 0, 1, '1251783646004776960', '2020-04-07 00:00:00.000000', '2020-04-01 00:00:00.000000', 'MEMBER', 2, NULL, '中国 北京市 北京市 朝阳区 酒仙桥路 3号 电子城．国际电子总部', '12NPQJ01S4400', 0, '30.5681733200,104.0666198700', '1251014922381430800', NULL),
-	(1251783729291071489, 'admin', '2020-04-19 16:04:32.000000', 0, 'admin', '2020-04-27 22:03:48.509000', 'https://i.loli.net/2020/04/18/NmF3IP4TOoVbLf5.png', '', '18782059033', '187****9093', NULL, 2, '', 0, 0, '1251783729303654400', NULL, NULL, 'MEMBER', 0, NULL, '中国 北京市 北京市 朝阳区 酒仙桥路 3号 电子城．国际电子总部', '12NPQLDKC4400', 0, '30.5681733200,104.0666198700', '1251014922381430800', NULL);
-/*!40000 ALTER TABLE `app_member` ENABLE KEYS */;
-
--- 导出  表 medicine.qrtz_blob_triggers 结构
-DROP TABLE IF EXISTS `qrtz_blob_triggers`;
-CREATE TABLE IF NOT EXISTS `qrtz_blob_triggers` (
-  `SCHED_NAME` varchar(120) COLLATE utf8_croatian_ci NOT NULL,
-  `TRIGGER_NAME` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `BLOB_DATA` blob,
-  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  CONSTRAINT `qrtz_blob_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
-
--- 正在导出表  medicine.qrtz_blob_triggers 的数据：~0 rows (大约)
-DELETE FROM `qrtz_blob_triggers`;
-/*!40000 ALTER TABLE `qrtz_blob_triggers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `qrtz_blob_triggers` ENABLE KEYS */;
-
--- 导出  表 medicine.qrtz_calendars 结构
-DROP TABLE IF EXISTS `qrtz_calendars`;
-CREATE TABLE IF NOT EXISTS `qrtz_calendars` (
-  `SCHED_NAME` varchar(120) COLLATE utf8_croatian_ci NOT NULL,
-  `CALENDAR_NAME` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `CALENDAR` blob NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`,`CALENDAR_NAME`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
-
--- 正在导出表  medicine.qrtz_calendars 的数据：~0 rows (大约)
-DELETE FROM `qrtz_calendars`;
-/*!40000 ALTER TABLE `qrtz_calendars` DISABLE KEYS */;
-/*!40000 ALTER TABLE `qrtz_calendars` ENABLE KEYS */;
-
--- 导出  表 medicine.qrtz_cron_triggers 结构
-DROP TABLE IF EXISTS `qrtz_cron_triggers`;
-CREATE TABLE IF NOT EXISTS `qrtz_cron_triggers` (
-  `SCHED_NAME` varchar(120) COLLATE utf8_croatian_ci NOT NULL,
-  `TRIGGER_NAME` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `CRON_EXPRESSION` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `TIME_ZONE_ID` varchar(80) COLLATE utf8_croatian_ci DEFAULT NULL,
-  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  CONSTRAINT `qrtz_cron_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
-
--- 正在导出表  medicine.qrtz_cron_triggers 的数据：~0 rows (大约)
-DELETE FROM `qrtz_cron_triggers`;
-/*!40000 ALTER TABLE `qrtz_cron_triggers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `qrtz_cron_triggers` ENABLE KEYS */;
-
--- 导出  表 medicine.qrtz_fired_triggers 结构
-DROP TABLE IF EXISTS `qrtz_fired_triggers`;
-CREATE TABLE IF NOT EXISTS `qrtz_fired_triggers` (
-  `SCHED_NAME` varchar(120) COLLATE utf8_croatian_ci NOT NULL,
-  `ENTRY_ID` varchar(95) COLLATE utf8_croatian_ci NOT NULL,
-  `TRIGGER_NAME` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `INSTANCE_NAME` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `FIRED_TIME` bigint(13) NOT NULL,
-  `SCHED_TIME` bigint(13) NOT NULL,
-  `PRIORITY` int(11) NOT NULL,
-  `STATE` varchar(16) COLLATE utf8_croatian_ci NOT NULL,
-  `JOB_NAME` varchar(200) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `JOB_GROUP` varchar(200) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `IS_NONCONCURRENT` varchar(1) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `REQUESTS_RECOVERY` varchar(1) COLLATE utf8_croatian_ci DEFAULT NULL,
-  PRIMARY KEY (`SCHED_NAME`,`ENTRY_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
-
--- 正在导出表  medicine.qrtz_fired_triggers 的数据：~0 rows (大约)
-DELETE FROM `qrtz_fired_triggers`;
-/*!40000 ALTER TABLE `qrtz_fired_triggers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `qrtz_fired_triggers` ENABLE KEYS */;
-
--- 导出  表 medicine.qrtz_job_details 结构
-DROP TABLE IF EXISTS `qrtz_job_details`;
-CREATE TABLE IF NOT EXISTS `qrtz_job_details` (
-  `SCHED_NAME` varchar(120) COLLATE utf8_croatian_ci NOT NULL,
-  `JOB_NAME` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `JOB_GROUP` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `DESCRIPTION` varchar(250) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `JOB_CLASS_NAME` varchar(250) COLLATE utf8_croatian_ci NOT NULL,
-  `IS_DURABLE` varchar(1) COLLATE utf8_croatian_ci NOT NULL,
-  `IS_NONCONCURRENT` varchar(1) COLLATE utf8_croatian_ci NOT NULL,
-  `IS_UPDATE_DATA` varchar(1) COLLATE utf8_croatian_ci NOT NULL,
-  `REQUESTS_RECOVERY` varchar(1) COLLATE utf8_croatian_ci NOT NULL,
-  `JOB_DATA` blob,
-  PRIMARY KEY (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
-
--- 正在导出表  medicine.qrtz_job_details 的数据：~0 rows (大约)
-DELETE FROM `qrtz_job_details`;
-/*!40000 ALTER TABLE `qrtz_job_details` DISABLE KEYS */;
-/*!40000 ALTER TABLE `qrtz_job_details` ENABLE KEYS */;
-
--- 导出  表 medicine.qrtz_locks 结构
-DROP TABLE IF EXISTS `qrtz_locks`;
-CREATE TABLE IF NOT EXISTS `qrtz_locks` (
-  `SCHED_NAME` varchar(120) COLLATE utf8_croatian_ci NOT NULL,
-  `LOCK_NAME` varchar(40) COLLATE utf8_croatian_ci NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`,`LOCK_NAME`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
-
--- 正在导出表  medicine.qrtz_locks 的数据：~0 rows (大约)
-DELETE FROM `qrtz_locks`;
-/*!40000 ALTER TABLE `qrtz_locks` DISABLE KEYS */;
-INSERT INTO `qrtz_locks` (`SCHED_NAME`, `LOCK_NAME`) VALUES
-	('quartzScheduler', 'TRIGGER_ACCESS');
-/*!40000 ALTER TABLE `qrtz_locks` ENABLE KEYS */;
-
--- 导出  表 medicine.qrtz_paused_trigger_grps 结构
-DROP TABLE IF EXISTS `qrtz_paused_trigger_grps`;
-CREATE TABLE IF NOT EXISTS `qrtz_paused_trigger_grps` (
-  `SCHED_NAME` varchar(120) COLLATE utf8_croatian_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_GROUP`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
-
--- 正在导出表  medicine.qrtz_paused_trigger_grps 的数据：~0 rows (大约)
-DELETE FROM `qrtz_paused_trigger_grps`;
-/*!40000 ALTER TABLE `qrtz_paused_trigger_grps` DISABLE KEYS */;
-/*!40000 ALTER TABLE `qrtz_paused_trigger_grps` ENABLE KEYS */;
-
--- 导出  表 medicine.qrtz_scheduler_state 结构
-DROP TABLE IF EXISTS `qrtz_scheduler_state`;
-CREATE TABLE IF NOT EXISTS `qrtz_scheduler_state` (
-  `SCHED_NAME` varchar(120) COLLATE utf8_croatian_ci NOT NULL,
-  `INSTANCE_NAME` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `LAST_CHECKIN_TIME` bigint(13) NOT NULL,
-  `CHECKIN_INTERVAL` bigint(13) NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`,`INSTANCE_NAME`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
-
--- 正在导出表  medicine.qrtz_scheduler_state 的数据：~0 rows (大约)
-DELETE FROM `qrtz_scheduler_state`;
-/*!40000 ALTER TABLE `qrtz_scheduler_state` DISABLE KEYS */;
-/*!40000 ALTER TABLE `qrtz_scheduler_state` ENABLE KEYS */;
-
--- 导出  表 medicine.qrtz_simple_triggers 结构
-DROP TABLE IF EXISTS `qrtz_simple_triggers`;
-CREATE TABLE IF NOT EXISTS `qrtz_simple_triggers` (
-  `SCHED_NAME` varchar(120) COLLATE utf8_croatian_ci NOT NULL,
-  `TRIGGER_NAME` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `REPEAT_COUNT` bigint(7) NOT NULL,
-  `REPEAT_INTERVAL` bigint(12) NOT NULL,
-  `TIMES_TRIGGERED` bigint(10) NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  CONSTRAINT `qrtz_simple_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
-
--- 正在导出表  medicine.qrtz_simple_triggers 的数据：~0 rows (大约)
-DELETE FROM `qrtz_simple_triggers`;
-/*!40000 ALTER TABLE `qrtz_simple_triggers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `qrtz_simple_triggers` ENABLE KEYS */;
-
--- 导出  表 medicine.qrtz_simprop_triggers 结构
-DROP TABLE IF EXISTS `qrtz_simprop_triggers`;
-CREATE TABLE IF NOT EXISTS `qrtz_simprop_triggers` (
-  `SCHED_NAME` varchar(120) COLLATE utf8_croatian_ci NOT NULL,
-  `TRIGGER_NAME` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `STR_PROP_1` varchar(512) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `STR_PROP_2` varchar(512) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `STR_PROP_3` varchar(512) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `INT_PROP_1` int(11) DEFAULT NULL,
-  `INT_PROP_2` int(11) DEFAULT NULL,
-  `LONG_PROP_1` bigint(20) DEFAULT NULL,
-  `LONG_PROP_2` bigint(20) DEFAULT NULL,
-  `DEC_PROP_1` decimal(13,4) DEFAULT NULL,
-  `DEC_PROP_2` decimal(13,4) DEFAULT NULL,
-  `BOOL_PROP_1` varchar(1) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `BOOL_PROP_2` varchar(1) COLLATE utf8_croatian_ci DEFAULT NULL,
-  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  CONSTRAINT `qrtz_simprop_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `qrtz_triggers` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
-
--- 正在导出表  medicine.qrtz_simprop_triggers 的数据：~0 rows (大约)
-DELETE FROM `qrtz_simprop_triggers`;
-/*!40000 ALTER TABLE `qrtz_simprop_triggers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `qrtz_simprop_triggers` ENABLE KEYS */;
-
--- 导出  表 medicine.qrtz_triggers 结构
-DROP TABLE IF EXISTS `qrtz_triggers`;
-CREATE TABLE IF NOT EXISTS `qrtz_triggers` (
-  `SCHED_NAME` varchar(120) COLLATE utf8_croatian_ci NOT NULL,
-  `TRIGGER_NAME` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `JOB_NAME` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `JOB_GROUP` varchar(200) COLLATE utf8_croatian_ci NOT NULL,
-  `DESCRIPTION` varchar(250) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `NEXT_FIRE_TIME` bigint(13) DEFAULT NULL,
-  `PREV_FIRE_TIME` bigint(13) DEFAULT NULL,
-  `PRIORITY` int(11) DEFAULT NULL,
-  `TRIGGER_STATE` varchar(16) COLLATE utf8_croatian_ci NOT NULL,
-  `TRIGGER_TYPE` varchar(8) COLLATE utf8_croatian_ci NOT NULL,
-  `START_TIME` bigint(13) NOT NULL,
-  `END_TIME` bigint(13) DEFAULT NULL,
-  `CALENDAR_NAME` varchar(200) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `MISFIRE_INSTR` smallint(2) DEFAULT NULL,
-  `JOB_DATA` blob,
-  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
-  KEY `SCHED_NAME` (`SCHED_NAME`,`JOB_NAME`,`JOB_GROUP`),
-  CONSTRAINT `qrtz_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) REFERENCES `qrtz_job_details` (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
-
--- 正在导出表  medicine.qrtz_triggers 的数据：~0 rows (大约)
-DELETE FROM `qrtz_triggers`;
-/*!40000 ALTER TABLE `qrtz_triggers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `qrtz_triggers` ENABLE KEYS */;
-
--- 导出  表 medicine.t_act_business 结构
-DROP TABLE IF EXISTS `t_act_business`;
-CREATE TABLE IF NOT EXISTS `t_act_business` (
-  `id` bigint(20) unsigned NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `del_flag` tinyint(1) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `proc_def_id` varchar(255) DEFAULT NULL,
-  `proc_inst_id` varchar(255) DEFAULT NULL,
-  `result` tinyint(1) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL,
-  `table_id` bigint(20) unsigned DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `user_id` bigint(20) unsigned DEFAULT NULL,
-  `apply_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `create_time` (`create_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  medicine.t_act_business 的数据：~0 rows (大约)
-DELETE FROM `t_act_business`;
-/*!40000 ALTER TABLE `t_act_business` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_act_business` ENABLE KEYS */;
-
--- 导出  表 medicine.t_act_category 结构
-DROP TABLE IF EXISTS `t_act_category`;
-CREATE TABLE IF NOT EXISTS `t_act_category` (
-  `id` bigint(20) unsigned NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `del_flag` tinyint(1) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `is_parent` bit(1) DEFAULT NULL,
-  `parent_id` bigint(20) unsigned DEFAULT NULL,
-  `sort_order` decimal(10,2) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `type` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  medicine.t_act_category 的数据：~0 rows (大约)
-DELETE FROM `t_act_category`;
-/*!40000 ALTER TABLE `t_act_category` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_act_category` ENABLE KEYS */;
-
--- 导出  表 medicine.t_act_model 结构
-DROP TABLE IF EXISTS `t_act_model`;
-CREATE TABLE IF NOT EXISTS `t_act_model` (
-  `id` bigint(20) unsigned NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `del_flag` tinyint(1) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `model_key` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `version` int(11) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `create_time` (`create_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  medicine.t_act_model 的数据：~0 rows (大约)
-DELETE FROM `t_act_model`;
-/*!40000 ALTER TABLE `t_act_model` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_act_model` ENABLE KEYS */;
-
--- 导出  表 medicine.t_act_node 结构
-DROP TABLE IF EXISTS `t_act_node`;
-CREATE TABLE IF NOT EXISTS `t_act_node` (
-  `id` bigint(20) unsigned NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `del_flag` tinyint(1) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `node_id` varchar(255) DEFAULT NULL,
-  `type` tinyint(1) DEFAULT NULL,
-  `relate_id` bigint(20) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  medicine.t_act_node 的数据：~0 rows (大约)
-DELETE FROM `t_act_node`;
-/*!40000 ALTER TABLE `t_act_node` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_act_node` ENABLE KEYS */;
-
--- 导出  表 medicine.t_act_process 结构
-DROP TABLE IF EXISTS `t_act_process`;
-CREATE TABLE IF NOT EXISTS `t_act_process` (
-  `id` varchar(255) NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `del_flag` tinyint(1) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `category_id` bigint(20) unsigned DEFAULT NULL,
-  `deployment_id` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `diagram_name` varchar(255) DEFAULT NULL,
-  `latest` bit(1) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `process_key` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL,
-  `version` int(11) DEFAULT NULL,
-  `xml_name` varchar(255) DEFAULT NULL,
-  `business_table` varchar(255) DEFAULT NULL,
-  `route_name` varchar(255) DEFAULT NULL,
-  `all_user` bit(1) DEFAULT NULL,
-  `category_title` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `create_time` (`create_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  medicine.t_act_process 的数据：~0 rows (大约)
-DELETE FROM `t_act_process`;
-/*!40000 ALTER TABLE `t_act_process` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_act_process` ENABLE KEYS */;
-
--- 导出  表 medicine.t_act_starter 结构
-DROP TABLE IF EXISTS `t_act_starter`;
-CREATE TABLE IF NOT EXISTS `t_act_starter` (
-  `id` bigint(20) unsigned NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime(6) DEFAULT NULL,
-  `del_flag` tinyint(1) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime(6) DEFAULT NULL,
-  `process_def_id` varchar(255) DEFAULT NULL,
-  `user_id` bigint(20) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  medicine.t_act_starter 的数据：~0 rows (大约)
-DELETE FROM `t_act_starter`;
-/*!40000 ALTER TABLE `t_act_starter` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_act_starter` ENABLE KEYS */;
-
--- 导出  表 medicine.t_client 结构
-DROP TABLE IF EXISTS `t_client`;
-CREATE TABLE IF NOT EXISTS `t_client` (
-  `id` bigint(20) unsigned NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime(6) DEFAULT NULL,
-  `del_flag` tinyint(1) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime(6) DEFAULT NULL,
-  `client_secret` varchar(255) DEFAULT NULL,
-  `home_uri` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `redirect_uri` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `create_time` (`create_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  medicine.t_client 的数据：~0 rows (大约)
-DELETE FROM `t_client`;
-/*!40000 ALTER TABLE `t_client` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_client` ENABLE KEYS */;
 
 -- 导出  表 medicine.t_department 结构
 DROP TABLE IF EXISTS `t_department`;
 CREATE TABLE IF NOT EXISTS `t_department` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL,
   `create_by` varchar(255) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
-  `del_flag` int(11) DEFAULT NULL,
+  `del_flag` int DEFAULT NULL,
   `update_by` varchar(255) DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
-  `parent_id` bigint(20) unsigned DEFAULT NULL,
+  `parent_id` bigint unsigned DEFAULT NULL,
   `sort_order` decimal(10,2) DEFAULT NULL,
   `status` tinyint(1) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `is_parent` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- 正在导出表  medicine.t_department 的数据：~11 rows (大约)
 DELETE FROM `t_department`;
@@ -1088,17 +55,17 @@ INSERT INTO `t_department` (`id`, `create_by`, `create_time`, `del_flag`, `updat
 -- 导出  表 medicine.t_department_header 结构
 DROP TABLE IF EXISTS `t_department_header`;
 CREATE TABLE IF NOT EXISTS `t_department_header` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL,
   `create_by` varchar(255) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `del_flag` tinyint(1) DEFAULT NULL,
   `update_by` varchar(255) DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
-  `department_id` bigint(20) unsigned DEFAULT NULL,
+  `department_id` bigint unsigned DEFAULT NULL,
   `type` tinyint(1) DEFAULT NULL,
-  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `user_id` bigint unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- 正在导出表  medicine.t_department_header 的数据：~3 rows (大约)
 DELETE FROM `t_department_header`;
@@ -1112,7 +79,7 @@ INSERT INTO `t_department_header` (`id`, `create_by`, `create_time`, `del_flag`,
 -- 导出  表 medicine.t_dict 结构
 DROP TABLE IF EXISTS `t_dict`;
 CREATE TABLE IF NOT EXISTS `t_dict` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL,
   `create_by` varchar(255) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `del_flag` tinyint(1) DEFAULT NULL,
@@ -1123,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `t_dict` (
   `type` varchar(255) DEFAULT NULL,
   `sort_order` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- 正在导出表  medicine.t_dict 的数据：~7 rows (大约)
 DELETE FROM `t_dict`;
@@ -1141,21 +108,21 @@ INSERT INTO `t_dict` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`,
 -- 导出  表 medicine.t_dict_data 结构
 DROP TABLE IF EXISTS `t_dict_data`;
 CREATE TABLE IF NOT EXISTS `t_dict_data` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL,
   `create_by` varchar(255) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `del_flag` tinyint(1) DEFAULT NULL,
   `update_by` varchar(255) DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
-  `dict_id` bigint(20) unsigned DEFAULT NULL,
+  `dict_id` bigint unsigned DEFAULT NULL,
   `sort_order` decimal(10,2) DEFAULT NULL,
   `status` tinyint(1) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `sort_order` (`sort_order`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- 正在导出表  medicine.t_dict_data 的数据：~39 rows (大约)
 DELETE FROM `t_dict_data`;
@@ -1205,23 +172,23 @@ INSERT INTO `t_dict_data` (`id`, `create_by`, `create_time`, `del_flag`, `update
 -- 导出  表 medicine.t_examine 结构
 DROP TABLE IF EXISTS `t_examine`;
 CREATE TABLE IF NOT EXISTS `t_examine` (
-  `id` varchar(255) COLLATE utf8_croatian_ci NOT NULL,
-  `create_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `id` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci NOT NULL,
+  `create_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   `create_time` datetime(6) DEFAULT NULL,
-  `del_flag` int(11) DEFAULT NULL,
-  `update_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `del_flag` int DEFAULT NULL,
+  `update_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   `update_time` datetime(6) DEFAULT NULL,
-  `insurance_id` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `insurance_name` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `money` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `status` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `user_id` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `user_name` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `message` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `insurance_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `insurance_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `money` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `user_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `message` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_croatian_ci;
 
--- 正在导出表  medicine.t_examine 的数据：~6 rows (大约)
+-- 正在导出表  medicine.t_examine 的数据：~7 rows (大约)
 DELETE FROM `t_examine`;
 /*!40000 ALTER TABLE `t_examine` DISABLE KEYS */;
 INSERT INTO `t_examine` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `insurance_id`, `insurance_name`, `money`, `status`, `user_id`, `user_name`, `message`) VALUES
@@ -1237,21 +204,21 @@ INSERT INTO `t_examine` (`id`, `create_by`, `create_time`, `del_flag`, `update_b
 -- 导出  表 medicine.t_file 结构
 DROP TABLE IF EXISTS `t_file`;
 CREATE TABLE IF NOT EXISTS `t_file` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL,
   `create_by` varchar(255) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `del_flag` tinyint(1) DEFAULT NULL,
   `update_by` varchar(255) DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `size` bigint(20) unsigned DEFAULT NULL,
+  `size` bigint unsigned DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
   `f_key` varchar(255) DEFAULT NULL,
   `location` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `create_time` (`create_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- 正在导出表  medicine.t_file 的数据：~0 rows (大约)
 DELETE FROM `t_file`;
@@ -1261,21 +228,21 @@ DELETE FROM `t_file`;
 -- 导出  表 medicine.t_insurance 结构
 DROP TABLE IF EXISTS `t_insurance`;
 CREATE TABLE IF NOT EXISTS `t_insurance` (
-  `id` varchar(255) COLLATE utf8_croatian_ci NOT NULL,
-  `create_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `id` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci NOT NULL,
+  `create_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   `create_time` datetime(6) DEFAULT NULL,
-  `del_flag` int(11) DEFAULT NULL,
-  `update_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `del_flag` int DEFAULT NULL,
+  `update_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   `update_time` datetime(6) DEFAULT NULL,
-  `big` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `common` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `mine` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `one` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `three` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `two` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `big` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `common` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `mine` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `one` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `three` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `two` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_croatian_ci;
 
 -- 正在导出表  medicine.t_insurance 的数据：~3 rows (大约)
 DELETE FROM `t_insurance`;
@@ -1286,39 +253,16 @@ INSERT INTO `t_insurance` (`id`, `create_by`, `create_time`, `del_flag`, `update
 	('1337933534492495872', 'admin', '2020-12-13 09:33:06.887000', 0, NULL, NULL, '30', '20', '0', '最低医疗保险', '20', '10', '10');
 /*!40000 ALTER TABLE `t_insurance` ENABLE KEYS */;
 
--- 导出  表 medicine.t_leave 结构
-DROP TABLE IF EXISTS `t_leave`;
-CREATE TABLE IF NOT EXISTS `t_leave` (
-  `id` bigint(20) unsigned NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `del_flag` tinyint(1) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `end_date` datetime DEFAULT NULL,
-  `start_date` datetime DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `duration` int(11) unsigned DEFAULT NULL,
-  `type` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  medicine.t_leave 的数据：~0 rows (大约)
-DELETE FROM `t_leave`;
-/*!40000 ALTER TABLE `t_leave` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_leave` ENABLE KEYS */;
-
 -- 导出  表 medicine.t_log 结构
 DROP TABLE IF EXISTS `t_log`;
 CREATE TABLE IF NOT EXISTS `t_log` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL,
   `create_by` varchar(255) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `del_flag` tinyint(1) DEFAULT NULL,
   `update_by` varchar(255) DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
-  `cost_time` int(11) unsigned DEFAULT NULL,
+  `cost_time` int unsigned DEFAULT NULL,
   `ip` varchar(255) DEFAULT NULL,
   `ip_info` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -1329,9 +273,9 @@ CREATE TABLE IF NOT EXISTS `t_log` (
   `log_type` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `create_time` (`create_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
--- 正在导出表  medicine.t_log 的数据：~22 rows (大约)
+-- 正在导出表  medicine.t_log 的数据：~27 rows (大约)
 DELETE FROM `t_log`;
 /*!40000 ALTER TABLE `t_log` DISABLE KEYS */;
 INSERT INTO `t_log` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `cost_time`, `ip`, `ip_info`, `name`, `request_param`, `request_type`, `request_url`, `username`, `log_type`) VALUES
@@ -1356,26 +300,38 @@ INSERT INTO `t_log` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, 
 	(1355732928340037632, NULL, '2021-01-31 12:21:33', 0, NULL, '2021-01-31 12:21:33', 60, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"due8","saveLogin":"true","captchaId":"648c07f55a2b463eb814768b25211c53","username":"admin"}', 'POST', '/xboot/login', 'admin', 1),
 	(1355751708294254592, NULL, '2021-01-31 13:36:11', 0, NULL, '2021-01-31 13:36:11', 75, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"uwxd","saveLogin":"true","captchaId":"ffe6067e7b3740f3aeb837111b79486b","username":"company"}', 'POST', '/xboot/login', 'company', 1),
 	(1355751794889854976, NULL, '2021-01-31 13:36:31', 0, NULL, '2021-01-31 13:36:31', 70, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"dekd","saveLogin":"true","captchaId":"e2e4c16b08bb49508e8ae345a5387141","username":"doctor"}', 'POST', '/xboot/login', 'doctor', 1),
-	(1355751908521938944, NULL, '2021-01-31 13:36:58', 0, NULL, '2021-01-31 13:36:58', 91, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"jpss","saveLogin":"true","captchaId":"00b0a0f70492445fa1ba3c7d5892aa8d","username":"admin"}', 'POST', '/xboot/login', 'admin', 1);
+	(1355751908521938944, NULL, '2021-01-31 13:36:58', 0, NULL, '2021-01-31 13:36:58', 91, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"jpss","saveLogin":"true","captchaId":"00b0a0f70492445fa1ba3c7d5892aa8d","username":"admin"}', 'POST', '/xboot/login', 'admin', 1),
+	(1463375568652341248, NULL, '2021-11-24 13:14:59', 0, NULL, '2021-11-24 13:14:59', 204, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"OLUR","saveLogin":"true","captchaId":"c9bc133822c6438e8c9499cb461a27d2","username":"admin"}', 'POST', '/xboot/login', 'admin', 1),
+	(1463375637669613568, NULL, '2021-11-24 13:15:15', 0, NULL, '2021-11-24 13:15:15', 79, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"SKUE","saveLogin":"true","captchaId":"77e6552ca17840dbacd9c8727f0573de","username":"admin"}', 'POST', '/xboot/login', 'admin', 1),
+	(1463384643616247808, NULL, '2021-11-24 13:51:02', 0, NULL, '2021-11-24 13:51:02', 69, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"IY7Q","saveLogin":"true","captchaId":"a2287d7f99f64fc98ad6316a2dbc8bf2","username":"admin"}', 'POST', '/xboot/login', 'admin', 1),
+	(1463390317393874944, NULL, '2021-11-24 14:13:35', 0, NULL, '2021-11-24 14:13:35', 81, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"9RNO","saveLogin":"true","captchaId":"e2ee9fed43db435095eed265a832df38","username":"admin"}', 'POST', '/xboot/login', 'admin', 1),
+	(1463396744564969472, NULL, '2021-11-24 14:39:07', 0, NULL, '2021-11-24 14:39:07', 92, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"avvh","saveLogin":"true","captchaId":"265ab32faada425f9e30adcacd27b263","username":"admin"}', 'POST', '/xboot/login', 'admin', 1),
+	(1463396965332160512, NULL, '2021-11-24 14:40:00', 0, NULL, '2021-11-24 14:40:00', 84, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"GER9","saveLogin":"true","captchaId":"8e5ed6a725c24ce586f85a828525bcbc","username":"admin"}', 'POST', '/xboot/login', 'admin', 1),
+	(1463397001549975552, NULL, '2021-11-24 14:40:09', 0, NULL, '2021-11-24 14:40:09', 83, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"YZHZ","saveLogin":"true","captchaId":"43b642dd04a84ff0b598c7e45dd8cbae","username":"admin"}', 'POST', '/xboot/login', 'admin', 1),
+	(1463745354230009856, NULL, '2021-11-25 13:44:22', 0, NULL, '2021-11-25 13:44:22', 199, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"7ptg","saveLogin":"true","captchaId":"b1e2e425f57145579c5bea5d5ed76ad2","username":"admin"}', 'POST', '/xboot/login', 'admin', 1),
+	(1463751360750161920, NULL, '2021-11-25 14:08:15', 0, NULL, '2021-11-25 14:08:15', 247, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"JQN5","saveLogin":"true","captchaId":"6a2975c9452e4243931b0d7b380325c6","username":"admin"}', 'POST', '/xboot/login', 'admin', 1),
+	(1463770014329999360, NULL, '2021-11-25 15:22:22', 0, NULL, '2021-11-25 15:22:22', 319, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"RZDZ","saveLogin":"true","captchaId":"f9b38f92cd224fe093bfde7948d9da04","username":"admin"}', 'POST', '/zwz/login', 'admin', 1),
+	(1463778047030333440, NULL, '2021-11-25 15:54:17', 0, NULL, '2021-11-25 15:54:17', 143, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"R9FZ","saveLogin":"true","captchaId":"ea065e931bb34e3583f1ec6238799060","username":"admin"}', 'POST', '/zwz/login', 'admin', 1),
+	(1464410444235149312, NULL, '2021-11-27 09:47:12', 0, NULL, '2021-11-27 09:47:12', 288, '127.0.0.1', '未知', '登录系统', '{"password":"密码已被隐藏","code":"BPQZ","saveLogin":"true","captchaId":"bce096c9b0d0430181d142f55f027ae7","username":"admin"}', 'POST', '/zwz/login', 'admin', 1);
 /*!40000 ALTER TABLE `t_log` ENABLE KEYS */;
 
 -- 导出  表 medicine.t_medicine 结构
 DROP TABLE IF EXISTS `t_medicine`;
 CREATE TABLE IF NOT EXISTS `t_medicine` (
-  `id` varchar(255) COLLATE utf8_croatian_ci NOT NULL,
-  `create_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `id` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci NOT NULL,
+  `create_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   `create_time` datetime(6) DEFAULT NULL,
-  `del_flag` int(11) DEFAULT NULL,
-  `update_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `del_flag` int DEFAULT NULL,
+  `update_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   `update_time` datetime(6) DEFAULT NULL,
-  `efficacy` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `price` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `type` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `efficacy` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `price` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_croatian_ci;
 
--- 正在导出表  medicine.t_medicine 的数据：~12 rows (大约)
+-- 正在导出表  medicine.t_medicine 的数据：~13 rows (大约)
 DELETE FROM `t_medicine`;
 /*!40000 ALTER TABLE `t_medicine` DISABLE KEYS */;
 INSERT INTO `t_medicine` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `efficacy`, `name`, `price`, `type`) VALUES
@@ -1394,58 +350,10 @@ INSERT INTO `t_medicine` (`id`, `create_by`, `create_time`, `del_flag`, `update_
 	('1350630395485491201', 'admin', '2021-01-17 10:25:54.441000', 0, NULL, NULL, '对人体的关键骨节进行复位穿刺', '关节穿刺术', '6750', '一级手术');
 /*!40000 ALTER TABLE `t_medicine` ENABLE KEYS */;
 
--- 导出  表 medicine.t_message 结构
-DROP TABLE IF EXISTS `t_message`;
-CREATE TABLE IF NOT EXISTS `t_message` (
-  `id` bigint(20) unsigned NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `del_flag` tinyint(1) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `create_send` bit(1) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `type` varchar(255) DEFAULT NULL,
-  `content` longtext CHARACTER SET utf8mb4,
-  PRIMARY KEY (`id`),
-  KEY `create_time` (`create_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  medicine.t_message 的数据：~0 rows (大约)
-DELETE FROM `t_message`;
-/*!40000 ALTER TABLE `t_message` DISABLE KEYS */;
-INSERT INTO `t_message` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `create_send`, `title`, `type`, `content`) VALUES
-	(43615268366192640, '', '2018-08-19 22:43:51', 0, 'admin', '2020-04-26 23:32:08', b'1', '城乡居民大病保险管理系统 点我查看使用须知', '系统公告', '<p style="text-align: center;">城乡居民大病保险管理系统</p>');
-/*!40000 ALTER TABLE `t_message` ENABLE KEYS */;
-
--- 导出  表 medicine.t_message_send 结构
-DROP TABLE IF EXISTS `t_message_send`;
-CREATE TABLE IF NOT EXISTS `t_message_send` (
-  `id` bigint(20) unsigned NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `del_flag` tinyint(1) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `message_id` bigint(20) unsigned DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL,
-  `user_id` bigint(20) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `create_time` (`create_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  medicine.t_message_send 的数据：~2 rows (大约)
-DELETE FROM `t_message_send`;
-/*!40000 ALTER TABLE `t_message_send` DISABLE KEYS */;
-INSERT INTO `t_message_send` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `message_id`, `status`, `user_id`) VALUES
-	(43615268663988224, NULL, '2018-08-19 22:43:51', 0, NULL, '2018-08-19 22:43:51', 43615268366192640, 0, 682265633886209),
-	(43615268663988226, '', '2018-08-19 22:43:51', 0, '', '2018-08-24 12:41:24', 43615268366192640, 2, 4363087427670016);
-/*!40000 ALTER TABLE `t_message_send` ENABLE KEYS */;
-
 -- 导出  表 medicine.t_permission 结构
 DROP TABLE IF EXISTS `t_permission`;
 CREATE TABLE IF NOT EXISTS `t_permission` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL,
   `create_by` varchar(255) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `del_flag` tinyint(1) DEFAULT NULL,
@@ -1453,20 +361,20 @@ CREATE TABLE IF NOT EXISTS `t_permission` (
   `update_time` datetime DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `parent_id` bigint(20) unsigned DEFAULT NULL,
+  `parent_id` bigint unsigned DEFAULT NULL,
   `type` tinyint(1) DEFAULT NULL,
   `sort_order` decimal(10,2) DEFAULT NULL,
   `component` varchar(255) DEFAULT NULL,
   `path` varchar(255) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `icon` varchar(255) DEFAULT NULL,
-  `level` int(11) unsigned DEFAULT NULL,
+  `level` int unsigned DEFAULT NULL,
   `button_type` varchar(255) DEFAULT NULL,
   `status` tinyint(1) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
   `show_always` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- 正在导出表  medicine.t_permission 的数据：~81 rows (大约)
 DELETE FROM `t_permission`;
@@ -1555,32 +463,10 @@ INSERT INTO `t_permission` (`id`, `create_by`, `create_time`, `del_flag`, `updat
 	(1337742085226369025, 'admin', '2020-12-12 20:52:22', 0, 'admin', '2020-12-12 20:52:22', NULL, 'examine', 1337741980058390528, 0, 1.00, 'examine/examine/medicine', 'examine', '保险审核', 'md-baseball', 2, '', 0, NULL, b'1');
 /*!40000 ALTER TABLE `t_permission` ENABLE KEYS */;
 
--- 导出  表 medicine.t_quartz_job 结构
-DROP TABLE IF EXISTS `t_quartz_job`;
-CREATE TABLE IF NOT EXISTS `t_quartz_job` (
-  `id` bigint(20) unsigned NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `del_flag` tinyint(1) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `cron_expression` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `job_class_name` varchar(255) DEFAULT NULL,
-  `parameter` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  medicine.t_quartz_job 的数据：~0 rows (大约)
-DELETE FROM `t_quartz_job`;
-/*!40000 ALTER TABLE `t_quartz_job` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_quartz_job` ENABLE KEYS */;
-
 -- 导出  表 medicine.t_role 结构
 DROP TABLE IF EXISTS `t_role`;
 CREATE TABLE IF NOT EXISTS `t_role` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL,
   `create_by` varchar(255) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `update_by` varchar(255) DEFAULT NULL,
@@ -1591,7 +477,7 @@ CREATE TABLE IF NOT EXISTS `t_role` (
   `description` varchar(255) DEFAULT NULL,
   `data_type` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- 正在导出表  medicine.t_role 的数据：~3 rows (大约)
 DELETE FROM `t_role`;
@@ -1605,16 +491,16 @@ INSERT INTO `t_role` (`id`, `create_by`, `create_time`, `update_by`, `update_tim
 -- 导出  表 medicine.t_role_department 结构
 DROP TABLE IF EXISTS `t_role_department`;
 CREATE TABLE IF NOT EXISTS `t_role_department` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL,
   `create_by` varchar(255) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `del_flag` tinyint(1) DEFAULT NULL,
   `update_by` varchar(255) DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
-  `department_id` bigint(20) unsigned DEFAULT NULL,
-  `role_id` bigint(20) unsigned DEFAULT NULL,
+  `department_id` bigint unsigned DEFAULT NULL,
+  `role_id` bigint unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- 正在导出表  medicine.t_role_department 的数据：~3 rows (大约)
 DELETE FROM `t_role_department`;
@@ -1628,18 +514,18 @@ INSERT INTO `t_role_department` (`id`, `create_by`, `create_time`, `del_flag`, `
 -- 导出  表 medicine.t_role_permission 结构
 DROP TABLE IF EXISTS `t_role_permission`;
 CREATE TABLE IF NOT EXISTS `t_role_permission` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL,
   `create_by` varchar(255) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `del_flag` tinyint(1) DEFAULT NULL,
   `update_by` varchar(255) DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
-  `permission_id` bigint(20) unsigned DEFAULT NULL,
-  `role_id` bigint(20) unsigned DEFAULT NULL,
+  `permission_id` bigint unsigned DEFAULT NULL,
+  `role_id` bigint unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
--- 正在导出表  medicine.t_role_permission 的数据：~62 rows (大约)
+-- 正在导出表  medicine.t_role_permission 的数据：~67 rows (大约)
 DELETE FROM `t_role_permission`;
 /*!40000 ALTER TABLE `t_role_permission` DISABLE KEYS */;
 INSERT INTO `t_role_permission` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `permission_id`, `role_id`) VALUES
@@ -1658,113 +544,118 @@ INSERT INTO `t_role_permission` (`id`, `create_by`, `create_time`, `del_flag`, `
 	(1350610088599097353, 'admin', '2021-01-17 09:05:13', 0, 'admin', '2021-01-17 09:05:13', 1337320087052488705, 16457350655250432),
 	(1350610088599097354, 'admin', '2021-01-17 09:05:13', 0, 'admin', '2021-01-17 09:05:13', 1337391052256055297, 16457350655250432),
 	(1350610088599097355, 'admin', '2021-01-17 09:05:13', 0, 'admin', '2021-01-17 09:05:13', 1337391123898961921, 16457350655250432),
-	(1350639140626108416, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 125909152017944576, 496138616573952),
-	(1350639140626108417, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 5129710648430592, 496138616573952),
-	(1350639140626108418, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 5129710648430593, 496138616573952),
-	(1350639140626108419, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 15701400130424832, 496138616573952),
-	(1350639140626108420, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 16678126574637056, 496138616573952),
-	(1350639140626108421, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 15701915807518720, 496138616573952),
-	(1350639140626108422, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 15708892205944832, 496138616573952),
-	(1350639140626108423, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 16678447719911424, 496138616573952),
-	(1350639140626108424, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 25014528525733888, 496138616573952),
-	(1350639140626108425, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 56898976661639168, 496138616573952),
-	(1350639140626108426, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 156365156580855808, 496138616573952),
-	(1350639140626108427, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 5129710648430594, 496138616573952),
-	(1350639140626108428, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 16687383932047360, 496138616573952),
-	(1350639140626108429, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 16689632049631232, 496138616573952),
-	(1350639140626108430, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 16689745006432256, 496138616573952),
-	(1350639140626108431, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 16689883993083904, 496138616573952),
-	(1350639140626108432, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 16690313745666048, 496138616573952),
-	(1350639140626108433, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 5129710648430595, 496138616573952),
-	(1350639140626108434, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 16694861252005888, 496138616573952),
-	(1350639140626108435, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 16695107491205120, 496138616573952),
-	(1350639140626108436, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 16695243126607872, 496138616573952),
-	(1350639140626108437, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 75002207560273920, 496138616573952),
-	(1350639140626108438, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 76215889006956544, 496138616573952),
-	(1350639140626108439, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 76216071333351424, 496138616573952),
-	(1350639140626108440, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 76216264070008832, 496138616573952),
-	(1350639140626108441, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 76216459709124608, 496138616573952),
-	(1350639140626108442, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 76216594207870976, 496138616573952),
-	(1350639140626108443, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 76216702639017984, 496138616573952),
-	(1350639140626108444, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 39915540965232640, 496138616573952),
-	(1350639140626108445, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 41363147411427328, 496138616573952),
-	(1350639140626108446, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 41363537456533504, 496138616573952),
-	(1350639140626108447, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 41364927394353152, 496138616573952),
-	(1350639140626108448, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337319819627859969, 496138616573952),
-	(1350639140626108449, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337324650472017921, 496138616573952),
-	(1350639140626108450, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337325396064079872, 496138616573952),
-	(1350639140626108451, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337376912225472513, 496138616573952),
-	(1350639140626108452, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337377059000946689, 496138616573952),
-	(1350639140626108453, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337319951794573313, 496138616573952),
-	(1350639140626108454, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337366451853594624, 496138616573952),
-	(1350639140626108455, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337366572867653632, 496138616573952),
-	(1350639140626108456, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337557674727968769, 496138616573952),
-	(1350639140626108457, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337320087052488705, 496138616573952),
-	(1350639140626108458, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337391052256055297, 496138616573952),
-	(1350639140626108459, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337391123898961921, 496138616573952),
-	(1350639140626108460, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337320167616679936, 496138616573952),
-	(1350639140626108461, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337741980058390528, 496138616573952),
-	(1350639140626108462, 'admin', '2021-01-17 11:00:39', 0, 'admin', '2021-01-17 11:00:39', 1337742085226369025, 496138616573952);
+	(1463389412896411648, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 125909152017944576, 496138616573952),
+	(1463389412896411649, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 5129710648430592, 496138616573952),
+	(1463389412896411650, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 5129710648430593, 496138616573952),
+	(1463389412896411651, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 15701400130424832, 496138616573952),
+	(1463389412896411652, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 16678126574637056, 496138616573952),
+	(1463389412896411653, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 15701915807518720, 496138616573952),
+	(1463389412896411654, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 15708892205944832, 496138616573952),
+	(1463389412896411655, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 16678447719911424, 496138616573952),
+	(1463389412896411656, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 25014528525733888, 496138616573952),
+	(1463389412896411657, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 56898976661639168, 496138616573952),
+	(1463389412896411658, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 156365156580855808, 496138616573952),
+	(1463389412896411659, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 5129710648430594, 496138616573952),
+	(1463389412896411660, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 16687383932047360, 496138616573952),
+	(1463389412896411661, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 16689632049631232, 496138616573952),
+	(1463389412896411662, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 16689745006432256, 496138616573952),
+	(1463389412896411663, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 16689883993083904, 496138616573952),
+	(1463389412896411664, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 16690313745666048, 496138616573952),
+	(1463389412896411665, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 5129710648430595, 496138616573952),
+	(1463389412896411666, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 16694861252005888, 496138616573952),
+	(1463389412896411667, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 16695107491205120, 496138616573952),
+	(1463389412896411668, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 16695243126607872, 496138616573952),
+	(1463389412896411669, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 75002207560273920, 496138616573952),
+	(1463389412896411670, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 76215889006956544, 496138616573952),
+	(1463389412896411671, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 76216071333351424, 496138616573952),
+	(1463389412896411672, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 76216264070008832, 496138616573952),
+	(1463389412896411673, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 76216459709124608, 496138616573952),
+	(1463389412896411674, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 76216594207870976, 496138616573952),
+	(1463389412896411675, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 76216702639017984, 496138616573952),
+	(1463389412896411676, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 39915540965232640, 496138616573952),
+	(1463389412896411677, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 41363147411427328, 496138616573952),
+	(1463389412896411678, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 41363537456533504, 496138616573952),
+	(1463389412896411679, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 41364927394353152, 496138616573952),
+	(1463389412896411680, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 121426317022334976, 496138616573952),
+	(1463389412896411681, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1255336077691064320, 496138616573952),
+	(1463389412896411682, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1255336361339260928, 496138616573952),
+	(1463389412896411683, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1255336455472025601, 496138616573952),
+	(1463389412896411684, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1255336553971060737, 496138616573952),
+	(1463389412896411685, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337319819627859969, 496138616573952),
+	(1463389412896411686, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337324650472017921, 496138616573952),
+	(1463389412896411687, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337325396064079872, 496138616573952),
+	(1463389412896411688, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337376912225472513, 496138616573952),
+	(1463389412896411689, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337377059000946689, 496138616573952),
+	(1463389412896411690, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337319951794573313, 496138616573952),
+	(1463389412896411691, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337366451853594624, 496138616573952),
+	(1463389412896411692, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337366572867653632, 496138616573952),
+	(1463389412896411693, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337557674727968769, 496138616573952),
+	(1463389412896411694, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337320087052488705, 496138616573952),
+	(1463389412896411695, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337391052256055297, 496138616573952),
+	(1463389412896411696, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337391123898961921, 496138616573952),
+	(1463389412896411697, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337320167616679936, 496138616573952),
+	(1463389412896411698, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337741980058390528, 496138616573952),
+	(1463389412896411699, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337742085226369025, 496138616573952);
 /*!40000 ALTER TABLE `t_role_permission` ENABLE KEYS */;
 
 -- 导出  表 medicine.t_roster 结构
 DROP TABLE IF EXISTS `t_roster`;
 CREATE TABLE IF NOT EXISTS `t_roster` (
-  `id` varchar(255) COLLATE utf8_croatian_ci NOT NULL,
-  `create_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `id` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci NOT NULL,
+  `create_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   `create_time` datetime(6) DEFAULT NULL,
-  `del_flag` int(11) DEFAULT NULL,
-  `update_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `del_flag` int DEFAULT NULL,
+  `update_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   `update_time` datetime(6) DEFAULT NULL,
-  `identity` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `insurance_type` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `address` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `balance` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `card_number` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `mobile` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `native_place` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `sex` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `age` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `status` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `insurance_name` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `identity` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `insurance_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `balance` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `card_number` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `mobile` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `native_place` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `sex` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `age` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `status` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `insurance_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_croatian_ci;
 
 -- 正在导出表  medicine.t_roster 的数据：~2 rows (大约)
 DELETE FROM `t_roster`;
 /*!40000 ALTER TABLE `t_roster` DISABLE KEYS */;
 INSERT INTO `t_roster` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `identity`, `insurance_type`, `address`, `balance`, `card_number`, `mobile`, `name`, `native_place`, `sex`, `age`, `status`, `insurance_name`) VALUES
 	('1337360883575296000', 'admin', '2020-12-11 19:37:36.000000', 0, 'admin', '2021-01-17 10:50:36.924000', '330281199908080808', '1337709526010433537', '浙江省XX市XX区XX街道', '63235.04', '1545452454152', '17857054301', '张三', '浙江省宁波市余姚市', '女', '22', '0', '基本医疗保险'),
-	('1337933671960809473', 'admin', '2020-12-13 09:33:39.662000', 0, 'admin', '2021-01-31 13:34:58.419000', '330282199912121212', '1337933430834466817', '浙江省慈溪市XXXXXX', '61171.29', '545454545454', '17857054302', '李四', '浙江省宁波市慈溪市', '男', '22', '0', '高档医疗保险');
+	('1337933671960809473', 'admin', '2020-12-13 09:33:39.662000', 0, 'admin', '2021-11-25 16:16:29.130000', '330282199912121212', '1337933430834466817', '浙江省慈溪市XXXXXX', '61231.29', '545454545454', '17857054302', '李四', '浙江省宁波市慈溪市', '男', '22', '0', '高档医疗保险');
 /*!40000 ALTER TABLE `t_roster` ENABLE KEYS */;
 
 -- 导出  表 medicine.t_see_doctor 结构
 DROP TABLE IF EXISTS `t_see_doctor`;
 CREATE TABLE IF NOT EXISTS `t_see_doctor` (
-  `id` varchar(255) COLLATE utf8_croatian_ci NOT NULL,
-  `create_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `id` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci NOT NULL,
+  `create_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   `create_time` datetime(6) DEFAULT NULL,
-  `del_flag` int(11) DEFAULT NULL,
-  `update_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `del_flag` int DEFAULT NULL,
+  `update_by` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   `update_time` datetime(6) DEFAULT NULL,
-  `date` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `type` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `user_id` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `price` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `medicine_price` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `price_sum` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `user_name` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `medicine_old` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `price_discount` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `balance` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `balance_new` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `medicine_name` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `price_old` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
-  `price_you` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `date` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `user_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `price` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `medicine_price` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `price_sum` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `medicine_old` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `price_discount` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `balance` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `balance_new` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `medicine_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `price_old` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
+  `price_you` varchar(255) CHARACTER SET utf8 COLLATE utf8_croatian_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_croatian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_croatian_ci;
 
 -- 正在导出表  medicine.t_see_doctor 的数据：~5 rows (大约)
 DELETE FROM `t_see_doctor`;
@@ -1788,59 +679,34 @@ CREATE TABLE IF NOT EXISTS `t_setting` (
   `update_time` datetime DEFAULT NULL,
   `value` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- 正在导出表  medicine.t_setting 的数据：~0 rows (大约)
 DELETE FROM `t_setting`;
 /*!40000 ALTER TABLE `t_setting` DISABLE KEYS */;
 /*!40000 ALTER TABLE `t_setting` ENABLE KEYS */;
 
--- 导出  表 medicine.t_social 结构
-DROP TABLE IF EXISTS `t_social`;
-CREATE TABLE IF NOT EXISTS `t_social` (
-  `id` bigint(20) unsigned NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime(6) DEFAULT NULL,
-  `del_flag` tinyint(1) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime(6) DEFAULT NULL,
-  `avatar` varchar(255) DEFAULT NULL,
-  `open_id` varchar(255) DEFAULT NULL,
-  `platform` tinyint(1) unsigned DEFAULT NULL,
-  `relate_username` varchar(255) DEFAULT NULL,
-  `username` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `relate_open_id` (`open_id`,`platform`) USING BTREE,
-  UNIQUE KEY `relate_username` (`relate_username`,`platform`) USING BTREE,
-  KEY `create_time` (`create_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- 正在导出表  medicine.t_social 的数据：~0 rows (大约)
-DELETE FROM `t_social`;
-/*!40000 ALTER TABLE `t_social` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_social` ENABLE KEYS */;
-
 -- 导出  表 medicine.t_user 结构
 DROP TABLE IF EXISTS `t_user`;
 CREATE TABLE IF NOT EXISTS `t_user` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL,
   `create_by` varchar(255) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `update_by` varchar(255) DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `avatar` varchar(255) DEFAULT NULL,
-  `description` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `mobile` varchar(255) DEFAULT NULL,
-  `nickname` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `sex` varchar(255) DEFAULT NULL,
-  `status` int(11) DEFAULT NULL,
-  `type` int(11) DEFAULT NULL,
+  `status` int DEFAULT NULL,
+  `type` int DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
   `del_flag` tinyint(1) DEFAULT NULL,
-  `department_id` bigint(20) unsigned DEFAULT NULL,
+  `department_id` bigint unsigned DEFAULT NULL,
   `street` varchar(255) DEFAULT NULL,
   `pass_strength` varchar(2) DEFAULT NULL,
   `department_title` varchar(255) DEFAULT NULL,
@@ -1850,13 +716,13 @@ CREATE TABLE IF NOT EXISTS `t_user` (
   UNIQUE KEY `email` (`email`) USING BTREE,
   UNIQUE KEY `mobile` (`mobile`) USING BTREE,
   KEY `create_time` (`create_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- 正在导出表  medicine.t_user 的数据：~3 rows (大约)
 DELETE FROM `t_user`;
 /*!40000 ALTER TABLE `t_user` DISABLE KEYS */;
 INSERT INTO `t_user` (`id`, `create_by`, `create_time`, `update_by`, `update_time`, `address`, `avatar`, `description`, `email`, `mobile`, `nickname`, `password`, `sex`, `status`, `type`, `username`, `del_flag`, `department_id`, `street`, `pass_strength`, `department_title`, `birth`) VALUES
-	(682265633886208, '', '2020-12-13 07:07:07', 'admin', '2020-12-13 07:07:07', '["330000","330600","330602"]', 'https://i.loli.net/2019/04/28/5cc5a71a6e3b6.png', '绍兴文理学院元培学院', '809394828@qq.com', '17857054385', '唐倩', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '男', 0, 1, 'admin', 0, 40322777781112832, '东浦街道', '弱', '总部', '2000-01-08 00:00:00.000000'),
+	(682265633886208, '', '2020-12-13 07:07:07', 'admin', '2020-12-13 07:07:07', '["330000","330600","330602"]', 'https://i.loli.net/2019/04/28/5cc5a71a6e3b6.png', '绍兴文理学院元培学院', '809394828@qq.com', '17857054385', '管理员', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '男', 0, 1, 'admin', 0, 40322777781112832, '东浦街道', '弱', '总部', '2000-01-08 00:00:00.000000'),
 	(4363087427670016, '', '2020-12-13 07:07:07', 'admin', '2021-01-17 09:06:51', '["110000","110100","110101"]', 'https://i.loli.net/2019/04/28/5cc5a71a6e3b6.png', '', 'bxgsa@qq.cn', '13646661012', '保险公司A', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '男', 0, 0, 'company', 0, 40322777781112832, '', '弱', '总部', '2020-04-28 00:00:00.000000'),
 	(16739222421508096, '', '2020-12-13 07:07:07', 'admin', '2021-01-17 09:06:11', '[]', 'https://i.loli.net/2019/04/28/5cc5a71a6e3b6.png', '', 'docter@qq.cn', '13646661011', '医生A', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '男', 0, 0, 'doctor', 0, 40322777781112832, '', '弱', '总部', '2020-04-23 00:00:00.000000');
 /*!40000 ALTER TABLE `t_user` ENABLE KEYS */;
@@ -1864,16 +730,16 @@ INSERT INTO `t_user` (`id`, `create_by`, `create_time`, `update_by`, `update_tim
 -- 导出  表 medicine.t_user_role 结构
 DROP TABLE IF EXISTS `t_user_role`;
 CREATE TABLE IF NOT EXISTS `t_user_role` (
-  `id` bigint(20) unsigned NOT NULL,
+  `id` bigint unsigned NOT NULL,
   `create_by` varchar(255) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
   `del_flag` tinyint(1) DEFAULT NULL,
   `update_by` varchar(255) DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
-  `role_id` bigint(20) unsigned DEFAULT NULL,
-  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `role_id` bigint unsigned DEFAULT NULL,
+  `user_id` bigint unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- 正在导出表  medicine.t_user_role 的数据：~3 rows (大约)
 DELETE FROM `t_user_role`;
@@ -1885,5 +751,6 @@ INSERT INTO `t_user_role` (`id`, `create_by`, `create_time`, `del_flag`, `update
 /*!40000 ALTER TABLE `t_user_role` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
