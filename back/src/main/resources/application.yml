@@ -11,9 +11,7 @@ server:
   shutdown: graceful
 spring:
   lifecycle:
-    # 配置优雅停机后的缓冲器 最大等待时间
     timeout-per-shutdown-phase: 10S
-  # 数据源
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/medicine?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&allowMultiQueries=true
     username: root
@@ -35,11 +33,8 @@ spring:
   # Redis
   redis:
     host: 127.0.0.1
-    # password:
-    # 数据库索引 默认0
     database: 1
     port: 6379
-    # 超时时间 Duration类型 3秒
     timeout: 3S
   # 文件大小上传配置
   servlet:

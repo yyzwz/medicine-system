@@ -7,7 +7,6 @@ import cn.zwz.modules.base.service.DictDataService;
 import cn.zwz.modules.base.service.DictService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
 /**
  * @author 郑为中
  */
-@Slf4j
 @RestController
 @Api(description = "字典管理接口")
 @RequestMapping("/zwz/dict")
@@ -36,56 +33,47 @@ public class DictController {
     private StringRedisTemplate redisTemplate;
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    @ApiOperation(value = "获取全部数据")
+    @ApiOperation(value = "查询数据字典")
     public Result<List<Dict>> getAll(){
-
-        List<Dict> list = dictService.findAllOrderBySortOrder();
-        return new ResultUtil<List<Dict>>().setData(list);
+        return new ResultUtil<List<Dict>>().setData(dictService.findAllOrderBySortOrder());
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @ApiOperation(value = "添加")
+    @ApiOperation(value = "添加数据字典")
     public Result<Object> add(Dict dict){
-
         if(dictService.findByType(dict.getType())!=null){
-            return ResultUtil.error("字典类型Type已存在");
+            return ResultUtil.error("字典类型已存在");
         }
         dictService.save(dict);
-        return ResultUtil.success("添加成功");
+        return ResultUtil.success();
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    @ApiOperation(value = "编辑")
+    @ApiOperation(value = "编辑数据字典")
     public Result<Object> edit(Dict dict){
-
         Dict old = dictService.get(dict.getId());
-        // 若type修改判断唯一
         if(!old.getType().equals(dict.getType())&&dictService.findByType(dict.getType())!=null){
-            return ResultUtil.error("字典类型Type已存在");
+            return ResultUtil.error("字典类型已存在");
         }
         dictService.update(dict);
-        return ResultUtil.success("编辑成功");
+        return ResultUtil.success();
     }
 
     @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
-    @ApiOperation(value = "通过id删除")
+    @ApiOperation(value = "删除数据字典")
     public Result<Object> delAllByIds(@RequestParam String[] ids){
-
         for (String id : ids){
             Dict dict = dictService.get(id);
             dictService.delete(id);
             dictDataService.deleteByDictId(id);
-            // 删除缓存
             redisTemplate.delete("dictData::"+dict.getType());
         }
-        return ResultUtil.success("删除成功");
+        return ResultUtil.success();
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    @ApiOperation(value = "搜索字典")
-    public Result<List<Dict>> searchPermissionList(@RequestParam String key){
-
-        List<Dict> list = dictService.findByTitleOrTypeLike(key);
-        return new ResultUtil<List<Dict>>().setData(list);
+    @ApiOperation(value = "搜索数据字典")
+    public Result<List<Dict>> search(@RequestParam String key){
+        return new ResultUtil<List<Dict>>().setData(dictService.findByTitleOrTypeLike(key));
     }
 }

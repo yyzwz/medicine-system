@@ -99,16 +99,16 @@ public class UserController {
         }
         HttpSession session = request.getSession();
         // 短信应用 SDK AppID
-        int appid = 1400000000; // SDK AppID 以1400开头
+        int appid = 1400000000;
         // 短信应用 SDK AppKey
         String appkey = "a7dxxxxxxxxxxxxxxxxxxxxxxxxxxxb2";
         // 需要发送短信的手机号码
         String[] phoneNumbers = {""};
         phoneNumbers[0] =  mobile;
-        // 短信模板 ID，需要在短信应用中申请
-        int templateId = 666666; // NOTE: 这里的模板 ID`7839`只是示例，真实的模板 ID 需要在短信控制台中申请
-        // 签名
-        String smsSign = "IT微简历"; // NOTE: 签名参数使用的是`签名内容`，而不是`签名ID`。这里的签名"腾讯云"只是示例，真实的签名需要在短信控制台申请
+        // 短信模板 ID，需要在短信应用中申请,这里的模板 ID`666666`只是示例，真实的模板 ID 需要在短信控制台中申请
+        int templateId = 666666;
+        // 签名参数使用的是`签名内容`，而不是`签名ID`。这里的签名"腾讯云"只是示例，真实的签名需要在短信控制台申请
+        String smsSign = "";
         try {
             String randomCode = RandomCode.getRandomCode();
             String[] params = {randomCode,"5"};
@@ -151,14 +151,10 @@ public class UserController {
     @ApiOperation(value = "注册用户")
     public Result<Object> regist(@ModelAttribute User u){
 
-        // 校验是否已存在
         checkUserInfo(u.getUsername(), u.getMobile(), u.getEmail());
-
         String encryptPass = new BCryptPasswordEncoder().encode(u.getPassword());
         u.setPassword(encryptPass).setType(CommonConstant.USER_TYPE_NORMAL);
         User user = userService.save(u);
-
-        // 默认角色
         List<Role> roleList = roleService.findByDefaultRole(true);
         if(roleList!=null&&roleList.size()>0){
             for(Role role : roleList){
@@ -174,7 +170,6 @@ public class UserController {
     public Result<User> getUserInfo(){
 
         User u = securityUtil.getCurrUser();
-        // 清除持久上下文环境 避免后面语句导致持久化
         entityManager.clear();
         u.setPassword(null);
         return new ResultUtil<User>().setData(u);
@@ -187,9 +182,8 @@ public class UserController {
         User u = securityUtil.getCurrUser();
         u.setMobile(mobile);
         userService.update(u);
-        // 删除缓存
         redisTemplate.delete("user::"+u.getUsername());
-        return ResultUtil.success("修改手机号成功");
+        return ResultUtil.success();
     }
 
     @RequestMapping(value = "/unlock", method = RequestMethod.POST)

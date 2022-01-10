@@ -57,7 +57,6 @@ export default {
     components: {},
     data() {
         return {
-            onePhotoSrc: 'https://artskyhome.com:8082/onePhoto/5c55fd84-d5af-4604-bc2b-5692e3eb4ca2.png',
             isChangeHighstyledate: false,
             isChangeFirststyledate: false,
             firststyledateTemp: '',

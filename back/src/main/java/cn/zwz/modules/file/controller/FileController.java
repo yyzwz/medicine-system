@@ -63,10 +63,7 @@ public class FileController {
     @RequestMapping(value = "/getByCondition", method = RequestMethod.GET)
     @ApiOperation(value = "多条件分页获取")
     @ResponseBody
-    public Result<Page<File>> getFileList(File file,
-                                          SearchVo searchVo,
-                                          PageVo pageVo){
-
+    public Result<Page<File>> getFileList(File file,SearchVo searchVo,PageVo pageVo){
         Page<File> page = fileService.findByCondition(file, searchVo, PageUtil.initPage(pageVo));
         OssSetting os = new Gson().fromJson(settingService.get(SettingConstant.LOCAL_OSS).getValue(), OssSetting.class);
         Map<String, String> map = new HashMap<>(16);
@@ -96,14 +93,12 @@ public class FileController {
     @RequestMapping(value = "/copy", method = RequestMethod.POST)
     @ApiOperation(value = "文件复制")
     @ResponseBody
-    public Result<Object> copy(@RequestParam String id,
-                               @RequestParam String key) throws Exception {
+    public Result<Object> copy(@RequestParam String id,@RequestParam String key) throws Exception {
 
         File file = fileService.get(id);
         if(file.getLocation()==null){
             return ResultUtil.error("存储位置未知");
         }
-
         String toKey = "副本_" + key;
         // 特殊处理本地服务器
         if(CommonConstant.OSS_LOCAL.equals(file.getLocation())){
@@ -119,17 +114,13 @@ public class FileController {
     @RequestMapping(value = "/rename", method = RequestMethod.POST)
     @ApiOperation(value = "文件重命名")
     @ResponseBody
-    public Result<Object> upload(@RequestParam String id,
-                                 @RequestParam String newKey,
-                                 @RequestParam String newName) throws Exception {
-
+    public Result<Object> upload(@RequestParam String id,@RequestParam String newKey,@RequestParam String newName) throws Exception {
         File file = fileService.get(id);
         if(file.getLocation()==null){
             return ResultUtil.error("存储位置未知");
         }
         String newUrl = "", oldKey = file.getFKey();
         if(!oldKey.equals(newKey)){
-            // 特殊处理本地服务器
             if(CommonConstant.OSS_LOCAL.equals(file.getLocation())){
                 oldKey = file.getUrl();
             }

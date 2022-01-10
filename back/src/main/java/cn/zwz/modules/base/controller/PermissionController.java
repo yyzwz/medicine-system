@@ -19,7 +19,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -36,9 +35,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author 郑为中
  */
-@Slf4j
 @RestController
-@Api(description = "菜单/权限管理接口")
+@Api(description = "菜单/权限")
 @RequestMapping("/zwz/permission")
 @CacheConfig(cacheNames = "permission")
 @Transactional
@@ -66,9 +64,8 @@ public class PermissionController {
     private MySecurityMetadataSource mySecurityMetadataSource;
 
     @RequestMapping(value = "/getMenuList", method = RequestMethod.GET)
-    @ApiOperation(value = "获取用户页面菜单数据")
+    @ApiOperation(value = "搜索菜单")
     public Result<List<MenuVo>> getAllMenuList(){
-
         List<MenuVo> menuList = new ArrayList<>();
         // 读取缓存
         User u = securityUtil.getCurrUser();
@@ -78,10 +75,8 @@ public class PermissionController {
             menuList = new Gson().fromJson(v, new TypeToken<List<MenuVo>>(){}.getType());
             return new ResultUtil<List<MenuVo>>().setData(menuList);
         }
-
         // 用户所有权限 已排序去重
         List<Permission> list = iPermissionService.findByUserId(u.getId());
-
         // 筛选0级页面
         for(Permission p : list){
             if(CommonConstant.PERMISSION_NAV.equals(p.getType())&&CommonConstant.LEVEL_ZERO.equals(p.getLevel())){
@@ -140,8 +135,6 @@ public class PermissionController {
             }
             m.setChildren(firstMenu);
         }
-
-        // 缓存
         redisTemplate.opsForValue().set(key, new Gson().toJson(menuList), 15L, TimeUnit.DAYS);
         return new ResultUtil<List<MenuVo>>().setData(menuList);
     }
@@ -150,7 +143,6 @@ public class PermissionController {
     @ApiOperation(value = "获取权限菜单树")
     @Cacheable(key = "'allList'")
     public Result<List<Permission>> getAllList(){
-
         // 0级
         List<Permission> list0 = permissionService.findByLevelOrderBySortOrder(CommonConstant.LEVEL_ZERO);
         for(Permission p0 : list0){
@@ -184,17 +176,14 @@ public class PermissionController {
             }
         }
         Permission u = permissionService.save(permission);
-        //重新加载权限
         mySecurityMetadataSource.loadResourceDefine();
-        //手动删除缓存
         redisTemplate.delete("permission::allList");
         return new ResultUtil<Permission>().setData(u);
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    @ApiOperation(value = "编辑")
+    @ApiOperation(value = "编辑菜单")
     public Result<Permission> edit(Permission permission){
-
         // 判断拦截请求的操作权限按钮名是否已存在
         if(CommonConstant.PERMISSION_OPERATION.equals(permission.getType())){
             // 若名称修改
@@ -219,7 +208,7 @@ public class PermissionController {
     }
 
     @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
-    @ApiOperation(value = "批量通过id删除")
+    @ApiOperation(value = "删除菜单")
     @CacheEvict(key = "'menuList'")
     public Result<Object> delByIds(@RequestParam String[] ids){
 
@@ -232,18 +221,14 @@ public class PermissionController {
         for(String id:ids){
             permissionService.delete(id);
         }
-        // 重新加载权限
         mySecurityMetadataSource.loadResourceDefine();
-        // 手动删除缓存
         redisTemplate.delete("permission::allList");
-        return ResultUtil.success("批量通过id删除数据成功");
+        return ResultUtil.success();
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     @ApiOperation(value = "搜索菜单")
-    public Result<List<Permission>> searchPermissionList(@RequestParam String title){
-
-        List<Permission> list = permissionService.findByTitleLikeOrderBySortOrder("%"+title+"%");
-        return new ResultUtil<List<Permission>>().setData(list);
+    public Result<List<Permission>> searchPermissionList(@RequestParam String title) {
+        return new ResultUtil<List<Permission>>().setData(permissionService.findByTitleLikeOrderBySortOrder("%"+title+"%"));
     }
 }

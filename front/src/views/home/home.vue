@@ -3,15 +3,15 @@
 @import "../../styles/common.less";
 
 .background1 {
-    background-image: url("https://artskyhome.com:8080/xboot/newFile/view/1463377030384062464")
+    background-image: url("https://jujia.lucheng.gov.cn/app/file/view/1480461044097880065")
 }
 
 .background2 {
-    background-image: url("https://artskyhome.com:8080/xboot/newFile/view/1463377041805152256")
+    background-image: url("https://jujia.lucheng.gov.cn/app/file/view/1480461029442981889")
 }
 
 .background3 {
-    background-image: url("https://artskyhome.com:8080/xboot/newFile/view/1463377052160888832")
+    background-image: url("https://jujia.lucheng.gov.cn/app/file/view/1480461011805933569")
 }
 </style>
 

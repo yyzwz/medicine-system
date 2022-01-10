@@ -274,13 +274,13 @@ export default {
             this.drop = !this.drop;
         },
         downloadTemple() {
-            window.open("https://artskyhome.com/xboot/huaFuJian/downloadImportedHuaFile/", "_blank");
+            window.open("", "_blank");
         },
         importExcelData() {
             this.importModalVisible = true;
         },
         outputExcelData() {
-            window.open("https://artskyhome.com/xboot/zwzRosterUser/export/", "_blank");
+            window.open("", "_blank");
         },
         changeTab(value) {
             this.chooseName = value;

@@ -11,13 +11,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author 郑为中
  */
 @SpringBootApplication
-// 启用JPA
 @EnableJpaAuditing
-// 启用缓存
 @EnableCaching
-// 启用异步
 @EnableAsync
-// 定时任务
 @EnableScheduling
 public class ZwzApplication {
 

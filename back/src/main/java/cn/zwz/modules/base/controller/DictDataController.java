@@ -10,7 +10,6 @@ import cn.zwz.modules.base.service.DictDataService;
 import cn.zwz.modules.base.service.DictService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -21,13 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
 /**
  * @author 郑为中
  */
-@Slf4j
 @RestController
-@Api(description = "字典数据管理接口")
+@Api(description = "字典数据")
 @RequestMapping("/zwz/dictData")
 @CacheConfig(cacheNames = "dictData")
 @Transactional
@@ -43,19 +40,15 @@ public class DictDataController{
     private StringRedisTemplate redisTemplate;
 
     @RequestMapping(value = "/getByCondition", method = RequestMethod.GET)
-    @ApiOperation(value = "多条件分页获取用户列表")
-    public Result<Page<DictData>> getByCondition(DictData dictData,
-                                                 PageVo pageVo){
-
-        Page<DictData> page = dictDataService.findByCondition(dictData, PageUtil.initPage(pageVo));
-        return new ResultUtil<Page<DictData>>().setData(page);
+    @ApiOperation(value = "查询数据字典的值")
+    public Result<Page<DictData>> getByCondition(DictData dictData,PageVo pageVo){
+        return new ResultUtil<Page<DictData>>().setData(dictDataService.findByCondition(dictData, PageUtil.initPage(pageVo)));
     }
 
     @RequestMapping(value = "/getByType/{type}", method = RequestMethod.GET)
-    @ApiOperation(value = "通过类型获取")
+    @ApiOperation(value = "查询单个数据字典的值")
     @Cacheable(key = "#type")
     public Result<Object> getByType(@PathVariable String type){
-
         Dict dict = dictService.findByType(type);
         if (dict == null) {
             return ResultUtil.error("字典类型 "+ type +" 不存在");
@@ -65,41 +58,37 @@ public class DictDataController{
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @ApiOperation(value = "添加")
+    @ApiOperation(value = "添加数据字典的值")
     public Result<Object> add(DictData dictData){
-
         Dict dict = dictService.get(dictData.getDictId());
         if (dict == null) {
             return ResultUtil.error("字典类型id不存在");
         }
         dictDataService.save(dictData);
-        // 删除缓存
         redisTemplate.delete("dictData::"+dict.getType());
-        return ResultUtil.success("添加成功");
+        return ResultUtil.success();
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    @ApiOperation(value = "编辑")
+    @ApiOperation(value = "编辑数据字典的值")
     public Result<Object> edit(DictData dictData){
 
         dictDataService.update(dictData);
         // 删除缓存
         Dict dict = dictService.get(dictData.getDictId());
         redisTemplate.delete("dictData::"+dict.getType());
-        return ResultUtil.success("编辑成功");
+        return ResultUtil.success();
     }
 
     @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
-    @ApiOperation(value = "批量通过id删除")
+    @ApiOperation(value = "删除数据字典的值")
     public Result<Object> delByIds(@RequestParam String[] ids){
-
         for(String id : ids){
             DictData dictData = dictDataService.get(id);
             Dict dict = dictService.get(dictData.getDictId());
             dictDataService.delete(id);
-            // 删除缓存
             redisTemplate.delete("dictData::"+dict.getType());
         }
-        return ResultUtil.success("批量通过id删除数据成功");
+        return ResultUtil.success();
     }
 }
