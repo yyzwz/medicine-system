@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(description = "医疗保险管理接口")
+@Api(tags = "医疗保险接口")
 @RequestMapping("/zwz/insurance")
 @Transactional
 public class InsuranceController {

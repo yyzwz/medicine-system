@@ -18,7 +18,7 @@ import java.util.List;
  * @author 郑为中
  */
 @RestController
-@Api(description = "字典管理接口")
+@Api(tags = "字典接口")
 @RequestMapping("/zwz/dict")
 @Transactional
 public class DictController {

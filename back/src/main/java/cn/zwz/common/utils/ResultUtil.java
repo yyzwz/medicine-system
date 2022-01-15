@@ -71,6 +71,9 @@ public class ResultUtil<T> {
     public static <T> Result<T> error(String msg){
         return new ResultUtil<T>().setErrorMsg(msg);
     }
+    public static <T> Result<T> error(){
+        return new ResultUtil<T>().setErrorMsg("操作失败");
+    }
 
     public static <T> Result<T> error(Integer code, String msg){
         return new ResultUtil<T>().setErrorMsg(code, msg);

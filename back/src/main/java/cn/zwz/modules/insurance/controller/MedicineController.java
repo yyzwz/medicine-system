@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(description = "药物档案管理接口")
+@Api(tags = "药物档案接口")
 @RequestMapping("/zwz/medicine")
 @Transactional
 public class MedicineController {

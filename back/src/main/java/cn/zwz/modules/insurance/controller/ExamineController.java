@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(description = "保险审核管理接口")
+@Api(tags = "保险审核接口")
 @RequestMapping("/zwz/examine")
 @Transactional
 public class ExamineController {

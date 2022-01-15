@@ -24,7 +24,7 @@ import java.util.List;
  * @author 郑为中
  */
 @RestController
-@Api(description = "字典数据")
+@Api(tags = "字典数据")
 @RequestMapping("/zwz/dictData")
 @CacheConfig(cacheNames = "dictData")
 @Transactional

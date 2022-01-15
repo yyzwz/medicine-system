@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author 郑为中
  */
 @RestController
-@Api(description = "IP接口")
+@Api(tags = "IP接口")
 @RequestMapping("/zwz/common/ip")
 @Transactional
 public class IpInfoController {

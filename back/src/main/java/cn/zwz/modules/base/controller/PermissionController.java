@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
  * @author 郑为中
  */
 @RestController
-@Api(description = "菜单/权限")
+@Api(tags = "菜单/权限")
 @RequestMapping("/zwz/permission")
 @CacheConfig(cacheNames = "permission")
 @Transactional

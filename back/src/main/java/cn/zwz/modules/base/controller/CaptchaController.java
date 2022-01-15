@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author 郑为中
  */
-@Api(description = "验证码")
+@Api(tags = "验证码")
 @RequestMapping("/zwz/common/captcha")
 @RestController
 @Transactional
@@ -26,21 +26,20 @@ public class CaptchaController {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    @RequestMapping(value = "/init", method = RequestMethod.GET)
-    @ApiOperation(value = "前端获取验证码")
-    public Result<Object> init() {
-        String captchaId = UUID.randomUUID().toString().replace("-","");
-        String code = new CreateVerifyCode().randomStr(4);
-        redisTemplate.opsForValue().set(captchaId, code,2L, TimeUnit.MINUTES);
-        return ResultUtil.data(captchaId);
-    }
-
     @RequestMapping(value = "/draw/{captchaId}", method = RequestMethod.GET)
-    @ApiOperation(value = "前端验证码返回")
+    @ApiOperation(value = "前端渲染验证码")
     public void draw(@PathVariable("captchaId") String captchaId,HttpServletResponse response) throws IOException {
         String code = redisTemplate.opsForValue().get(captchaId);
         CreateVerifyCode vCode = new CreateVerifyCode(116,36,4,10, code);
         response.setContentType("image/png");
         vCode.write(response.getOutputStream());
+    }
+
+    @RequestMapping(value = "/init", method = RequestMethod.GET)
+    @ApiOperation(value = "初始化验证码")
+    public Result<Object> init() {
+        String captchaId = UUID.randomUUID().toString().replace("-","");
+        redisTemplate.opsForValue().set(captchaId, new CreateVerifyCode().randomStr(4),2L, TimeUnit.MINUTES);
+        return ResultUtil.data(captchaId);
     }
 }

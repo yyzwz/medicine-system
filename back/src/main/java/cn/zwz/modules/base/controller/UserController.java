@@ -54,7 +54,7 @@ import org.json.JSONException;
  */
 @Slf4j
 @RestController
-@Api(description = "用户接口")
+@Api(tags = "用户接口")
 @RequestMapping("/zwz/user")
 @CacheConfig(cacheNames = "user")
 @Transactional

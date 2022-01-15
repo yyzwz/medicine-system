@@ -19,7 +19,6 @@ import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -34,13 +33,11 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * @author 郑为中
  */
-@Slf4j
 @Controller
-@Api(description = "文件管理管理接口")
+@Api(tags = "文件管理接口")
 @RequestMapping("/zwz/file")
 @Transactional
 public class FileController {
@@ -85,7 +82,6 @@ public class FileController {
                 }
             }
         }
-        // GC
         map = null;
         return new ResultUtil<Page<File>>().setData(page);
     }
@@ -94,13 +90,11 @@ public class FileController {
     @ApiOperation(value = "文件复制")
     @ResponseBody
     public Result<Object> copy(@RequestParam String id,@RequestParam String key) throws Exception {
-
         File file = fileService.get(id);
         if(file.getLocation()==null){
             return ResultUtil.error("存储位置未知");
         }
         String toKey = "副本_" + key;
-        // 特殊处理本地服务器
         if(CommonConstant.OSS_LOCAL.equals(file.getLocation())){
             key = file.getUrl();
         }
@@ -139,13 +133,11 @@ public class FileController {
     @ApiOperation(value = "文件删除")
     @ResponseBody
     public Result<Object> delete(@RequestParam String[] ids) {
-
         for(String id : ids){
             File file = fileService.get(id);
-            if(file.getLocation()==null){
-                return ResultUtil.error("存储位置未知");
+            if(file.getLocation() == null){
+                return ResultUtil.error();
             }
-            // 特殊处理本地服务器
             String key = file.getFKey();
             if(CommonConstant.OSS_LOCAL.equals(file.getLocation())){
                 key = file.getUrl();
@@ -158,11 +150,7 @@ public class FileController {
 
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "本地存储预览文件")
-    public void view(@PathVariable String id,
-                     @RequestParam(required = false) String filename,
-                     @RequestParam(required = false, defaultValue = "false") Boolean preview,
-                     HttpServletResponse response) throws IOException {
-
+    public void view(@PathVariable String id,@RequestParam(required = false) String filename,@RequestParam(required = false, defaultValue = "false") Boolean preview,HttpServletResponse response) throws IOException {
         File file = fileService.get(id);
         if(file==null){
             throw new ZwzException("文件ID："+id+"不存在");
@@ -170,7 +158,6 @@ public class FileController {
         if(StrUtil.isBlank(filename)){
             filename =  file.getFKey();
         }
-
         if(!preview){
             response.addHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));
         }

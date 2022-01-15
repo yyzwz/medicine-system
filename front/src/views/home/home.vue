@@ -3,15 +3,15 @@
 @import "../../styles/common.less";
 
 .background1 {
-    background-image: url("https://jujia.lucheng.gov.cn/app/file/view/1480461044097880065")
+    background-image: url("https://zwz99.top:10002/app/file/view/1482180361084604417")
 }
 
 .background2 {
-    background-image: url("https://jujia.lucheng.gov.cn/app/file/view/1480461029442981889")
+    background-image: url("https://zwz99.top:10002/app/file/view/1482180401953902594")
 }
 
 .background3 {
-    background-image: url("https://jujia.lucheng.gov.cn/app/file/view/1480461011805933569")
+    background-image: url("https://zwz99.top:10002/app/file/view/1482180459369730050")
 }
 </style>
 

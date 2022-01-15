@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 文件管理接口实现
+ * 文件接口实现
  * @author 郑为中
  */
 @Slf4j

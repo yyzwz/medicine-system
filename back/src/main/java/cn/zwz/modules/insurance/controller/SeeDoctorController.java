@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(description = "看病登记管理接口")
+@Api(tags = "看病登记接口")
 @RequestMapping("/zwz/seeDoctor")
 @Transactional
 public class SeeDoctorController {

@@ -38,7 +38,7 @@
             <transition>
                 <div v-show="showFilterPanelFlag" class="filter-panel">
                     <CheckboxGroup v-model="selected">
-                        <div v-for="item in mycolumns" :key="item" v-if="item.title!=null">
+                        <div v-for="item in mycolumns" :key="item">
                             <Checkbox :label="item.title" style="margin: 2px 5px"></Checkbox>
                         </div>
                     </CheckboxGroup>

@@ -86,7 +86,7 @@ export default {
     components: {},
     data() {
         return {
-            onePhotoSrc: 'https://jujia.lucheng.gov.cn/app/file/view/1480461951971758081',
+            onePhotoSrc: 'https://zwz99.top:10002/app/file/view/1482182423335800834',
             isChangeHighstyledate: false,
             isChangeFirststyledate: false,
             firststyledateTemp: '',

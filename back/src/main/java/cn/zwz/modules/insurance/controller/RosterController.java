@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(description = "参保人员管理接口")
+@Api(tags = "参保人员接口")
 @RequestMapping("/zwz/roster")
 @Transactional
 public class RosterController {

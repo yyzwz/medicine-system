@@ -30,7 +30,7 @@ import java.io.InputStream;
  */
 @Slf4j
 @RestController
-@Api(description = "文件上传接口")
+@Api(tags = "文件上传接口")
 @RequestMapping("/zwz/upload")
 @Transactional
 public class UploadController {

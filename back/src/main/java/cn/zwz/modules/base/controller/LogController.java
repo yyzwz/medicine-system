@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * @author 郑为中
  */
 @RestController
-@Api(description = "日志管理")
+@Api(tags = "日志管理")
 @RequestMapping("/zwz/log")
 @Transactional
 public class LogController{

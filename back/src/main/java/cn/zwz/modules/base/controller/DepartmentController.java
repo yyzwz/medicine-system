@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
  * @author 郑为中
  */
 @RestController
-@Api(description = "部门管理接口")
+@Api(tags = "部门接口")
 @RequestMapping("/zwz/department")
 @CacheConfig(cacheNames = "department")
 @Transactional
@@ -63,12 +63,16 @@ public class DepartmentController {
     @Autowired
     private SecurityUtil securityUtil;
 
+    private static final String REDIS_KEY_USER_PRE = "user:";
+
+    private static final String REDIS_KEY_DEP_PRE = "department::";
+
     @RequestMapping(value = "/getByParentId/{parentId}", method = RequestMethod.GET)
     @ApiOperation(value = "查询部门")
     public Result<List<Department>> getByParentId(@PathVariable String parentId){
-        List<Department> list = new ArrayList<>();
+        List<Department> list = null;
         User u = securityUtil.getCurrUser();
-        String key = "department::"+parentId+":"+u.getId()+"_false";
+        String key = REDIS_KEY_DEP_PRE + parentId+":"+u.getId()+"_false";
         String v = redisTemplate.opsForValue().get(key);
         if(StrUtil.isNotBlank(v)){
             list = new Gson().fromJson(v, new TypeToken<List<Department>>(){}.getType());
@@ -91,8 +95,7 @@ public class DepartmentController {
                 departmentService.update(parent);
             }
         }
-        Set<String> keys = redisTemplateHelper.keys("department::*");
-        redisTemplate.delete(keys);
+        redisTemplate.delete(redisTemplateHelper.keys(REDIS_KEY_DEP_PRE + "*"));
         return ResultUtil.success();
     }
 
@@ -101,31 +104,27 @@ public class DepartmentController {
     public Result<Object> edit(Department department,@RequestParam(required = false) String[] mainHeader,@RequestParam(required = false) String[] viceHeader){
         Department old = departmentService.get(department.getId());
         Department d = departmentService.update(department);
-        // 先删除原数据
         departmentHeaderService.deleteByDepartmentId(department.getId());
         List<DepartmentHeader> headers = new ArrayList<>();
         if(mainHeader!=null){
             for(String id : mainHeader){
-                DepartmentHeader dh = new DepartmentHeader().setUserId(id).setDepartmentId(d.getId())
-                        .setType(CommonConstant.HEADER_TYPE_MAIN);
+                DepartmentHeader dh = new DepartmentHeader().setUserId(id).setDepartmentId(d.getId()).setType(CommonConstant.HEADER_TYPE_MAIN);
                 headers.add(dh);
             }
         }
         if(viceHeader!=null){
             for(String id:viceHeader){
-                DepartmentHeader dh = new DepartmentHeader().setUserId(id).setDepartmentId(d.getId())
-                        .setType(CommonConstant.HEADER_TYPE_VICE);
+                DepartmentHeader dh = new DepartmentHeader().setUserId(id).setDepartmentId(d.getId()).setType(CommonConstant.HEADER_TYPE_VICE);
                 headers.add(dh);
             }
         }
         departmentHeaderService.saveOrUpdateAll(headers);
         if(!old.getTitle().equals(department.getTitle())){
             userService.updateDepartmentTitle(department.getId(), department.getTitle());
-            Set<String> keysUser = redisTemplateHelper.keys("user:" + "*");
+            Set<String> keysUser = redisTemplateHelper.keys(REDIS_KEY_USER_PRE + "*");
             redisTemplate.delete(keysUser);
         }
-        Set<String> keys = redisTemplateHelper.keys("department:" + "*");
-        redisTemplate.delete(keys);
+        redisTemplate.delete(redisTemplateHelper.keys("department:" + "*"));
         return ResultUtil.success();
     }
 
@@ -146,7 +145,7 @@ public class DepartmentController {
     public void deleteRecursion(String id, String[] ids){
         List<User> list = userService.findByDepartmentId(id);
         if(list!=null&&list.size()>0){
-            throw new ZwzException("不能删除！包含正被用户使用关联的部门");
+            throw new ZwzException("包含正被用户使用的部门");
         }
         Department dep = departmentService.get(id);
         Department parent = null;
@@ -163,7 +162,6 @@ public class DepartmentController {
                 departmentService.update(parent);
             }
         }
-        // 递归删除
         List<Department> departments = departmentService.findByParentIdOrderBySortOrder(id);
         for(Department d : departments){
             if(!CommonUtil.judgeIds(d.getId(), ids)){
@@ -173,7 +171,7 @@ public class DepartmentController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    @ApiOperation(value = "部门名模糊搜索")
+    @ApiOperation(value = "模糊搜索")
     public Result<List<Department>> searchByTitle(@RequestParam String title){
         List<Department> list = departmentService.findByTitleLikeOrderBySortOrder("%"+title+"%");
         list = setInfo(list);
@@ -189,7 +187,6 @@ public class DepartmentController {
             }else{
                 item.setParentTitle("一级部门");
             }
-            // 设置负责人
             item.setMainHeader(departmentHeaderService.findHeaderByDepartmentId(item.getId(), CommonConstant.HEADER_TYPE_MAIN));
             item.setViceHeader(departmentHeaderService.findHeaderByDepartmentId(item.getId(), CommonConstant.HEADER_TYPE_VICE));
         });

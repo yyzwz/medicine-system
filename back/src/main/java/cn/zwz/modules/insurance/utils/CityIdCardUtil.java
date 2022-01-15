@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@Api(description = "身份证判断出生城市的工具接口")
+@Api(tags = "身份证判断出生城市的工具接口")
 @RequestMapping("/zwz/city")
 @Transactional
 public class CityIdCardUtil {

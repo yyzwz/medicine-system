@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * 文件管理接口
+ * 文件接口
  * @author 郑为中
  */
 public interface FileService extends XbootBaseService<File,String> {
