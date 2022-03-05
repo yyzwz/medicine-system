@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- 主机:                           127.0.0.1
--- 服务器版本:                        8.0.26 - MySQL Community Server - GPL
+-- 服务器版本:                        8.0.28 - MySQL Community Server - GPL
 -- 服务器操作系统:                      Win64
 -- HeidiSQL 版本:                  11.3.0.6295
 -- --------------------------------------------------------
@@ -17,6 +17,34 @@
 DROP DATABASE IF EXISTS `medicine`;
 CREATE DATABASE IF NOT EXISTS `medicine` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_croatian_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `medicine`;
+
+-- 导出  表 medicine.t_assets_type 结构
+DROP TABLE IF EXISTS `t_assets_type`;
+CREATE TABLE IF NOT EXISTS `t_assets_type` (
+  `id` varchar(255) COLLATE utf8_croatian_ci NOT NULL,
+  `create_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `create_time` datetime(6) DEFAULT NULL,
+  `del_flag` int NOT NULL,
+  `update_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `update_time` datetime(6) DEFAULT NULL,
+  `asset_name` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `existing_number` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `model` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `nature` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `number` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `remarks` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `total_price` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `unit_price` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_croatian_ci;
+
+-- 正在导出表  medicine.t_assets_type 的数据：~2 rows (大约)
+DELETE FROM `t_assets_type`;
+/*!40000 ALTER TABLE `t_assets_type` DISABLE KEYS */;
+INSERT INTO `t_assets_type` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `asset_name`, `existing_number`, `model`, `nature`, `number`, `remarks`, `total_price`, `unit_price`) VALUES
+	('1499957748480217088', 'admin', '2022-03-05 11:59:29.765000', 0, 'admin', '2022-03-05 12:00:25.721000', '医用外科口罩', '80.0', 'N1', '固定资产', '80.0', '无', '16.0', '0.2'),
+	('1499957840603910144', 'admin', '2022-03-05 11:59:51.728000', 0, 'admin', '2022-03-05 12:01:11.068000', 'N95医用口罩', '80.0', 'N95', '固定资产', '100.0', '无', '80.0', '0.8');
+/*!40000 ALTER TABLE `t_assets_type` ENABLE KEYS */;
 
 -- 导出  表 medicine.t_department 结构
 DROP TABLE IF EXISTS `t_department`;
@@ -39,15 +67,15 @@ CREATE TABLE IF NOT EXISTS `t_department` (
 DELETE FROM `t_department`;
 /*!40000 ALTER TABLE `t_department` DISABLE KEYS */;
 INSERT INTO `t_department` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `parent_id`, `sort_order`, `status`, `title`, `is_parent`) VALUES
-	(40322777781112832, '', '2018-08-10 20:40:40', 0, '', '2018-08-11 00:03:06', 0, 1.00, 0, '总部', b'1'),
+	(40322777781112832, '', '2018-08-10 20:40:40', 0, 'admin', '2022-03-05 12:04:26', 0, 1.00, 0, '医院管理部', b'1'),
 	(40322811096469504, '', '2018-08-10 20:40:48', 0, '', '2018-08-11 00:27:05', 40322777781112832, 1.00, 0, '技术部', b'1'),
 	(40322852833988608, '', '2018-08-10 20:40:58', 0, '', '2018-08-11 01:29:42', 40322811096469504, 1.00, 0, '研发中心', NULL),
 	(40327204755738624, '', '2018-08-10 20:58:15', 0, '', '2018-08-10 22:02:15', 40322811096469504, 2.00, 0, '大数据', NULL),
 	(40327253309001728, '', '2018-08-10 20:58:27', 0, '', '2018-08-11 17:26:38', 40322811096469504, 3.00, -1, '人工智障', NULL),
-	(40343262766043136, '', '2018-08-10 22:02:04', 0, '', '2018-08-11 00:02:53', 0, 2.00, 0, '成都分部', b'1'),
+	(40343262766043136, '', '2018-08-10 22:02:04', 0, 'admin', '2022-03-05 12:04:39', 0, 2.00, 0, '大病手术科', b'1'),
 	(40344005342400512, '', '2018-08-10 22:05:01', 0, '', '2018-08-11 17:48:44', 40343262766043136, 2.00, 0, 'Vue', NULL),
 	(40389030113710080, '', '2018-08-11 01:03:56', 0, '', '2018-08-11 17:50:04', 40343262766043136, 1.00, 0, 'JAVA', b'0'),
-	(40652270295060480, '', '2018-08-11 18:29:57', 0, '', '2018-08-12 18:45:01', 0, 3.00, 0, '人事部', b'1'),
+	(40652270295060480, '', '2018-08-11 18:29:57', 0, 'admin', '2022-03-05 12:04:44', 0, 3.00, 0, '医院人事部', b'1'),
 	(40652338142121984, NULL, '2018-08-11 18:30:13', 0, NULL, '2018-08-11 18:30:13', 40652270295060480, 1.00, 0, '游客', b'0'),
 	(40681289119961088, '', '2018-08-11 20:25:16', 0, '', '2018-08-11 22:47:48', 40652270295060480, 2.00, 0, 'VIP', b'0');
 /*!40000 ALTER TABLE `t_department` ENABLE KEYS */;
@@ -71,9 +99,9 @@ CREATE TABLE IF NOT EXISTS `t_department_header` (
 DELETE FROM `t_department_header`;
 /*!40000 ALTER TABLE `t_department_header` DISABLE KEYS */;
 INSERT INTO `t_department_header` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `department_id`, `type`, `user_id`) VALUES
-	(1254427833757995008, 'admin', '2020-04-26 23:11:16', 0, 'admin', '2020-04-26 23:11:16', 40322777781112832, 0, 682265633886208),
-	(1254427833757995009, 'admin', '2020-04-26 23:11:16', 0, 'admin', '2020-04-26 23:11:16', 40322777781112832, 0, 16739222421508096),
-	(1254427833757995010, 'admin', '2020-04-26 23:11:16', 0, 'admin', '2020-04-26 23:11:16', 40322777781112832, 1, 16739222421508096);
+	(1499958993068625920, 'admin', '2022-03-05 12:04:27', 0, NULL, NULL, 40322777781112832, 0, 682265633886208),
+	(1499958993068625921, 'admin', '2022-03-05 12:04:27', 0, NULL, NULL, 40322777781112832, 0, 16739222421508096),
+	(1499958993068625922, 'admin', '2022-03-05 12:04:27', 0, NULL, NULL, 40322777781112832, 1, 16739222421508096);
 /*!40000 ALTER TABLE `t_department_header` ENABLE KEYS */;
 
 -- 导出  表 medicine.t_dict 结构
@@ -275,7 +303,7 @@ CREATE TABLE IF NOT EXISTS `t_log` (
   KEY `create_time` (`create_time`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
--- 正在导出表  medicine.t_log 的数据：~27 rows (大约)
+-- 正在导出表  medicine.t_log 的数据：~37 rows (大约)
 DELETE FROM `t_log`;
 /*!40000 ALTER TABLE `t_log` DISABLE KEYS */;
 INSERT INTO `t_log` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `cost_time`, `ip`, `ip_info`, `name`, `request_param`, `request_type`, `request_url`, `username`, `log_type`) VALUES
@@ -312,7 +340,17 @@ INSERT INTO `t_log` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, 
 	(1463751360750161920, NULL, '2021-11-25 14:08:15', 0, NULL, '2021-11-25 14:08:15', 247, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"JQN5","saveLogin":"true","captchaId":"6a2975c9452e4243931b0d7b380325c6","username":"admin"}', 'POST', '/xboot/login', 'admin', 1),
 	(1463770014329999360, NULL, '2021-11-25 15:22:22', 0, NULL, '2021-11-25 15:22:22', 319, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"RZDZ","saveLogin":"true","captchaId":"f9b38f92cd224fe093bfde7948d9da04","username":"admin"}', 'POST', '/zwz/login', 'admin', 1),
 	(1463778047030333440, NULL, '2021-11-25 15:54:17', 0, NULL, '2021-11-25 15:54:17', 143, '127.0.0.1', '未知', '登录系统', '{"password":"你是看不见我的","code":"R9FZ","saveLogin":"true","captchaId":"ea065e931bb34e3583f1ec6238799060","username":"admin"}', 'POST', '/zwz/login', 'admin', 1),
-	(1464410444235149312, NULL, '2021-11-27 09:47:12', 0, NULL, '2021-11-27 09:47:12', 288, '127.0.0.1', '未知', '登录系统', '{"password":"密码已被隐藏","code":"BPQZ","saveLogin":"true","captchaId":"bce096c9b0d0430181d142f55f027ae7","username":"admin"}', 'POST', '/zwz/login', 'admin', 1);
+	(1464410444235149312, NULL, '2021-11-27 09:47:12', 0, NULL, '2021-11-27 09:47:12', 288, '127.0.0.1', '未知', '登录系统', '{"password":"密码已被隐藏","code":"BPQZ","saveLogin":"true","captchaId":"bce096c9b0d0430181d142f55f027ae7","username":"admin"}', 'POST', '/zwz/login', 'admin', 1),
+	(1499894423088140288, NULL, '2022-03-05 07:47:52', 0, NULL, '2022-03-05 07:47:52', 583, '127.0.0.1', '未知', '登录系统', '{"password":"密码已被隐藏","code":"LYIB","saveLogin":"true","captchaId":"c2a2525e8da548228ce808c109b1dc7f","username":"admin"}', 'POST', '/zwz/login', 'admin', 1),
+	(1499915762297606144, NULL, '2022-03-05 09:12:40', 0, NULL, '2022-03-05 09:12:40', 440, '127.0.0.1', '本地测试', '登录系统', '{"password":"密码隐藏","code":"6481","saveLogin":"true","captchaId":"ee622b2031214a87b40e5c78d1b6b37b","username":"admin"}', 'POST', '/zwz/login', 'admin', 0),
+	(1499921339434274816, NULL, '2022-03-05 09:34:49', 0, NULL, '2022-03-05 09:34:49', 96, '127.0.0.1', '本地测试', '登录系统', '{"password":"密码隐藏","code":"2977","saveLogin":"true","captchaId":"4a6e5f9cfd584e6cb995afcfdf477aeb","username":"admin"}', 'POST', '/zwz/login', 'admin', 0),
+	(1499921997386354688, NULL, '2022-03-05 09:37:26', 0, NULL, '2022-03-05 09:37:26', 71, '127.0.0.1', '本地测试', '登录系统', '{"password":"密码隐藏","code":"8296","saveLogin":"true","captchaId":"506e48fa59cc4ed4936e76108b5e913e","username":"admin"}', 'POST', '/zwz/login', 'admin', 0),
+	(1499922557233664000, NULL, '2022-03-05 09:39:40', 0, NULL, '2022-03-05 09:39:40', 89, '127.0.0.1', '本地测试', '登录系统', '{"password":"密码隐藏","code":"4482","saveLogin":"true","captchaId":"2e801996e96e442ca0b5a15421dc9d59","username":"admin"}', 'POST', '/zwz/login', 'admin', 0),
+	(1499923679650385920, NULL, '2022-03-05 09:44:07', 0, NULL, '2022-03-05 09:44:07', 248, '127.0.0.1', '本地测试', '登录系统', '{"password":"密码隐藏","code":"7917","saveLogin":"true","captchaId":"713b33be0ad6480fa82c0ff059c0ce4a","username":"admin"}', 'POST', '/zwz/login', 'admin', 0),
+	(1499925237830127616, NULL, '2022-03-05 09:50:19', 0, NULL, '2022-03-05 09:50:19', 77, '127.0.0.1', '本地测试', '登录系统', '{"password":"密码隐藏","code":"3557","saveLogin":"true","captchaId":"fec5d2bbd9014005897337062c1cf79c","username":"admin"}', 'POST', '/zwz/login', 'admin', 0),
+	(1499928003063451648, NULL, '2022-03-05 10:01:18', 0, NULL, '2022-03-05 10:01:18', 286, '127.0.0.1', '本地测试', '登录系统', '{"password":"密码隐藏","code":"9175","saveLogin":"true","captchaId":"9a95c5d0ab7044808cdb04f16e47374a","username":"admin"}', 'POST', '/zwz/login', 'admin', 0),
+	(1499928417519407104, NULL, '2022-03-05 10:02:57', 0, NULL, '2022-03-05 10:02:57', 89, '127.0.0.1', '本地测试', '登录系统', '{"password":"密码隐藏","code":"3517","saveLogin":"true","captchaId":"e4792c2465f4488ab70effe1b91b8b6a","username":"admin"}', 'POST', '/zwz/login', 'admin', 0),
+	(1499970546182524928, NULL, '2022-03-05 12:50:21', 0, NULL, '2022-03-05 12:50:21', 99, '127.0.0.1', '本地测试', '登录系统', '{"password":"密码隐藏","code":"7548","saveLogin":"true","captchaId":"2ed5ba2efb1f4aa89e697fb9a819f7a8","username":"admin"}', 'POST', '/zwz/login', 'admin', 0);
 /*!40000 ALTER TABLE `t_log` ENABLE KEYS */;
 
 -- 导出  表 medicine.t_medicine 结构
@@ -380,10 +418,10 @@ CREATE TABLE IF NOT EXISTS `t_permission` (
 DELETE FROM `t_permission`;
 /*!40000 ALTER TABLE `t_permission` DISABLE KEYS */;
 INSERT INTO `t_permission` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `description`, `name`, `parent_id`, `type`, `sort_order`, `component`, `path`, `title`, `icon`, `level`, `button_type`, `status`, `url`, `show_always`) VALUES
-	(5129710648430592, '', '2018-06-04 19:02:29', 0, '', '2018-09-29 23:11:56', '', 'sys', 125909152017944576, 0, 1.00, 'Main', '/sys', '系统管理', 'ios-settings', 1, '', 0, '', b'1'),
-	(5129710648430593, '', '2018-06-04 19:02:32', 0, 'admin', '2021-01-17 10:59:29', '', 'user-manage', 5129710648430592, 0, 1.10, 'sys/user-manage/userManage', 'user-manage', '登入用户', 'md-person', 2, '', 0, '', b'1'),
-	(5129710648430594, '', '2018-06-04 19:02:35', 0, 'admin', '2021-01-17 10:59:46', '', 'role-manage', 5129710648430592, 0, 1.60, 'sys/role-manage/roleManage', 'role-manage', '角色权限', 'md-contacts', 2, '', 0, '', b'1'),
-	(5129710648430595, '', '2018-06-04 19:02:37', 0, 'admin', '2021-01-17 11:00:10', '', 'menu-manage', 5129710648430592, 0, 1.70, 'sys/menu-manage/menuManage', 'menu-manage', '系统菜单', 'md-menu', 2, '', 0, '', b'1'),
+	(5129710648430592, '', '2018-06-04 19:02:29', 0, 'admin', '2021-11-27 14:46:19', '', 'sys', 125909152017944576, 0, 4.00, 'Main', '/sys', '权限管理', 'ios-settings', 1, '', 0, '', b'1'),
+	(5129710648430593, '', '2018-06-04 19:02:32', 0, 'admin', '2022-03-05 09:45:52', '', 'user-admin', 1464484663442673664, 0, 1.10, 'roster/user/user', 'user-admin', '用户管理', 'md-person', 2, '', 0, '', b'1'),
+	(5129710648430594, '', '2018-06-04 19:02:35', 0, '', '2018-10-13 13:51:36', '', 'role-manage', 5129710648430592, 0, 1.60, 'sys/role-manage/roleManage', 'role-manage', '角色权限管理', 'md-contacts', 2, '', 0, '', b'1'),
+	(5129710648430595, '', '2018-06-04 19:02:37', 0, '', '2018-09-23 23:32:02', '', 'menu-manage', 5129710648430592, 0, 1.70, 'sys/menu-manage/menuManage', 'menu-manage', '菜单权限管理', 'md-menu', 2, '', 0, '', b'1'),
 	(15701400130424832, '', '2018-06-03 22:04:06', 0, '', '2018-09-19 22:16:44', '', '', 5129710648430593, 1, 1.11, '', '/xboot/user/admin/add*', '添加用户', '', 3, 'add', 0, '', b'1'),
 	(15701915807518720, '', '2018-06-03 22:06:09', 0, '', '2018-06-06 14:46:51', '', '', 5129710648430593, 1, 1.13, '', '/xboot/user/admin/disable/**', '禁用用户', '', 3, 'disable', 0, NULL, b'1'),
 	(15708892205944832, '', '2018-06-03 22:33:52', 0, '', '2018-06-28 16:44:48', '', '', 5129710648430593, 1, 1.14, '', '/xboot/user/admin/enable/**', '启用用户', '', 3, 'enable', 0, NULL, b'1'),
@@ -398,50 +436,30 @@ INSERT INTO `t_permission` (`id`, `create_by`, `create_time`, `del_flag`, `updat
 	(16695107491205120, '', '2018-06-06 15:52:44', 0, '', '2018-09-19 22:07:57', '', '', 5129710648430595, 1, 1.32, '', '/xboot/permission/edit*', '编辑菜单', '', 3, 'edit', 0, '', b'1'),
 	(16695243126607872, '', '2018-06-06 15:53:17', 0, 'admin', '2020-04-28 14:29:17', '', '', 5129710648430595, 1, 1.33, '', '/xboot/permission/delByIds**', '删除菜单', '', 3, 'delete', 0, '', b'1'),
 	(25014528525733888, '', '2018-06-29 14:51:09', 0, '', '2018-10-08 11:13:27', '', '', 5129710648430593, 1, 1.16, '', '无', '上传图片', '', 3, 'upload', 0, '', b'1'),
-	(39915540965232640, NULL, '2018-08-09 17:42:28', 0, NULL, '2018-08-09 17:42:28', NULL, 'monitor', 125909152017944576, 0, 2.00, 'Main', '/monitor', '系统监控', 'ios-analytics', 1, NULL, 0, NULL, b'1'),
-	(39916171171991552, '', '2018-08-09 17:44:57', 0, 'admin', '2019-01-20 00:37:29', '', 'druid', 39915540965232640, 0, 2.40, 'sys/monitor/monitor', 'druid', 'SQL监控', 'md-analytics', 2, '', 0, 'http://127.0.0.1:8888/druid/login.html', b'1'),
-	(39918482854252544, '', '2018-08-09 17:54:08', 0, 'admin', '2019-01-20 00:37:41', '', 'swagger', 39915540965232640, 0, 2.50, 'sys/monitor/monitor', 'swagger', '接口文档', 'md-document', 2, '', 0, 'http://127.0.0.1:8888/swagger-ui.html', b'1'),
-	(40238597734928384, NULL, '2018-08-10 15:06:10', 0, NULL, '2018-08-10 15:06:10', NULL, 'department-manage', 5129710648430592, 0, 1.20, 'sys/department-manage/departmentManage', 'department-manage', '部门管理', 'md-git-branch', 2, '', 0, NULL, b'1'),
-	(41363147411427328, '', '2018-08-13 17:34:43', 0, 'admin', '2021-01-17 11:00:19', '', 'log-manage', 39915540965232640, 0, 2.20, 'sys/log-manage/logManage', 'log-manage', '系统日志', 'md-list-box', 2, '', 0, '', b'1'),
+	(39915540965232640, '', '2018-08-09 17:42:28', 0, 'admin', '2021-11-27 14:46:28', '', 'monitor', 125909152017944576, 0, 10.00, 'Main', '/monitor', '日志管理', 'ios-analytics', 1, '', 0, '', b'1'),
+	(40238597734928384, '', '2018-08-10 15:06:10', 0, 'admin', '2022-03-05 09:46:03', '', 'department-admin', 1464485105081913345, 0, 1.20, 'roster/department/department', 'department-admin', '部门管理', 'md-git-branch', 2, '', 0, '', b'1'),
+	(41363147411427328, '', '2018-08-13 17:34:43', 0, 'admin', '2020-03-25 20:31:16', '', 'log-manage', 39915540965232640, 0, 2.20, 'sys/log-manage/logManage', 'log-manage', '日志管理', 'md-list-box', 2, '', 0, '', b'1'),
 	(41363537456533504, '', '2018-08-13 17:36:16', 0, 'admin', '2020-04-28 14:31:54', '', '', 41363147411427328, 1, 2.11, '', '/xboot/log/delByIds**', '删除日志', '', 3, 'delete', 0, '', b'1'),
 	(41364927394353152, '', '2018-08-13 17:41:48', 0, '', '2018-09-19 22:08:57', '', '', 41363147411427328, 1, 2.12, '', '/xboot/log/delAll*', '清空日志', '', 3, 'undefined', 0, '', b'1'),
-	(41370251991977984, NULL, '2018-08-13 18:02:57', 0, NULL, '2018-08-13 18:02:57', NULL, 'quartz-job', 39915540965232640, 0, 2.10, 'sys/quartz-manage/quartzManage', 'quartz-job', '定时任务', 'md-time', 2, '', 0, NULL, b'1'),
-	(41371711400054784, '', '2018-08-13 18:08:45', 0, '', '2019-07-07 21:24:26', '', 'actuator', 39915540965232640, 0, 2.30, 'sys/actuator/actuator', 'actuator', 'Actuator监控', 'logo-angular', 2, '', 0, '', b'1'),
-	(41469219249852416, NULL, '2018-08-14 00:36:13', 0, NULL, '2018-08-14 00:36:13', NULL, '', 41371711400054784, 1, 2.31, '', '无', '查看数据', '', 3, 'view', 0, NULL, b'1'),
-	(43117268627886080, '', '2018-08-18 13:44:58', 0, 'admin', '2020-12-12 21:36:58', '', 'message-manage', 5129710648430592, 0, 1.30, 'sys/message-manage/messageManage', 'message-manage', '消息管理', 'md-mail', 2, '', 0, '', b'1'),
 	(45235621697949696, '', '2018-08-24 10:02:33', 0, '', '2018-09-19 22:06:57', '', '', 40238597734928384, 1, 1.21, '', '/xboot/department/add*', '添加部门', '', 3, 'add', 0, '', b'1'),
 	(45235787867885568, '', '2018-08-24 10:03:13', 0, '', '2018-09-19 22:07:02', '', '', 40238597734928384, 1, 1.22, '', '/xboot/department/edit*', '编辑部门', '', 3, 'edit', 0, '', b'1'),
 	(45235939278065664, '', '2018-08-24 10:03:49', 0, 'admin', '2020-04-28 14:27:35', '', '', 40238597734928384, 1, 1.23, '', '/xboot/department/delByIds*', '删除部门', '', 3, 'delete', 0, '', b'1'),
-	(45236734832676864, '', '2018-08-24 10:06:59', 0, '', '2018-09-19 22:07:07', '', '', 43117268627886080, 1, 1.31, '', '/xboot/message/add*', '添加消息', '', 3, 'add', 0, '', b'1'),
-	(45237010692050944, '', '2018-08-24 10:08:04', 0, '', '2018-09-19 22:07:12', '', '', 43117268627886080, 1, 1.32, '', '/xboot/message/edit*', '编辑消息', '', 3, 'edit', 0, '', b'1'),
-	(45237170029465600, '', '2018-08-24 10:08:42', 0, 'admin', '2020-04-28 14:28:03', '', '', 43117268627886080, 1, 1.33, '', '/xboot/message/delByIds*', '删除消息', '', 3, 'delete', 0, '', b'1'),
-	(45264987354042368, '', '2018-08-24 11:59:14', 0, '', '2018-09-19 22:08:11', '', '', 41370251991977984, 1, 2.11, '', '/xboot/quartzJob/add*', '添加定时任务', '', 3, 'add', 0, '', b'1'),
-	(45265487029866496, '', '2018-08-24 12:01:14', 0, '', '2018-09-19 22:08:17', '', '', 41370251991977984, 1, 2.12, '', '/xboot/quartzJob/edit*', '编辑定时任务', '', 3, 'edit', 0, '', b'1'),
-	(45265762415284224, '', '2018-08-24 12:02:19', 0, '', '2018-09-19 22:08:24', '', '', 41370251991977984, 1, 2.13, '', '/xboot/quartzJob/pause*', '暂停定时任务', '', 3, 'disable', 0, '', b'1'),
-	(45265886315024384, '', '2018-08-24 12:02:49', 0, '', '2018-09-19 22:09:13', '', '', 41370251991977984, 1, 2.14, '', '/xboot/quartzJob/resume*', '恢复定时任务', '', 3, 'enable', 0, '', b'1'),
-	(45266070000373760, '', '2018-08-24 12:03:33', 0, 'admin', '2020-04-28 14:31:48', '', '', 41370251991977984, 1, 2.15, '', '/xboot/quartzJob/delByIds*', '删除定时任务', '', 3, 'delete', 0, '', b'1'),
+	(56309618086776832, '', '2018-09-23 23:26:40', 0, 'admin', '2021-11-27 14:47:48', '', 'file-admin', 1464485485316542465, 0, 1.00, 'sys/oss-manage/ossManage', 'file-admin', '文件对象存储', 'ios-folder', 2, '', 0, '', b'1'),
 	(56898976661639168, '', '2018-09-25 14:28:34', 0, '', '2018-09-25 15:12:46', '', '', 5129710648430593, 1, 1.17, '', '/xboot/user/importData*', '导入用户', '', 3, 'input', 0, '', b'1'),
-	(57009544286441472, NULL, '2018-09-25 21:47:55', 0, NULL, '2018-09-25 21:47:55', NULL, '', 43117268627886080, 1, 1.40, '', '/xboot/messageSend/save*', '添加已发送消息', '', 3, 'add', 0, NULL, b'1'),
-	(57009744761589760, NULL, '2018-09-25 21:48:43', 0, NULL, '2018-09-25 21:48:43', NULL, '', 43117268627886080, 1, 1.50, '', '/xboot/messageSend/update*', '编辑已发送消息', '', 3, 'edit', 0, NULL, b'1'),
-	(57009981228060672, NULL, '2018-09-25 21:49:39', 0, NULL, '2018-09-25 21:49:39', NULL, '', 43117268627886080, 1, 1.60, '', '/xboot/messageSend/delByIds/*', '删除已发送消息', '', 3, 'delete', 0, NULL, b'1'),
-	(75002207560273920, 'admin', '2018-11-14 13:24:21', 0, 'admin', '2021-01-17 10:59:52', '', 'dict', 5129710648430592, 0, 1.80, 'sys/dict-manage/dictManage', 'dict', '数据字典', 'md-bookmarks', 2, '', 0, '', b'1'),
+	(57212882168844288, '', '2018-09-26 11:15:55', 0, '', '2018-10-08 11:10:05', '', '', 56309618086776832, 1, 1.41, '', '无', '上传文件', '', 3, 'upload', 0, '', b'1'),
+	(61560041605435392, NULL, '2018-10-08 11:09:58', 0, NULL, '2018-10-08 11:09:58', NULL, '', 56309618086776832, 1, 1.42, '', '/xboot/file/rename*', '重命名文件', '', 3, 'edit', 0, NULL, b'1'),
+	(61560275261722624, NULL, '2018-10-08 11:10:54', 0, NULL, '2018-10-08 11:10:54', NULL, '', 56309618086776832, 1, 1.43, '', '/xboot/file/copy*', '复制文件', '', 3, 'edit', 0, NULL, b'1'),
+	(61560480518377472, '', '2018-10-08 11:11:43', 0, 'admin', '2020-04-28 14:28:22', '', '', 56309618086776832, 1, 1.44, '', '/xboot/file/delete*', '删除文件', '', 3, 'delete', 0, '', b'1'),
+	(75002207560273920, 'admin', '2018-11-14 13:24:21', 0, 'admin', '2021-11-27 14:47:55', '', 'dict-admin', 1464485485316542465, 0, 2.00, 'sys/dict-manage/dictManage', 'dict-admin', '数据字典管理', 'md-bookmarks', 2, '', 0, '', b'1'),
 	(76215889006956544, 'admin', '2018-11-17 21:47:05', 0, 'admin', '2018-11-17 21:47:53', '', '', 75002207560273920, 1, 1.81, '', '/xboot/dict/add*', '添加字典', '', 3, 'add', 0, '', b'1'),
 	(76216071333351424, 'admin', '2018-11-17 21:47:48', 0, 'admin', '2018-11-17 21:47:48', NULL, '', 75002207560273920, 1, 1.82, '', '/xboot/dict/edit*', '编辑字典', '', 3, 'edit', 0, NULL, b'1'),
 	(76216264070008832, 'admin', '2018-11-17 21:48:34', 0, 'admin', '2020-04-28 14:29:30', '', '', 75002207560273920, 1, 1.83, '', '/xboot/dict/delByIds**', '删除字典', '', 3, 'delete', 0, '', b'1'),
 	(76216459709124608, 'admin', '2018-11-17 21:49:21', 0, 'admin', '2018-11-17 21:49:21', NULL, '', 75002207560273920, 1, 1.84, '', '/xboot/dictData/add*', '添加字典数据', '', 3, 'add', 0, NULL, b'1'),
 	(76216594207870976, 'admin', '2018-11-17 21:49:53', 0, 'admin', '2018-11-17 21:49:53', NULL, '', 75002207560273920, 1, 1.85, '', '/xboot/dictData/edit*', '编辑字典数据', '', 3, 'edit', 0, NULL, b'1'),
 	(76216702639017984, 'admin', '2018-11-17 21:50:18', 0, 'admin', '2018-11-17 21:50:18', NULL, '', 75002207560273920, 1, 1.86, '', '/xboot/dictData/delByIds/**', '删除字典数据', '', 3, 'delete', 0, NULL, b'1'),
-	(102235632889237504, 'admin', '2019-01-28 17:00:15', 0, 'admin', '2019-11-22 11:47:14', '', 'vue-generator', 125909152017944576, 0, 3.00, 'Main', '/vue-generator', 'Vue代码生成', 'md-send', 1, '', 0, '', b'1'),
-	(102237605176807424, 'admin', '2019-01-28 17:08:06', 0, 'admin', '2020-12-12 21:36:35', '', 'table-generator', 102235632889237504, 0, 0.00, 'xboot-vue-generator/tableGenerator', 'table', '增删改表格生成', 'md-grid', 2, '', 0, '', b'1'),
-	(102240052523831296, 'admin', '2019-01-28 17:17:49', 0, 'admin', '2020-12-12 21:36:40', '', 'tree-generator', 102235632889237504, 0, 1.00, 'xboot-vue-generator/treeGenerator', 'tree', '树形结构生成', 'md-git-branch', 2, '', 0, '', b'1'),
-	(103658022701633536, 'admin', '2019-02-01 15:12:20', 0, 'admin', '2019-02-01 18:38:29', '', 'test', 102235632889237504, 0, 3.00, 'xboot-vue-generator/test', 'test', '代码生成测试页', 'ios-bug', 2, '', 0, '', b'1'),
-	(121426317022334976, 'admin', '2019-03-22 15:57:11', 0, 'admin', '2019-03-22 15:57:11', NULL, 'redis', 39915540965232640, 0, 2.21, 'sys/redis/redis', 'redis', 'Redis缓存管理', 'md-barcode', 2, '', 0, '', b'1'),
-	(125909152017944576, 'admin', '2019-04-04 00:50:22', 0, 'admin', '2021-01-17 10:58:07', '', 'xboot', 0, -1, 1.00, '', '', '大病系统配置', 'md-home', 0, '', 0, '', b'1'),
-	(127996320085446656, 'admin', '2019-04-09 19:04:02', 0, 'admin', '2021-01-17 10:59:06', '', 'app', 0, -1, 10.00, '', '', '其他', 'md-phone-portrait', 0, '', 0, '', b'1'),
-	(149452775095275520, 'admin', '2019-06-08 00:04:19', 0, 'admin', '2019-06-08 00:04:19', NULL, 'admin', 39915540965232640, 0, 2.29, 'sys/monitor/monitor', '/admin', 'Admin监控', 'md-speedometer', 2, '', 0, 'http://127.0.0.1:8888/xboot/admin', b'1'),
+	(121426317022334976, 'admin', '2019-03-22 15:57:11', 0, 'admin', '2021-11-27 14:46:36', '', 'redis', 39915540965232640, 0, 2.21, 'sys/redis/redis', 'redis', 'Redis日志', 'md-barcode', 2, '', 0, '', b'1'),
+	(125909152017944576, 'admin', '2019-04-04 00:50:22', 0, 'admin', '2021-11-27 14:40:00', '', 'xboot', 0, -1, 1.00, '', '', '数据中心', 'md-home', 0, '', 0, '', b'1'),
 	(156365156580855808, 'admin', '2019-06-27 01:51:39', 0, 'admin', '2019-06-27 01:51:39', NULL, '', 5129710648430593, 1, 1.18, '', '/xboot/user/resetPass', '重置密码', '', 3, 'other', 0, NULL, b'1'),
-	(1251760630449442816, 'admin', '2020-04-19 14:32:46', 0, 'admin', '2020-04-27 18:31:03', '', 'member-log', 127996320085446656, 0, 3.00, 'Main', '/member-log', '日志记录', 'md-list-box', 1, '', 0, '', b'1'),
-	(1251761480286736384, 'admin', '2020-04-19 14:36:08', 0, 'admin', '2020-12-12 21:36:27', '', 'member-log', 1251760630449442816, 0, 0.00, 'sys/log-manage/logManage', 'member-log', '日志记录', 'md-list-box', 2, '', 0, '', b'1'),
 	(1255336077691064320, 'admin', '2020-04-29 11:20:18', 0, 'admin', '2020-04-29 11:20:47', '', '', 121426317022334976, 1, 0.00, '', '/xboot/redis/getAllByPage**', '获取Redis', '', 3, 'view', 0, '', b'1'),
 	(1255336361339260928, 'admin', '2020-04-29 11:21:26', 0, 'admin', '2020-04-29 11:21:26', NULL, '', 121426317022334976, 1, 0.00, '', '/xboot/redis/save', '添加Redis', '', 3, 'add', 0, NULL, b'1'),
 	(1255336455472025601, 'admin', '2020-04-29 11:21:48', 0, 'admin', '2020-04-29 11:21:48', NULL, '', 121426317022334976, 1, 0.00, '', '/xboot/redis/delByKeys**', '删除Redis', '', 3, 'delete', 0, NULL, b'1'),
@@ -460,7 +478,25 @@ INSERT INTO `t_permission` (`id`, `create_by`, `create_time`, `del_flag`, `updat
 	(1337391123898961921, 'admin', '2020-12-11 21:37:46', 0, 'admin', '2020-12-11 21:37:46', NULL, 'seeDoctor', 1337391052256055297, 0, 1.00, 'seeDoctor/seeDoctor/seeDoctor', 'seeDoctor', '看病登记', 'md-aperture', 2, '', 0, NULL, b'1'),
 	(1337557674727968769, 'admin', '2020-12-12 08:39:35', 0, 'admin', '2020-12-12 08:39:35', NULL, 'medicine', 1337366451853594624, 0, 2.00, 'medicalInsurance/medicine/medicine', 'medicine', '手术档案', 'ios-baseball', 2, '', 0, NULL, b'1'),
 	(1337741980058390528, 'admin', '2020-12-12 20:51:57', 0, 'admin', '2020-12-12 20:51:57', NULL, 'examine', 1337320167616679936, 0, 1.00, 'Main', '/examine', '保险审核', 'md-aperture', 1, '', 0, NULL, b'1'),
-	(1337742085226369025, 'admin', '2020-12-12 20:52:22', 0, 'admin', '2020-12-12 20:52:22', NULL, 'examine', 1337741980058390528, 0, 1.00, 'examine/examine/medicine', 'examine', '保险审核', 'md-baseball', 2, '', 0, NULL, b'1');
+	(1337742085226369025, 'admin', '2020-12-12 20:52:22', 0, 'admin', '2020-12-12 20:52:22', NULL, 'examine', 1337741980058390528, 0, 1.00, 'examine/examine/medicine', 'examine', '保险审核', 'md-baseball', 2, '', 0, NULL, b'1'),
+	(1464484663442673664, 'admin', '2021-11-27 14:42:07', 0, 'admin', '2021-11-27 14:42:37', '', 'userTwoMenu', 125909152017944576, 0, 1.00, 'Main', '/userTwoMenu', '用户管理', 'md-analytics', 1, '', 0, '', b'1'),
+	(1464485105081913345, 'admin', '2021-11-27 14:43:53', 0, 'admin', '2021-11-27 14:43:53', NULL, 'depTwoMenu', 125909152017944576, 0, 2.00, 'Main', '/depTwoMenu', '部门管理', 'ios-apps', 1, '', 0, NULL, b'1'),
+	(1464485485316542465, 'admin', '2021-11-27 14:45:23', 0, 'admin', '2021-11-27 14:47:05', '', 'fileAdmin', 125909152017944576, 0, 3.00, 'Main', '/fileAdmin', '资源管理', 'md-basketball', 1, '', 0, '', b'1'),
+	(1464486736955576321, 'admin', '2021-11-27 14:50:22', 0, 'admin', '2021-11-27 14:50:22', NULL, 'file-setting', 1464485485316542465, 0, 3.00, 'sys/setting-manage/settingManage', 'file-setting', '文件存储配置', 'ios-settings-outline', 2, '', 0, NULL, b'1'),
+	(1464514283202285568, 'admin', '2021-11-27 16:39:49', 0, 'admin', '2021-11-27 16:39:49', NULL, 'vue-code', 1464485485316542465, 0, 4.00, 'sys/oneJavaVue/tableGenerator', 'vue-code', 'Vue', 'md-analytics', 2, '', 0, NULL, b'1'),
+	(1499934641631662080, 'admin', '2022-03-05 10:27:41', 0, NULL, NULL, NULL, 'assets', 1337319951794573313, 0, 2.00, 'Main', '/assets', '医疗资产档案', 'md-aperture', 1, '', 0, NULL, b'1'),
+	(1499934789682204672, 'admin', '2022-03-05 10:28:16', 0, NULL, NULL, NULL, 'assetsType', 1499934641631662080, 0, 1.00, 'asset/assType/assetsType', 'assetsType', '医疗资产', 'ios-apps', 2, '', 0, NULL, b'1'),
+	(1499934978849509376, 'admin', '2022-03-05 10:29:01', 0, NULL, NULL, NULL, 'assEnter', 1499934641631662080, 0, 2.00, 'asset/assEnter/enter', 'assEnter', '医疗资产入库', 'md-arrow-down', 2, '', 0, NULL, b'1'),
+	(1499935100312358912, 'admin', '2022-03-05 10:29:30', 0, NULL, NULL, NULL, 'assOut', 1499934641631662080, 0, 3.00, 'asset/assOut/out', 'assOut', '医疗资产出库', 'md-arrow-round-up', 2, '', 0, NULL, b'1'),
+	(1499951136352899072, 'admin', '2022-03-05 11:33:13', 0, NULL, NULL, NULL, '', 1499934789682204672, 1, 1.00, '', '无', '添加医疗资产', '', 3, 'add', 0, NULL, b'1'),
+	(1499951205797990400, 'admin', '2022-03-05 11:33:30', 0, NULL, NULL, NULL, '', 1499934789682204672, 1, 2.00, '', '无', '编辑医疗资产', '', 3, 'edit', 0, NULL, b'1'),
+	(1499951233618808832, 'admin', '2022-03-05 11:33:37', 0, NULL, NULL, NULL, '', 1499934789682204672, 1, 3.00, '', '无', '删除医疗资产', '', 3, 'delete', 0, NULL, b'1'),
+	(1499951786017034240, 'admin', '2022-03-05 11:35:48', 0, NULL, NULL, NULL, '', 1499934978849509376, 1, 1.00, '', '无', '新增', '', 3, 'add', 0, NULL, b'1'),
+	(1499951817495285760, 'admin', '2022-03-05 11:35:56', 0, NULL, NULL, NULL, '', 1499934978849509376, 1, 2.00, '', '无', '编辑医疗资产入库', '', 3, 'edit', 0, NULL, b'1'),
+	(1499951850831613952, 'admin', '2022-03-05 11:36:04', 0, NULL, NULL, NULL, '', 1499934978849509376, 1, 3.00, '', '无', '删除医疗资产入库', '', 3, 'delete', 0, NULL, b'1'),
+	(1499951902551576576, 'admin', '2022-03-05 11:36:16', 0, NULL, NULL, NULL, '', 1499935100312358912, 1, 1.00, '', '无', '新增医疗资产出库', '', 3, 'add', 0, NULL, b'1'),
+	(1499951931324502016, 'admin', '2022-03-05 11:36:23', 0, NULL, NULL, NULL, '', 1499935100312358912, 1, 2.00, '', '无', '编辑医疗资产出库', '', 3, 'edit', 0, NULL, b'1'),
+	(1499951963851329536, 'admin', '2022-03-05 11:36:31', 0, NULL, NULL, NULL, '', 1499935100312358912, 1, 3.00, '', '无', '删除医疗资产出库', '', 3, 'delete', 0, NULL, b'1');
 /*!40000 ALTER TABLE `t_permission` ENABLE KEYS */;
 
 -- 导出  表 medicine.t_role 结构
@@ -595,7 +631,34 @@ INSERT INTO `t_role_permission` (`id`, `create_by`, `create_time`, `del_flag`, `
 	(1463389412896411696, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337391123898961921, 496138616573952),
 	(1463389412896411697, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337320167616679936, 496138616573952),
 	(1463389412896411698, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337741980058390528, 496138616573952),
-	(1463389412896411699, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337742085226369025, 496138616573952);
+	(1463389412896411699, 'admin', '2021-11-24 14:09:59', 0, 'admin', '2021-11-24 14:09:59', 1337742085226369025, 496138616573952),
+	(1499922109542043652, 'admin', '2022-03-05 09:37:53', 0, NULL, NULL, 1464484663442673664, 496138616573952),
+	(1499922109579792384, 'admin', '2022-03-05 09:37:53', 0, NULL, NULL, 1464485105081913345, 496138616573952),
+	(1499922109592375296, 'admin', '2022-03-05 09:37:53', 0, NULL, NULL, 40238597734928384, 496138616573952),
+	(1499922109609152512, 'admin', '2022-03-05 09:37:53', 0, NULL, NULL, 45235621697949696, 496138616573952),
+	(1499922109630124032, 'admin', '2022-03-05 09:37:53', 0, NULL, NULL, 45235787867885568, 496138616573952),
+	(1499922109642706944, 'admin', '2022-03-05 09:37:53', 0, NULL, NULL, 45235939278065664, 496138616573952),
+	(1499922109655289856, 'admin', '2022-03-05 09:37:53', 0, NULL, NULL, 1464485485316542465, 496138616573952),
+	(1499922109667872768, 'admin', '2022-03-05 09:37:53', 0, NULL, NULL, 56309618086776832, 496138616573952),
+	(1499922109684649984, 'admin', '2022-03-05 09:37:53', 0, NULL, NULL, 57212882168844288, 496138616573952),
+	(1499922109697232896, 'admin', '2022-03-05 09:37:53', 0, NULL, NULL, 61560041605435392, 496138616573952),
+	(1499922109714010112, 'admin', '2022-03-05 09:37:53', 0, NULL, NULL, 61560275261722624, 496138616573952),
+	(1499922109726593024, 'admin', '2022-03-05 09:37:53', 0, NULL, NULL, 61560480518377472, 496138616573952),
+	(1499922109734981632, 'admin', '2022-03-05 09:37:53', 0, NULL, NULL, 1464486736955576321, 496138616573952),
+	(1499922109747564544, 'admin', '2022-03-05 09:37:53', 0, NULL, NULL, 1464514283202285568, 496138616573952),
+	(1499935187327389696, 'admin', '2022-03-05 10:29:51', 0, NULL, NULL, 1499934641631662080, 496138616573952),
+	(1499935187348361216, 'admin', '2022-03-05 10:29:51', 0, NULL, NULL, 1499934789682204672, 496138616573952),
+	(1499935187356749824, 'admin', '2022-03-05 10:29:51', 0, NULL, NULL, 1499934978849509376, 496138616573952),
+	(1499935187373527040, 'admin', '2022-03-05 10:29:51', 0, NULL, NULL, 1499935100312358912, 496138616573952),
+	(1499951265151586309, 'admin', '2022-03-05 11:33:44', 0, NULL, NULL, 1499951136352899072, 496138616573952),
+	(1499951265189335040, 'admin', '2022-03-05 11:33:44', 0, NULL, NULL, 1499951205797990400, 496138616573952),
+	(1499951265210306560, 'admin', '2022-03-05 11:33:44', 0, NULL, NULL, 1499951233618808832, 496138616573952),
+	(1499952035813003264, 'admin', '2022-03-05 11:36:48', 0, NULL, NULL, 1499951786017034240, 496138616573952),
+	(1499952035846557696, 'admin', '2022-03-05 11:36:48', 0, NULL, NULL, 1499951817495285760, 496138616573952),
+	(1499952035859140608, 'admin', '2022-03-05 11:36:48', 0, NULL, NULL, 1499951850831613952, 496138616573952),
+	(1499952035867529216, 'admin', '2022-03-05 11:36:48', 0, NULL, NULL, 1499951902551576576, 496138616573952),
+	(1499952035884306432, 'admin', '2022-03-05 11:36:48', 0, NULL, NULL, 1499951931324502016, 496138616573952),
+	(1499952035892695040, 'admin', '2022-03-05 11:36:48', 0, NULL, NULL, 1499951963851329536, 496138616573952);
 /*!40000 ALTER TABLE `t_role_permission` ENABLE KEYS */;
 
 -- 导出  表 medicine.t_roster 结构
@@ -684,6 +747,9 @@ CREATE TABLE IF NOT EXISTS `t_setting` (
 -- 正在导出表  medicine.t_setting 的数据：~0 rows (大约)
 DELETE FROM `t_setting`;
 /*!40000 ALTER TABLE `t_setting` DISABLE KEYS */;
+INSERT INTO `t_setting` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `value`) VALUES
+	('LOCAL_OSS', 'admin', '2021-11-27 14:23:13', 0, 'admin', '2022-01-26 14:16:12', '{"serviceName":"LOCAL_OSS","accessKey":"","secretKey":"**********","endpoint":"127.0.0.1:9999/zwz/file/view","bucket":"","http":"http://","bucketRegion":"","filePath":"C:\\\\oa-file"}'),
+	('OSS_USED', 'admin', '2021-11-27 14:23:13', 0, 'admin', '2021-11-27 14:23:13', 'LOCAL_OSS');
 /*!40000 ALTER TABLE `t_setting` ENABLE KEYS */;
 
 -- 导出  表 medicine.t_user 结构
@@ -722,9 +788,9 @@ CREATE TABLE IF NOT EXISTS `t_user` (
 DELETE FROM `t_user`;
 /*!40000 ALTER TABLE `t_user` DISABLE KEYS */;
 INSERT INTO `t_user` (`id`, `create_by`, `create_time`, `update_by`, `update_time`, `address`, `avatar`, `description`, `email`, `mobile`, `nickname`, `password`, `sex`, `status`, `type`, `username`, `del_flag`, `department_id`, `street`, `pass_strength`, `department_title`, `birth`) VALUES
-	(682265633886208, '', '2020-12-13 07:07:07', 'admin', '2020-12-13 07:07:07', '["330000","330600","330602"]', 'https://i.loli.net/2019/04/28/5cc5a71a6e3b6.png', '绍兴文理学院元培学院', '809394828@qq.com', '17857054385', '管理员', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '男', 0, 1, 'admin', 0, 40322777781112832, '东浦街道', '弱', '总部', '2000-01-08 00:00:00.000000'),
-	(4363087427670016, '', '2020-12-13 07:07:07', 'admin', '2021-01-17 09:06:51', '["110000","110100","110101"]', 'https://i.loli.net/2019/04/28/5cc5a71a6e3b6.png', '', 'bxgsa@qq.cn', '13646661012', '保险公司A', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '男', 0, 0, 'company', 0, 40322777781112832, '', '弱', '总部', '2020-04-28 00:00:00.000000'),
-	(16739222421508096, '', '2020-12-13 07:07:07', 'admin', '2021-01-17 09:06:11', '[]', 'https://i.loli.net/2019/04/28/5cc5a71a6e3b6.png', '', 'docter@qq.cn', '13646661011', '医生A', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '男', 0, 0, 'doctor', 0, 40322777781112832, '', '弱', '总部', '2020-04-23 00:00:00.000000');
+	(682265633886208, '', '2020-12-13 07:07:07', 'admin', '2022-03-05 12:04:27', '["330000","330600","330602"]', 'https://i.loli.net/2019/04/28/5cc5a71a6e3b6.png', '绍兴文理学院元培学院', '809394828@qq.com', '17857058888', '管理员', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '男', 0, 1, 'admin', 0, 40322777781112832, '东浦街道', '弱', '医院管理部', '2000-01-08 00:00:00.000000'),
+	(4363087427670016, '', '2020-12-13 07:07:07', 'admin', '2022-03-05 12:04:27', '["110000","110100","110101"]', 'https://i.loli.net/2019/04/28/5cc5a71a6e3b6.png', '', 'bxgsa@qq.cn', '13646661012', '保险公司A', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '男', 0, 0, 'company', 0, 40322777781112832, '', '弱', '医院管理部', '2020-04-28 00:00:00.000000'),
+	(16739222421508096, '', '2020-12-13 07:07:07', 'admin', '2022-03-05 12:04:27', '[]', 'https://i.loli.net/2019/04/28/5cc5a71a6e3b6.png', '', 'docter@qq.cn', '13646661011', '医生A', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '男', 0, 0, 'doctor', 0, 40322777781112832, '', '弱', '医院管理部', '2020-04-23 00:00:00.000000');
 /*!40000 ALTER TABLE `t_user` ENABLE KEYS */;
 
 -- 导出  表 medicine.t_user_role 结构
@@ -749,6 +815,63 @@ INSERT INTO `t_user_role` (`id`, `create_by`, `create_time`, `del_flag`, `update
 	(1350610331046645760, 'admin', '2021-01-17 09:06:11', 0, 'admin', '2021-01-17 09:06:11', 16457350655250432, 16739222421508096),
 	(1350610500785934336, 'admin', '2021-01-17 09:06:51', 0, 'admin', '2021-01-17 09:06:51', 496138616573953, 4363087427670016);
 /*!40000 ALTER TABLE `t_user_role` ENABLE KEYS */;
+
+-- 导出  表 medicine.t_warehouse_out 结构
+DROP TABLE IF EXISTS `t_warehouse_out`;
+CREATE TABLE IF NOT EXISTS `t_warehouse_out` (
+  `id` varchar(255) COLLATE utf8_croatian_ci NOT NULL,
+  `create_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `create_time` datetime(6) DEFAULT NULL,
+  `del_flag` int NOT NULL,
+  `update_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `update_time` datetime(6) DEFAULT NULL,
+  `asset_id` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `asset_name` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `exist_number` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `model` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `nature` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `number` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `recipients` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `recipients_id` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `remarks` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `unit_price` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_croatian_ci;
+
+-- 正在导出表  medicine.t_warehouse_out 的数据：~1 rows (大约)
+DELETE FROM `t_warehouse_out`;
+/*!40000 ALTER TABLE `t_warehouse_out` DISABLE KEYS */;
+INSERT INTO `t_warehouse_out` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `asset_id`, `asset_name`, `exist_number`, `model`, `nature`, `number`, `recipients`, `recipients_id`, `remarks`, `unit_price`) VALUES
+	('1499958173375795200', 'admin', '2022-03-05 12:01:11.072000', 0, NULL, NULL, '1499957840603910144', 'N95医用口罩', NULL, 'N95', '固定资产', '20', '医生A', '16739222421508096', '测试', '0.8');
+/*!40000 ALTER TABLE `t_warehouse_out` ENABLE KEYS */;
+
+-- 导出  表 medicine.t_warehousing 结构
+DROP TABLE IF EXISTS `t_warehousing`;
+CREATE TABLE IF NOT EXISTS `t_warehousing` (
+  `id` varchar(255) COLLATE utf8_croatian_ci NOT NULL,
+  `create_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `create_time` datetime(6) DEFAULT NULL,
+  `del_flag` int NOT NULL,
+  `update_by` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `update_time` datetime(6) DEFAULT NULL,
+  `asset_id` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `asset_name` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `invoice` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `model` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `nature` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `number` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `remarks` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  `unit_price` varchar(255) COLLATE utf8_croatian_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_croatian_ci;
+
+-- 正在导出表  medicine.t_warehousing 的数据：~2 rows (大约)
+DELETE FROM `t_warehousing`;
+/*!40000 ALTER TABLE `t_warehousing` DISABLE KEYS */;
+INSERT INTO `t_warehousing` (`id`, `create_by`, `create_time`, `del_flag`, `update_by`, `update_time`, `asset_id`, `asset_name`, `invoice`, `model`, `nature`, `number`, `remarks`, `unit_price`) VALUES
+	('1499957905963749376', 'admin', '2022-03-05 12:00:07.324000', 0, NULL, NULL, '1499957840603910144', 'N95医用口罩', 'FP0000001', 'N95', '固定资产', '100', '测试', '0.8'),
+	('1499957983189274624', 'admin', '2022-03-05 12:00:25.736000', 0, NULL, NULL, '1499957748480217088', '医用外科口罩', 'FP00000002', 'N1', '固定资产', '80', '测试', '0.2');
+/*!40000 ALTER TABLE `t_warehousing` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;

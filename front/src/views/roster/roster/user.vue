@@ -86,7 +86,7 @@ export default {
     components: {},
     data() {
         return {
-            onePhotoSrc: 'https://zwz99.top:10002/app/file/view/1482182423335800834',
+            onePhotoSrc: 'https://artskyhome.com:17476/static/gitee/medicineSystem/home3.jpg',
             isChangeHighstyledate: false,
             isChangeFirststyledate: false,
             firststyledateTemp: '',

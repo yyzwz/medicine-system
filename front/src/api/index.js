@@ -14,6 +14,9 @@ export const getDictData = "/zwz/dictData/getByType/"
 // Websocket
 export const ws = "/zwz/ws"
 
+export const getMyUserListData = (params) => {
+    return getRequest('/myUser/getByPage', params)
+}
 export const deleteOne = (params) => {
     return getRequest('/roster/deleteOne', params)
 }

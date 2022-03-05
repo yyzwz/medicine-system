@@ -41,8 +41,7 @@ import {
 } from "./api.js";
 export default {
     name: "single-window",
-    components: {
-    },
+    components: {},
     data() {
         return {
             tuiMessage: '',

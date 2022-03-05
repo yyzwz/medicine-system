@@ -219,6 +219,7 @@
 
 <script>
 import {
+    getAllPermissionList,
     addPermission,
     editPermission,
     deletePermission,

@@ -39,19 +39,23 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/cn/zwz" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15527344" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\java\git\medicineSystem\back\src\main\java\cn\zwz" />
+      <recent name="C:\java\git\medicineSystem\back\src\main\java\cn\zwz\insurance" />
       <recent name="C:\java\git\medicineSystem\back\src\main\java\cn\zwz\config\mybatisplus" />
       <recent name="C:\java\git\medicineSystem\back\src\main\resources\static" />
       <recent name="D:\GIT\medicineSystem\back\src\main\java\cn\exrick\xboot\modules\base\utils" />
-      <recent name="D:\GIT\medicineSystem\back\src\main\java\cn\exrick\xboot\modules\your\utils" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -120,7 +124,8 @@
       <workItem from="1637818968233" duration="10731000" />
       <workItem from="1637976347914" duration="1573000" />
       <workItem from="1641803542044" duration="1555000" />
-      <workItem from="1642213076467" duration="2979000" />
+      <workItem from="1642213076467" duration="1996000" />
+      <workItem from="1646437342982" duration="9104000" />
     </task>
     <servers />
   </component>

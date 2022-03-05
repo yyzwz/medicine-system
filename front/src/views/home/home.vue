@@ -3,15 +3,15 @@
 @import "../../styles/common.less";
 
 .background1 {
-    background-image: url("https://zwz99.top:10002/app/file/view/1482180361084604417")
+    background-image: url("https://artskyhome.com:17476/static/gitee/medicineSystem/home3.jpg")
 }
 
 .background2 {
-    background-image: url("https://zwz99.top:10002/app/file/view/1482180401953902594")
+    background-image: url("https://artskyhome.com:17476/static/gitee/medicineSystem/home1.jpg")
 }
 
 .background3 {
-    background-image: url("https://zwz99.top:10002/app/file/view/1482180459369730050")
+    background-image: url("https://artskyhome.com:17476/static/gitee/medicineSystem/home2.jpg")
 }
 </style>
 
@@ -92,7 +92,7 @@ import {
     ipInfo
 } from "@/api/index";
 export default {
-    name: "show",
+    name: "home",
     data() {
         return {
             city: ''
@@ -103,19 +103,19 @@ export default {
     mounted() {
         const s = document.createElement('script');
         s.type = 'text/javascript';
-        s.src = 'https://changjienongye.cn/bs/assets/js/jquery.min.js';
+        s.src = 'https://artskyhome.com:17476/static/gitee/medicineSystem/assets/js/jquery.min.js';
         document.body.appendChild(s);
         const s2 = document.createElement('script');
         s2.type = 'text/javascript';
-        s2.src = 'https://changjienongye.cn/bs/assets/js/jquery.flexslider-min.js';
+        s2.src = 'https://artskyhome.com:17476/static/gitee/medicineSystem/assets/js/jquery.flexslider-min.js';
         document.body.appendChild(s2);
         const s3 = document.createElement('script');
         s3.type = 'text/javascript';
-        s3.src = 'https://changjienongye.cn/bs/assets/js/pace.min.js';
+        s3.src = 'https://artskyhome.com:17476/static/gitee/medicineSystem/assets/js/pace.min.js';
         document.body.appendChild(s3);
         const s4 = document.createElement('script');
         s4.type = 'text/javascript';
-        s4.src = 'https://changjienongye.cn/bs/assets/js/main.js';
+        s4.src = 'https://artskyhome.com:17476/static/gitee/medicineSystem/assets/js/main.js';
         document.body.appendChild(s4);
         ipInfo().then(res => {
             if (res.success) {

@@ -361,7 +361,6 @@ util.initRouter = function (vm) {
 
 // 添加所有顶部导航栏下的菜单路由
 util.initAllMenuData = function (constRoutes, data) {
-
     let allMenuData = [];
     data.forEach(e => {
         if (e.type == -1) {
@@ -431,7 +430,6 @@ util.initMenuData = function (vm, data) {
 
 // 生成路由节点
 util.initRouterNode = function (routers, data) {
-
     for (var item of data) {
         let menu = Object.assign({}, item);
         // menu.component = import(`@/views/${menu.component}.vue`);

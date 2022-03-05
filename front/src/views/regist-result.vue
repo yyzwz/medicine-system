@@ -1,33 +1,27 @@
 <template>
-  <div class="regist-result">
-    <Row
-      type="flex"
-      justify="center"
-      align="middle"
-      @keydown.enter="submitRegist"
-      style="height:100%"
-    >
-      <Col class="layout">
+<div class="regist-result">
+    <Row type="flex" justify="center" align="middle" @keydown.enter="submitRegist" style="height:100%">
+        <Col class="layout">
         <div>
-          <Header />
-          <Row class="success">
-            <Icon type="md-checkmark-circle" color="#52c41a" size="64"></Icon>
-            <p class="success-words">恭喜您，您的账户：{{username}} 注册成功</p>
-            <Row class="buttons">
-              <router-link to="/login">
-                <Button type="primary" size="large" style="margin-right:10px;">立即登录</Button>
-              </router-link>
-              <router-link to="/regist">
-                <Button size="large">返回注册</Button>
-              </router-link>
+            <Header />
+            <Row class="success">
+                <Icon type="md-checkmark-circle" color="#52c41a" size="64"></Icon>
+                <p class="success-words">您好，{{username}} 注册成功</p>
+                <Row class="buttons">
+                    <router-link to="/login">
+                        <Button type="primary" size="large" style="margin-right:10px;">立即登录</Button>
+                    </router-link>
+                    <router-link to="/regist">
+                        <Button size="large">返回注册</Button>
+                    </router-link>
+                </Row>
             </Row>
-          </Row>
         </div>
         <Footer />
-      </Col>
-      <LangSwitch />
+        </Col>
+        <LangSwitch />
     </Row>
-  </div>
+</div>
 </template>
 
 <script>
@@ -36,20 +30,20 @@ import Header from "@/views/main-components/header";
 import Footer from "@/views/main-components/footer";
 import LangSwitch from "@/views/main-components/lang-switch";
 export default {
-  components: {
-    Header,
-    Footer,
-    LangSwitch
-  },
-  data() {
-    return {
-      username: ""
-    };
-  },
-  methods: {},
-  mounted() {
-    this.username = this.$route.query.username;
-  }
+    components: {
+        Header,
+        Footer,
+        LangSwitch
+    },
+    data() {
+        return {
+            username: ""
+        };
+    },
+    methods: {},
+    mounted() {
+        this.username = this.$route.query.username;
+    }
 };
 </script>
 
