@@ -2,6 +2,12 @@
 
 ---
 
+经个人测试，发现 Github 出现了图片无法加载的情况，不管是用我的服务器 URL，或者项目本地的图片相对路径均无法浏览图片。
+
+请各位开发者移步 https://gitee.com/yyzwz/medicineSystem ，或者下载项目完成查阅，谢谢！
+
+---
+
 ![输入图片说明](https://artskyhome.com/zwz/2.png)
 
 ![输入图片说明](https://artskyhome.com/zwz/6.png)
