@@ -1,5 +1,7 @@
 package cn.zwz.data.controller;
 
+import cn.zwz.basics.log.LogType;
+import cn.zwz.basics.log.SystemLog;
 import cn.zwz.basics.redis.RedisTemplateHelper;
 import cn.zwz.basics.utils.PageUtil;
 import cn.zwz.basics.utils.ResultUtil;
@@ -9,6 +11,7 @@ import cn.zwz.data.entity.*;
 import cn.zwz.data.service.IRolePermissionService;
 import cn.zwz.data.service.IRoleService;
 import cn.zwz.data.service.IUserRoleService;
+import cn.zwz.data.utils.ZwzNullUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
@@ -47,24 +50,34 @@ public class RoleController {
     @Autowired
     private RedisTemplateHelper redisTemplateHelper;
 
+    @SystemLog(about = "查询全部角色", type = LogType.DATA_CENTER,doType = "ROLE-01")
     @RequestMapping(value = "/getAllList", method = RequestMethod.GET)
     @ApiOperation(value = "查询全部角色")
     public Result<Object> getAllList(){
         return ResultUtil.data(iRoleService.list());
     }
 
+    @SystemLog(about = "查询角色", type = LogType.DATA_CENTER,doType = "ROLE-02")
     @RequestMapping(value = "/getAllByPage", method = RequestMethod.GET)
-    @ApiOperation(value = "分页查询角色")
-    public Result<IPage<Role>> getRoleByPage(PageVo page) {
-        IPage<Role> roleList = iRoleService.page(PageUtil.initMpPage(page));
-        for(Role role : roleList.getRecords()){
+    @ApiOperation(value = "查询角色")
+    public Result<IPage<Role>> getRoleByPage(@ModelAttribute Role role,@ModelAttribute PageVo page) {
+        QueryWrapper<Role> qw = new QueryWrapper<>();
+        if(!ZwzNullUtils.isNull(role.getName())) {
+            qw.like("name",role.getName());
+        }
+        if(!ZwzNullUtils.isNull(role.getDescription())) {
+            qw.like("description",role.getDescription());
+        }
+        IPage<Role> roleList = iRoleService.page(PageUtil.initMpPage(page),qw);
+        for(Role r : roleList.getRecords()){
             QueryWrapper<RolePermission> rpQw = new QueryWrapper<>();
-            rpQw.eq("role_id",role.getId());
-            role.setPermissions(iRolePermissionService.list(rpQw));
+            rpQw.eq("role_id",r.getId());
+            r.setPermissions(iRolePermissionService.list(rpQw));
         }
         return new ResultUtil<IPage<Role>>().setData(roleList);
     }
 
+    @SystemLog(about = "配置默认角色", type = LogType.DATA_CENTER,doType = "ROLE-03")
     @RequestMapping(value = "/setDefault", method = RequestMethod.POST)
     @ApiOperation(value = "配置默认角色")
     public Result<Object> setDefault(@RequestParam String id,@RequestParam Boolean isDefault){
@@ -77,6 +90,7 @@ public class RoleController {
         return ResultUtil.success();
     }
 
+    @SystemLog(about = "修改菜单权限", type = LogType.DATA_CENTER,doType = "ROLE-04")
     @RequestMapping(value = "/editRolePerm", method = RequestMethod.POST)
     @ApiOperation(value = "修改菜单权限")
     public Result<Object> editRolePerm(@RequestParam String roleId,@RequestParam(required = false) String[] permIds){
@@ -128,28 +142,17 @@ public class RoleController {
         return ResultUtil.data();
     }
 
-    @RequestMapping(value = "/editRoleDep", method = RequestMethod.POST)
-    @ApiOperation(value = "修改数据权限")
-    public Result<Object> editRoleDep(@RequestParam String roleId, @RequestParam Integer dataType, @RequestParam(required = false) String[] depIds){
-        Role role = iRoleService.getById(roleId);
-        role.setDataType(dataType);
-        iRoleService.saveOrUpdate(role);
-        Set<String> keys = redisTemplateHelper.keys("department:" + "*");
-        redisTemplate.delete(keys);
-        Set<String> keysUserRole = redisTemplateHelper.keys("userRole:" + "*");
-        redisTemplate.delete(keysUserRole);
-        return ResultUtil.data();
-    }
-
+    @SystemLog(about = "新增角色", type = LogType.DATA_CENTER,doType = "ROLE-05")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    @ApiOperation(value = "保存数据")
+    @ApiOperation(value = "新增角色")
     public Result<Role> save(Role role){
         iRoleService.saveOrUpdate(role);
         return new ResultUtil<Role>().setData(role);
     }
 
+    @SystemLog(about = "编辑角色", type = LogType.DATA_CENTER,doType = "ROLE-06")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    @ApiOperation(value = "更新数据")
+    @ApiOperation(value = "编辑角色")
     public Result<Role> edit(Role role){
         iRoleService.saveOrUpdate(role);
         Set<String> keysUser = redisTemplateHelper.keys("user:" + "*");
@@ -159,6 +162,7 @@ public class RoleController {
         return new ResultUtil<Role>().setData(role);
     }
 
+    @SystemLog(about = "删除角色", type = LogType.DATA_CENTER,doType = "ROLE-07")
     @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
     @ApiOperation(value = "删除角色")
     public Result<Object> delByIds(@RequestParam String[] ids){

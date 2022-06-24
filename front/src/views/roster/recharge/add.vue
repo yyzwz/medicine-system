@@ -13,29 +13,31 @@
                 </a>
             </div>
         </div>
-        <Form ref="form" :model="form" :label-width="150" :rules="formValidate" label-position="left">
-            <Row :gutter="32">
-                <Col span="12">
-                <FormItem label="保险名称" prop="name">
-                    <Input v-model="form.name" clearable />
-                </FormItem>
-                </Col>
-                <Col span="12">
-                <FormItem label="C类大病门诊百分比">
-                    <InputNumber v-model="form.mine" clearable max="100" min="0" :formatter="value => `${value}%`" :parser="value => value.replace('%', '')" />
-                </FormItem>
-                </Col>
-                <Col span="12">
-                <FormItem label="B类大病门诊百分比">
-                    <InputNumber v-model="form.common" clearable max="100" min="0" :formatter="value => `${value}%`" :parser="value => value.replace('%', '')" />
-                </FormItem>
-                </Col>
-                <Col span="12">
-                <FormItem label="A类大病门诊百分比">
-                    <InputNumber v-model="form.big" clearable max="100" min="0" :formatter="value => `${value}%`" :parser="value => value.replace('%', '')" />
-                </FormItem>
-                </Col>
-            </Row>
+        <Form ref="form" :model="form" :label-width="100" :rules="formValidate" label-position="left">
+            <FormItem label="姓名" prop="name">
+                <Input v-model="form.name" clearable style="width:570px" />
+            </FormItem>
+            <FormItem label="性别" prop="sex">
+                <Input v-model="form.sex" clearable style="width:570px" />
+            </FormItem>
+            <FormItem label="电话号码" prop="mobile">
+                <Input v-model="form.mobile" clearable style="width:570px" />
+            </FormItem>
+            <FormItem label="身份证" prop="idCard">
+                <Input v-model="form.idCard" clearable style="width:570px" />
+            </FormItem>
+            <FormItem label="社保卡状态" prop="cardStatus">
+                <Input v-model="form.cardStatus" clearable style="width:570px" />
+            </FormItem>
+            <FormItem label="社保卡号" prop="cardNumber">
+                <Input v-model="form.cardNumber" clearable style="width:570px" />
+            </FormItem>
+            <FormItem label="余额" prop="money">
+                <InputNumber v-model="form.money" min="0" max="5000000" style="width:570px"></InputNumber>
+            </FormItem>
+            <FormItem label="保险名称" prop="insuranceName">
+                <Input v-model="form.insuranceName" clearable style="width:570px" />
+            </FormItem>
             <Form-item class="br">
                 <Button @click="handleSubmit" :loading="submitLoading" type="primary">提交并保存</Button>
                 <Button @click="handleReset">重置</Button>
@@ -48,7 +50,7 @@
 
 <script>
 import {
-    addMeeting
+    addRoster
 } from "./api.js";
 export default {
     name: "add",
@@ -58,112 +60,27 @@ export default {
             submitLoading: false, // 表单提交状态
             form: { // 添加或编辑表单对象初始化数据
                 name: "",
-                mine: "0",
-                common: "70",
-                big: "80"
+                sex: "",
+                mobile: "",
+                idCard: "",
+                cardStatus: "",
+                cardNumber: "",
+                money: 0,
+                insuranceName: "",
             },
             // 表单验证规则
-            formValidate: {
-                name: [{
-                    required: true,
-                    message: "不能为空",
-                    trigger: "blur"
-                }],
-                peopleNum: [{
-                    type: "number",
-                    required: true,
-                    message: "不能为空",
-                    trigger: "blur"
-                }],
-                zuoBiao: [{
-                    required: true,
-                    message: "不能为空",
-                    trigger: "blur"
-                }],
-                guiGe: [{
-                    required: true,
-                    message: "不能为空",
-                    trigger: "blur"
-                }],
-                haoCai: [{
-                    required: true,
-                    message: "不能为空",
-                    trigger: "blur"
-                }],
-                manger: [{
-                    required: true,
-                    message: "不能为空",
-                    trigger: "blur"
-                }],
-            },
-            userColumns: [{
-                    type: "selection",
-                    width: 55,
-                    align: "center",
-                    fixed: "left"
-                },
-                {
-                    title: "姓名",
-                    key: "username",
-                    width: 100,
-                    sortable: true
-                },
-                {
-                    title: "联系电话",
-                    key: "telpublic",
-                    width: 140,
-                    sortable: true
-                },
-                {
-                    title: "创建时间",
-                    key: "createTime",
-                    sortable: true,
-                    sortType: "desc",
-                    width: 200
-                }
-            ],
-            shiOrLing: '',
-            isImportHuaData: false,
-            huasearchForm: {
-                pageNumber: 1,
-                pageSize: 10,
-                username: ""
-            },
-            exportHuaData: [],
-            selectHuaList: [],
-            selectHuaCount: [],
-            huaData: [], //花名册组件的数据
+            formValidate: {}
         };
     },
     methods: {
         init() {},
-        showHuaModel() {
-            this.shiOrLing = "ling";
-            this.getHuaUserList();
-            this.isImportHuaData = true;
-        },
-        huaAddData() {
-            var that = this;
-            if (this.huaselectCount <= 0) {
-                this.$Message.warning("您还未选择要从花名册导入的数据");
-                return;
-            }
-            let ids = "";
-            this.huaselectList.forEach(function (e) {
-                ids += e.username + ",";
-            });
-            ids = ids.substring(0, ids.length - 1);
-            this.$Message.success("导入成功");
-            this.isImportHuaData = false;
-            that.form.manger = ids;
-        },
         handleReset() {
             this.$refs.form.resetFields();
         },
         handleSubmit() {
             this.$refs.form.validate(valid => {
                 if (valid) {
-                    addMeeting(this.form).then(res => {
+                    addRoster(this.form).then(res => {
                         this.submitLoading = false;
                         if (res.success) {
                             this.$Message.success("操作成功");
@@ -187,6 +104,8 @@ export default {
 </script>
 
 <style lang="less">
+// 建议引入通用样式 具体路径自行修改 可删除下面样式代码
+// @import "../../../styles/single-common.less";
 .edit-head {
     display: flex;
     align-items: center;

@@ -1,5 +1,7 @@
 package cn.zwz.data.controller;
 
+import cn.zwz.basics.log.LogType;
+import cn.zwz.basics.log.SystemLog;
 import cn.zwz.basics.utils.PageUtil;
 import cn.zwz.basics.utils.ResultUtil;
 import cn.zwz.basics.baseVo.PageVo;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@Api(description = "mybatis用户接口")
+@Api(tags = "mybatis用户接口")
 @RequestMapping("/zwz/myUser")
 @Transactional
 public class MyUserController {
@@ -29,6 +31,7 @@ public class MyUserController {
     @Autowired
     private IUserService iUserService;
 
+    @SystemLog(about = "查询用户", type = LogType.DATA_CENTER,doType = "USER-01")
     @RequestMapping(value = "/getByPage", method = RequestMethod.GET)
     @ApiOperation(value = "查询用户")
     public Result<IPage<User>> getByPage(@ModelAttribute User user,@ModelAttribute PageVo page){

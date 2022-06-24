@@ -8,7 +8,19 @@
     transform: translate(-50%, -50%);
     transition: all 3s;
 }
-
+#qywxsmqywxsm{
+    height: 500px;
+    width: 100%;
+    justify-content: center; /*水平方向的居中*/
+    align-items: center; /*垂直方向的居中*/
+    margin-top: 0;
+}
+#qywxsmqywxsm iframe{
+    height: 100%;
+    width: 100%;
+    justify-content: center; /*水平方向的居中*/
+    align-items: center; /*垂直方向的居中*/
+}
 .main {
     position: absolute;
     width: 100%;
@@ -29,7 +41,7 @@
         top: 0;
         left: 0;
         z-index: 21;
-        transition: width .3s; // background: rgb(73, 80, 96)
+        transition: width .3s;
         background: #515a6e;
         box-shadow: rgba(0, 21, 41, 0.35) 2px 0px 6px;
     }
@@ -117,11 +129,13 @@
             }
         }
     }
-
+    .ivu-menu-item{
+        background: rgb(255, 250, 205);
+    }
     &-header {
         min-width: 740px;
         height: 60px;
-        background: #fff;
+        background: rgb(255, 250, 205);
         box-shadow: 0 2px 1px 1px rgba(100, 100, 100, .1);
         position: relative;
         z-index: 11;
@@ -136,6 +150,7 @@
             left: 60px;
             top: 0;
             // right: 340px;
+            background: rgb(255, 250, 205);
             bottom: 0;
             padding: 10px;
             // overflow: hidden;

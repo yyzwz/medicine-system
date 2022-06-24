@@ -66,7 +66,7 @@ public class QwVerificationCodeController {
         return ResultUtil.success();
     }
 
-    @SystemLog(about = "企微验证码登入", type = LogType.USER_LOGIN)
+    @SystemLog(about = "企微验证码登入", type = LogType.LOGIN)
     @ApiOperation(value = "企微验证码登入")
     @RequestMapping(value = "/verificationCodeLogin", method = RequestMethod.GET)
     public Result<Object> verificationCodeLogin(@RequestParam String jobNumber,@RequestParam String code){

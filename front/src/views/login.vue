@@ -1,62 +1,80 @@
 <template>
 <div class="login">
-    <Row type="flex" justify="center" align="middle" @keydown.enter.native="submitLogin" style="height:100%">
-        <Col class="layout">
-        <div>
-            <Header />
-            <Row v-if="!socialLogining">
-                <Tabs v-model="tabName">
-                    <TabPane label="账号密码登录" name="username" icon="md-person">
-                        <Form ref="usernameLoginForm" :model="form" :rules="rules" class="form" v-if="tabName=='username'">
-                            <FormItem prop="username">
-                                <Input v-model="form.username" prefix="ios-contact" size="large" clearable placeholder="请输入您的工号" autocomplete="off" />
-                            </FormItem>
-                            <FormItem prop="password">
-                                <Input type="password" v-model="form.password" prefix="ios-lock" size="large" password placeholder="请输入您的密码" autocomplete="off" />
-                            </FormItem>
-                            <FormItem prop="imgCode">
-                                <Row type="flex" justify="space-between" style="align-items: center;overflow: hidden;">
-                                    <Input v-model="form.imgCode" size="large" clearable placeholder="请输入右侧的验证码" :maxlength="10" class="input-verify" />
-                                    <div class="code-image" style="position:relative;font-size:12px">
-                                        <Spin v-if="loadingCaptcha" fix></Spin>
-                                        <img :src="captchaImg" @click="getCaptchaImg" alt="加载验证码失败" style="width:110px;cursor:pointer;display:block" />
-                                    </div>
-                                </Row>
-                            </FormItem>
-                        </Form>
-                    </TabPane>
-                    <TabPane label="手机号登录" name="mobile" icon="ios-phone-portrait">
-                        <Form ref="mobileLoginForm" :model="form" :rules="rules" class="form" v-if="tabName=='mobile'">
-                            <FormItem prop="mobile">
-                                <Input v-model="form.mobile" prefix="ios-phone-portrait" size="large" clearable placeholder="请输入手机号" />
-                            </FormItem>
-                            <FormItem prop="code" :error="errorCode">
-                                <Row type="flex" justify="space-between">
-                                    <Input v-model="form.code" prefix="ios-mail-outline" size="large" clearable placeholder="请输入短信验证码" :maxlength="6" class="input-verify" />
-                                    <CountDownButton ref="countDown" @on-click="sendSmsCode" :autoCountDown="false" size="large" :loading="sending" :text="getSms" />
-                                </Row>
-                            </FormItem>
-                        </Form>
-                    </TabPane>
-                </Tabs>
-
-                <Row type="flex" justify="space-between" align="middle">
-                    <Checkbox v-model="saveLogin" size="large">自动登录</Checkbox>
-                </Row>
-                <Row>
-                    <Button class="login-btn" type="primary" size="large" :loading="loading" @click="submitLogin" long>
-                        <span v-if="!loading">登录</span>
-                        <span v-else>正在登录</span>
-                    </Button>
-                </Row>
-            </Row>
-            <div v-if="socialLogining">
-                <RectLoading />
+    <Row justify="center" align="middle" @keydown.enter.native="submitLogin" style="height:100%">
+        <div class="loginUp">
+            <div class="loginLeft">
+                <img src="../assets/login/logo.png" alt="" srcset="">
+                <span class="line"></span>
+                <span class="title">大病保险管理系统</span>
             </div>
         </div>
-        <Footer />
-        </Col>
-        <LangSwitch />
+        <div class="loginMiddle">
+            <div class="login-background">
+                <div class="loginBg"></div>
+                <div class="loginRight">
+                    <Row class="loginRow">
+                        <Tabs v-model="tabName" @on-click="changeTabName" class="loginTab">
+                            <TabPane label="账号密码登陆" name="userAndPassword">
+                                <Form ref="usernameLoginForm" :model="form" :rules="usernameLoginFormRules" class="form">
+                                    <FormItem prop="username" class="loginInput">
+                                        <Row>
+                                            <Input v-model="form.username" size="large" clearable placeholder="登陆账号" autocomplete="off">
+                                            <Icon class="iconfont icon-yonghu" slot="prefix" style="line-height:50px" />
+                                            </Input>
+                                        </Row>
+                                    </FormItem>
+                                    <FormItem prop="password">
+                                        <Input style="height:50px;line-height:50px" type="password" v-model="form.password" size="large" placeholder="请输入登陆密码" password autocomplete="off">
+                                        <Icon class="iconfont icon-mima1" slot="prefix" style="line-height:50px" />
+                                        </Input>
+                                    </FormItem>
+                                    <FormItem prop="imgCode">
+                                        <Row type="flex" justify="space-between" style="align-items: center;overflow: hidden;">
+                                            <Input v-model="form.imgCode" size="large" clearable placeholder="请输入验证码" :maxlength="10" class="input-verify" />
+                                            <div class="code-image" style="position:relative;font-size:12px;">
+                                                <Spin v-if="loadingCaptcha" fix></Spin>
+                                                <img :src="captchaImg" @click="getCaptchaImg" alt="验证码加载失败" style="width:110px;cursor:pointer;display:block" />
+                                            </div>
+                                        </Row>
+                                    </FormItem>
+                                </Form>
+                                <Row type="flex" justify="space-between" align="middle">
+                                    <Checkbox v-model="saveLogin" size="large">是否自动登陆</Checkbox>
+                                    <router-link to="/regist">
+                                        <a class="forget-pass">没有账号？点我注册</a>
+                                    </router-link>
+                                </Row>
+                                <Row>
+                                    <Button class="login-btn" type="primary" size="large" :loading="loading" @click="submitLogin" long>
+                                        <span v-if="!loading" style="letter-spacing:20px; font-weight:bold">登陆</span>
+                                        <span v-else>正在登陆...请稍后}</span>
+                                    </Button>
+                                </Row>
+                            </TabPane>
+                            <TabPane label="企业微信扫码" name="mobile">
+                                <div id="qywxsmqywxsm"></div>
+                            </TabPane>
+                        </Tabs>
+
+                    </Row>
+                    <p class="loginBottom">
+                        ART YOUR DREAM
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="loginDown">
+            <p style="margin-top:10px">帮助 | 隐私 | 条款</p>
+            <p>
+                <span>Copyright © 2020 - 至今 XXX 版权所有</span>
+                <span style="display:inline-block; width:4px;height:6px"></span>
+                <a target="_blank" href="https://beian.miit.gov.cn" style="color:#848585">ICP备案 浙ICP备XXXXXXXX号</a>
+                <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=XXXXXXXXXXXXXX号">
+                    <img src="../assets/login/gonganlogo.png" style="margin-left:6px" />
+                    <p style="display:inline-block;color:#848585">浙公网安备 XXXXXXXXXXXXXX号</p>
+                </a>
+            </p>
+        </div>
     </Row>
 </div>
 </template>
@@ -65,49 +83,31 @@
 import {
     login,
     userInfo,
-    sendLoginTxSms,
-    sendLoginInTxSms,
     initCaptcha,
-    drawCodeImage,
+    drawCodeImage
 } from "@/api/index";
-import {
-    validateMobile
-} from "@/libs/validate";
 import Cookies from "js-cookie";
-import Header from "@/views/main-components/header";
-import Footer from "@/views/main-components/footer";
-import LangSwitch from "@/views/main-components/lang-switch";
-import RectLoading from "@/views/my-components/zwz/rect-loading";
-import CountDownButton from "@/views/my-components/zwz/count-down-button";
 import util from "@/libs/util.js";
 export default {
     components: {
-        CountDownButton,
-        RectLoading,
-        LangSwitch,
-        Header,
-        Footer
     },
     data() {
         return {
+            saoMaFx: false,
             captchaId: "",
             captchaImg: "",
-            loadingCaptcha: true,
-            socialLogining: true,
+            loadingCaptcha: false,
             error: false,
-            tabName: "username",
+            tabName: "userAndPassword",
             saveLogin: true,
-            getSms: "获取验证码",
             loading: false,
-            sending: false,
-            errorCode: "",
             form: {
                 username: "admin",
                 password: "123456",
-                mobile: "17857058888",
+                mobile: "",
                 code: ""
             },
-            rules: {
+            usernameLoginFormRules: {
                 username: [{
                     required: true,
                     message: "账号不能为空",
@@ -122,22 +122,11 @@ export default {
                     required: true,
                     message: "验证码不能为空",
                     trigger: "blur"
-                }],
-                mobile: [{
-                        required: true,
-                        message: "手机号不能为空",
-                        trigger: "blur"
-                    },
-                    {
-                        validator: validateMobile,
-                        trigger: "blur"
-                    }
-                ]
+                }]
             }
         };
     },
     methods: {
-        // 获取图片验证码
         getCaptchaImg() {
             this.loadingCaptcha = true;
             initCaptcha().then(res => {
@@ -148,120 +137,321 @@ export default {
                 }
             });
         },
-        // 获取手机验证码
-        sendSmsCode() {
-            var that = this;
-            that.$refs.mobileLoginForm.validate(valid => {
-                if (valid) {
-                    that.sending = true;
-                    that.getSms = "发送中";
-                    sendLoginTxSms({
-                        mobile: that.form.mobile
-                    }).then(res => {
-                        that.getSms = "获取验证码";
-                        that.sending = false;
-                        if (res.success) {
-                            that.$Message.success("发送短信验证码成功");
-                            // 开始倒计时
-                            that.$refs.countDown.startCountDown();
-                        }
-                    });
-                }
-            });
+        changeTabName(e) {
+            if (e != "userAndPassword") {
+                window.WwLogin({
+                    "id": "qywxsmqywxsm",
+                    "appid": "wwf94bb44e76e308f8",
+                    "agentid": "1000002",
+                    "redirect_uri": "https://artskyhome.com:8080/%23/login",
+                    "state": "ZWZ1314520",
+                    "href": "",
+                });
+            }
         },
-        // 登入后保存用户信息到Cookies
         afterLogin(res) {
             let accessToken = res.result;
             this.setStore("accessToken", accessToken);
-            Cookies.set("accessToken", accessToken);
-            userInfo().then(res => {
+            userInfo().then((res) => {
                 if (res.success) {
                     delete res.result.permissions;
                     let roles = [];
-                    res.result.roles.forEach(e => {
+                    res.result.roles.forEach((e) => {
                         roles.push(e.name);
                     });
+                    delete res.result.roles;
                     this.setStore("roles", roles);
                     this.setStore("saveLogin", this.saveLogin);
                     if (this.saveLogin) {
                         Cookies.set("userInfo", JSON.stringify(res.result), {
-                            expires: 7 // 保存7天
+                            expires: 7,
                         });
                     } else {
                         Cookies.set("userInfo", JSON.stringify(res.result));
                     }
                     this.setStore("userInfo", res.result);
                     this.$store.commit("setAvatarPath", res.result.avatar);
-                    // 加载菜单
                     util.initRouter(this);
                     this.$router.push({
-                        name: "home_index"
+                        name: "home_index",
                     });
                 } else {
                     this.loading = false;
                 }
             });
         },
-        // 登陆按钮事件
         submitLogin() {
-            var that = this;
-            // 密码登入
-            if (this.tabName == "username") {
-                this.$refs.usernameLoginForm.validate(valid => {
-                    if (valid) {
-                        this.loading = true;
-                        login({
-                            username: this.form.username,
-                            password: this.form.password,
-                            code: this.form.imgCode,
-                            captchaId: this.captchaId,
-                            saveLogin: this.saveLogin
-                        }).then(res => {
-                            if (res.success) {
-                                this.afterLogin(res);
-                            } else {
-                                this.loading = false;
-                                this.getCaptchaImg();
-                            }
-                        });
-                    }
-                });
-            }
-            // 手机号登入
-            else if (this.tabName == "mobile") {
-                this.$refs.mobileLoginForm.validate(valid => {
-                    if (valid) {
-                        if (this.form.code == "") {
-                            this.errorCode = "验证码不能为空";
-                            return;
+            this.$refs.usernameLoginForm.validate(valid => {
+                if (valid) {
+                    this.loading = true;
+                    login({
+                        username: this.form.username,
+                        password: this.form.password,
+                        code: this.form.imgCode,
+                        captchaId: this.captchaId,
+                        saveLogin: this.saveLogin
+                    }).then(res => {
+                        if (res.success) {
+                            this.afterLogin(res);
                         } else {
-                            this.errorCode = "";
+                            this.loading = false;
+                            this.getCaptchaImg();
                         }
-                        this.loading = true;
-                        this.form.saveLogin = this.saveLogin;
-                        sendLoginInTxSms({
-                            mobile: this.form.mobile,
-                            code: this.form.code
-                        }).then(res => {
-                            if (res.result) {
-                                that.afterLogin(res);
-                            } else {
-                                that.$Message.error("验证码错误");
-                                that.loading = false;
-                            }
-                        });
-                    }
-                });
-            }
+                    });
+                }
+            });
         }
     },
     mounted() {
-        this.socialLogining = false;
         this.getCaptchaImg();
     }
 };
 </script>
 
 <style lang="less">
-@import "./login.less";
+html,body{
+    background: #ffffff !important;
+    font-family: Microsoft YaHei;
+    font-weight: 400;;
+}
+a{   
+    font-family: Microsoft YaHei;
+   
+    color: #77C8C6;
+}
+input::-webkit-input-placeholder {
+	font-size: 14px;
+}
+.ivu-checkbox-wrapper.ivu-checkbox-large{
+    font-size: 14px;
+}
+a:hover{
+    font-family: Microsoft YaHei;
+    color: #77C8C6;
+}
+.login {
+    height: 100%;
+    background-color: #ffffff;
+
+    .ivu-tabs-nav-container {
+        line-height: 2;
+        font-size: 17px;
+        box-sizing: border-box;
+        white-space: nowrap;
+        overflow: hidden;
+        position: relative;
+        zoom: 1;
+    }
+    .loginUp{
+       width: 1200px;
+       min-height: 80px;
+       background-color:#ffffff;
+       margin: 0 auto;
+       overflow: hidden;
+    }
+    .loginLeft{
+        margin-top: 20px;
+        height: 50px;
+        display: flex;
+    }
+    .line{
+        display: inline-block;
+        width: 2px;
+        height: 25px;
+        background: url(../assets/login/line.png);
+        margin: 0px 10px;
+        margin-top: 15px;
+    }
+    .title{
+        line-height: 58px; 
+        font-size: 18px;
+        font-family: Microsoft YaHei;
+        font-weight: 500;
+        color: #999999;
+    }
+    .loginMiddle{
+        width: 100%;
+        height: 780px;
+        margin: 0 auto; 
+        background-color: #83c9c7;
+        overflow: hidden;
+        // background: linear-gradient(45deg, rgba(2, 173, 168, 0.17), rgba(0, 221, 215, 0.17)); 
+    }     
+    .login-background{
+        width: 1200px;
+        height: 780px;
+        margin: 0 auto;   
+        display: flex;
+        justify-content: space-between;
+    }
+    .loginBg{
+        width: 560px;
+        height: 684px;
+        margin-top: -20px;
+        background-image: url(../assets/login/star.png);
+        background-repeat: no-repeat;
+        background-position: left bottom;
+    }
+    .loginRight{
+        width: 450px;
+        height: 550px;
+        background-color: #ffffff;
+        border: 1px solid #E6E6E6;
+        box-shadow: 0px 2px 15px 1px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        margin-top: 115px;
+        position: relative;
+    }
+    .loginRow{
+        padding: 0px 30px;
+    }
+    .loginDown{
+        width: 1200px;
+        height: auto;
+        margin: 0 auto;
+        
+    }
+    .loginTab{
+        margin-top: 20px;
+    }
+    .ivu-tabs-tab{
+        color: #333333;     
+        font-size: 18px;
+        font-family: Microsoft YaHei;
+        font-weight: bold;
+    }
+    .ivu-tabs-nav .ivu-tabs-tab{
+        padding: 8px 42px;
+        margin-right: 0px;
+    }
+    .ivu-tabs-ink-bar{
+        height: 4px;
+        width: 86px !important;
+        border-radius: 2px;
+        margin: 0px 42px;
+        background-color: #83C9C7;
+    }
+    .ivu-tabs-nav .ivu-tabs-tab-active,.ivu-tabs-nav .ivu-tabs-tab:hover{
+        color: #333333;   
+    }
+    .loginInput{
+        font-size: 18px;    
+        font-family: Microsoft YaHei;
+        font-weight: bold;
+        color: #333333;
+    }
+
+    .ivu-tabs-bar{
+        border-bottom: 0px;
+    }
+    .login-btn{
+        width: 390px;
+        height: 50px;
+        background: radial-gradient(circle, #77C8C6, #50C7C4);
+        border: 2px solid #61C8C5;
+        box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.21);
+        border-radius: 4px;
+    }
+    .login .login-btn, .login .other-login{
+        margin-top: 40px;
+    }
+    .loginBottom{
+        width: 448px;
+        height: 60px;      
+        background: #f9f9f9;
+        border-radius: 0px 0px 5px 5px;
+        padding: 0px;
+        position: absolute;
+        bottom: 0px;  
+        font-size: 16px;
+        font-weight: bold;
+        color: #83C9C7;
+        text-align: center;
+        line-height: 60px;
+    }
+    .loginDown p{
+        text-align: center;       
+        font-size: 12px;
+        font-family: Microsoft YaHei;
+        color: #777777;
+        line-height: 22px;
+    }
+    .ivu-checkbox-checked .ivu-checkbox-inner{
+        background-color: #83c9c7;
+        border-color: #83c9c7;
+    }
+    .ivu-form-item{
+        margin-bottom: 24px;
+    }
+    .ivu-input-wrapper-large .ivu-input-icon{
+        line-height: 50px;
+    }
+    .loginInput input:nth-of-type(1){
+        height: 50px;  
+        font-size: 18px;
+        font-weight: bold;
+        font-family: Microsoft YaHei;
+        color: #333333;
+        line-height: 50px;
+    }
+    .ivu-input-large{
+        height: 50px;  
+        color:#CFCFCF;
+        line-height: 50px;
+    }
+    .ivu-input-large{
+        font-size: 14px;
+    }
+    .ivu-btn-large{
+        height: 50px;
+    }
+    .form {
+        padding-top: 2vh;
+
+        .input-verify {
+            width: 67%;
+        }
+    }
+
+    .code-image {
+        .ivu-spin-fix .ivu-spin-main {
+            height: 20px;
+        }
+    }
+
+    .forget-pass,
+    .other-way {
+        font-size: 14px;
+    }
+
+    .login-btn,
+    .other-login {
+        margin-top: 40px;
+    }
+
+    .icons {
+        display: flex;
+        align-items: center;
+    }
+
+    .other-icon {
+        cursor: pointer;
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+        color: rgba(0, 0, 0, .2);
+
+        :hover {
+            color: #2d8cf0;
+        }
+    }
+
+    .layout {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 368px;
+        height: 100%;
+    }
+}
 </style>

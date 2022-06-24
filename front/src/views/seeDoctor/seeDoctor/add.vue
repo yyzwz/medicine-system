@@ -35,7 +35,9 @@
                 <Col span="12">
                 <FormItem label="门诊类型" prop="type">
                     <Select v-model="form.type" @on-change="changePrice">
-                        <Option v-for="(item, i) in this.$store.state.dict.examineType" :key="i" :value="item.value">{{item.title}}</Option>
+                        <Option value="A类大病门诊">A类大病门诊</Option>
+                        <Option value="B类大病门诊">B类大病门诊</Option>
+                        <Option value="C类大病门诊">C类大病门诊</Option>
                     </Select>
                 </FormItem>
                 </Col>
@@ -130,10 +132,8 @@
 
 <script>
 import {
+    addSeeDoctor,
     getInsuranceOne
-} from "@/api/index";
-import {
-    addMeeting
 } from "./api.js";
 import userChoose from './userChoose.vue';
 import medicineChoose from './medicineChoose.vue';
@@ -151,10 +151,11 @@ export default {
             form: { // 添加或编辑表单对象初始化数据
                 userId: "",
                 price: 0,
+                userName: "",
                 priceSum: 0,
                 medicinePrice: '',
                 type: '',
-                balance: 0,
+                money: 0,
                 priceOld: 0,
                 price: 0,
                 priceYou: 0,
@@ -247,8 +248,9 @@ export default {
             var that = this;
             this.nowUser = e.name;
             this.form.userName = e.name;
+            this.form.name = e.insuranceName;
             this.form.userId = e.id;
-            this.form.balance = e.balance;
+            this.form.balance = e.money;
             getInsuranceOne({
                 id: e.insuranceType
             }).then(res => {
@@ -259,7 +261,7 @@ export default {
                 that.dazheList.mine = 100 - parseInt(that.dazheList.mine);
                 that.dazheList.common = 100 - parseInt(that.dazheList.common);
                 that.dazheList.big = 100 - parseInt(that.dazheList.big);
-                that.form.name = that.dazheList.name;
+                that.form.name = that.dazheList.title;
             })
         },
         getMedicineData(e) {
@@ -268,11 +270,16 @@ export default {
             var medicineOldPrice = 0;
             that.nowMedicine = "";
             e.forEach(function (ee) {
-                that.nowMedicine += '(' + ee.name + ')=' + ee.number + '次*' + ee.price;
-                if (ee.type == '一级手术') priceNum += ee.number * ee.price * that.dazheList.one / 100.0;
-                else if (ee.type == '二级手术') priceNum += ee.number * ee.price * that.dazheList.two / 100.0;
-                else if (ee.type == '三级手术') priceNum += ee.number * ee.price * that.dazheList.three / 100.0;
-                else priceNum += ee.number * ee.price;
+                that.nowMedicine += '(' + ee.title + ')=' + ee.number + '次*' + ee.price;
+                if (ee.type == '一级手术') {
+                    priceNum += ee.number * ee.price * that.dazheList.one / 100.0;
+                } else if (ee.type == '二级手术') {
+                    priceNum += ee.number * ee.price * that.dazheList.two / 100.0;
+                } else if (ee.type == '三级手术') {
+                    priceNum += ee.number * ee.price * that.dazheList.three / 100.0;
+                } else {
+                    priceNum += ee.number * ee.price;
+                }
                 medicineOldPrice += ee.number * ee.price;
             })
             that.form.medicineOld = this.accAdd(medicineOldPrice, "0.0");
@@ -342,7 +349,7 @@ export default {
                 that.form.medicineName = that.nowMedicine;
                 this.$refs.form.validate(valid => {
                     if (valid) {
-                        addMeeting(this.form).then(res => {
+                        addSeeDoctor(this.form).then(res => {
                             this.submitLoading = false;
                             if (res.success) {
                                 this.$Message.success("操作成功");

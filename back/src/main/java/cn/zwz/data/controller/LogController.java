@@ -1,5 +1,7 @@
 package cn.zwz.data.controller;
 
+import cn.zwz.basics.log.LogType;
+import cn.zwz.basics.log.SystemLog;
 import cn.zwz.basics.utils.PageUtil;
 import cn.zwz.basics.utils.ResultUtil;
 import cn.zwz.basics.baseVo.PageVo;
@@ -27,6 +29,7 @@ public class LogController{
     @Autowired
     private ILogService iLogService;
 
+    @SystemLog(about = "查询日志", type = LogType.DATA_CENTER,doType = "LOG-01")
     @RequestMapping(value = "/getAllByPage", method = RequestMethod.GET)
     @ApiOperation(value = "查询日志")
     public Result<Object> getAllByPage(@ModelAttribute Log log, @ModelAttribute PageVo page){
@@ -43,22 +46,10 @@ public class LogController{
         if(!ZwzNullUtils.isNull(log.getIp())) {
             qw.like("ip",log.getIp());
         }
-        return ResultUtil.data(iLogService.page(PageUtil.initMpPage(page),qw));
-    }
-
-    @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
-    @ApiOperation(value = "删除日志")
-    public Result<Object> delByIds(@RequestParam String[] ids){
-        for(String logId : ids){
-            iLogService.removeById(logId);
+        if(!ZwzNullUtils.isNull(log.getStartDate())) {
+            qw.ge("create_time",log.getStartDate());
+            qw.le("create_time",log.getEndDate());
         }
-        return ResultUtil.success();
-    }
-
-    @RequestMapping(value = "/delAll", method = RequestMethod.POST)
-    @ApiOperation(value = "删除全部日志")
-    public Result<Object> delAll(){
-        iLogService.remove(new QueryWrapper<Log>());
-        return ResultUtil.success();
+        return ResultUtil.data(iLogService.page(PageUtil.initMpPage(page),qw));
     }
 }

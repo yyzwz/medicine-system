@@ -41,7 +41,7 @@
 <script>
 import {
     getMedicineList
-} from "@/api/index";
+} from "./api.js";
 export default {
     name: "add",
     components: {},
@@ -80,7 +80,7 @@ export default {
                 },
                 {
                     title: "手术名称",
-                    key: "name",
+                    key: "title",
                     minWidth: 100,
                     sortable: true
                 },
@@ -152,7 +152,7 @@ export default {
             })
             that.selectUserName = '';
             that.saveSelectNewData.forEach(function (e) {
-                that.selectUserName += "  " + e.name + " * " + e.number;
+                that.selectUserName += "  " + e.title + " * " + e.number;
             })
 
         },

@@ -1,26 +1,26 @@
 package cn.zwz.data.controller;
 
+import cn.zwz.basics.baseVo.PageVo;
+import cn.zwz.basics.log.LogType;
+import cn.zwz.basics.log.SystemLog;
 import cn.zwz.basics.parameter.CommonConstant;
 import cn.zwz.basics.redis.RedisTemplateHelper;
 import cn.zwz.basics.utils.ResultUtil;
 import cn.zwz.basics.utils.SecurityUtil;
 import cn.zwz.basics.baseVo.Result;
 import cn.zwz.basics.security.permission.MySecurityMetadataSource;
-import cn.zwz.data.entity.Permission;
-import cn.zwz.data.entity.RolePermission;
-import cn.zwz.data.entity.User;
-import cn.zwz.data.entity.UserRole;
-import cn.zwz.data.service.IPermissionService;
-import cn.zwz.data.service.IRolePermissionService;
-import cn.zwz.data.service.IUserRoleService;
+import cn.zwz.data.entity.*;
+import cn.zwz.data.service.*;
 import cn.zwz.data.utils.VoUtil;
 import cn.zwz.data.utils.ZwzNullUtils;
 import cn.zwz.data.vo.MenuVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -66,6 +66,67 @@ public class PermissionController {
     @Autowired
     private RedisTemplateHelper redisTemplateHelper;
 
+    @Autowired
+    private IRoleService iRoleService;
+
+    @Autowired
+    private IUserService iUserService;
+
+    @SystemLog(about = "查询菜单权限拥有者", type = LogType.DATA_CENTER,doType = "PERMISSION-01")
+    @ApiOperation(value = "查询菜单权限拥有者")
+    @RequestMapping(value = "/getUserByPermission", method = RequestMethod.GET)
+    public Result<List<UserByPermissionVo>> getUserByPermission(@RequestParam String permissionId){
+        Permission permission = iPermissionService.getById(permissionId);
+        if(permission == null) {
+            return ResultUtil.error("该菜单已被删除");
+        }
+        List<UserByPermissionVo> ansList = new ArrayList<>();
+        // 查询用户
+        QueryWrapper<RolePermission> qw = new QueryWrapper<>();
+        qw.eq("permission_id",permissionId);
+        List<RolePermission> rolePermissionList = iRolePermissionService.list(qw);
+        for (RolePermission rp : rolePermissionList) {
+            Role role = iRoleService.getById(rp.getRoleId());
+            if(role != null) {
+                QueryWrapper<UserRole> urQw = new QueryWrapper<>();
+                urQw.eq("role_id",role.getId());
+                List<UserRole> userRoleList = iUserRoleService.list(urQw);
+                for (UserRole ur : userRoleList) {
+                    User user = iUserService.getById(ur.getUserId());
+                    if(user != null) {
+                        boolean flag = false;
+                        for (UserByPermissionVo vo : ansList) {
+                            if(Objects.equals(vo.getUserId(),user.getId())) {
+                                flag = true;
+                                vo.setRoleStr(vo.getRoleStr() + role.getName() + "(" + role.getDescription() + ") ");
+                                break;
+                            }
+                        }
+                        if(!flag) {
+                            UserByPermissionVo vo = new UserByPermissionVo();
+                            vo.setUserId(user.getId());
+                            vo.setUserName(user.getNickname());
+                            vo.setRoleStr(role.getName());
+                            vo.setCode(user.getUsername());
+                            vo.setMobile(user.getMobile());
+                            ansList.add(vo);
+                        }
+                    }
+                }
+            }
+        }
+        return new ResultUtil<List<UserByPermissionVo>>().setData(ansList);
+    }
+
+    @Data
+    private static class UserByPermissionVo{
+        private String userId;
+        private String userName;
+        private String roleStr;
+        private String code;
+        private String mobile;
+    }
+
     @ApiOperation(value = "根据层级查询菜单")
     private List<Permission> getPermissionListByLevel(int level) {
         QueryWrapper<Permission> qw = new QueryWrapper<>();
@@ -98,8 +159,9 @@ public class PermissionController {
         return permissionList;
     }
 
+    @SystemLog(about = "查询菜单", type = LogType.DATA_CENTER,doType = "PERMISSION-02")
     @RequestMapping(value = "/getMenuList", method = RequestMethod.GET)
-    @ApiOperation(value = "查询有权限的菜单")
+    @ApiOperation(value = "查询菜单")
     public Result<List<MenuVo>> getMenuList(){
         List<MenuVo> menuList = new ArrayList<>();
         User currUser = securityUtil.getCurrUser();
@@ -172,6 +234,7 @@ public class PermissionController {
         return new ResultUtil<List<MenuVo>>().setData(menuList);
     }
 
+    @SystemLog(about = "搜索菜单", type = LogType.DATA_CENTER,doType = "PERMISSION-03")
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     @ApiOperation(value = "搜索菜单")
     public Result<List<Permission>> searchPermissionList(@RequestParam String title){
@@ -189,8 +252,9 @@ public class PermissionController {
         return iPermissionService.list(qw);
     }
 
+    @SystemLog(about = "查询全部菜单", type = LogType.DATA_CENTER,doType = "PERMISSION-04")
     @RequestMapping(value = "/getAllList", method = RequestMethod.GET)
-    @ApiOperation(value = "获取权限菜单树")
+    @ApiOperation(value = "查询全部菜单")
     @Cacheable(key = "'allList'")
     public Result<List<Permission>> getAllList(){
         // 顶级菜单列表
@@ -213,6 +277,7 @@ public class PermissionController {
         return new ResultUtil<List<Permission>>().setData(list0);
     }
 
+    @SystemLog(about = "删除菜单", type = LogType.DATA_CENTER,doType = "PERMISSION-05")
     @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
     @ApiOperation(value = "删除菜单")
     @CacheEvict(key = "'menuList'")
@@ -224,7 +289,7 @@ public class PermissionController {
             if(rolePermissionCount > 0L) {
                 Permission permission = iPermissionService.getById(id);
                 if(permission == null) {
-                    return ResultUtil.error("该空菜单正在被角色使用，不能删除");
+                    return ResultUtil.error("菜单不存在");
                 }
                 return ResultUtil.error(permission.getTitle() + "菜单正在被角色使用，不能删除");
             }
@@ -237,14 +302,15 @@ public class PermissionController {
         return ResultUtil.success();
     }
 
+    @SystemLog(about = "添加菜单", type = LogType.DATA_CENTER,doType = "PERMISSION-06")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @ApiOperation(value = "添加")
+    @ApiOperation(value = "添加菜单")
     @CacheEvict(key = "'menuList'")
     public Result<Permission> add(Permission permission){
         if(Objects.equals(CommonConstant.PERMISSION_OPERATION,permission.getType())) {
             QueryWrapper<Permission> perQw = new QueryWrapper<>();
             perQw.eq("title",permission.getTitle());
-            long permissionByTitleCount = iPermissionService.count(perQw);
+            long permissionByTitleCount = iPermissionService.count();
             if(permissionByTitleCount > 0L){
                 return new ResultUtil<Permission>().setErrorMsg("名称已存在");
             }
@@ -255,15 +321,15 @@ public class PermissionController {
         return new ResultUtil<Permission>().setData(permission);
     }
 
+    @SystemLog(about = "编辑菜单", type = LogType.DATA_CENTER,doType = "PERMISSION-07")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    @ApiOperation(value = "编辑")
+    @ApiOperation(value = "编辑菜单")
     public Result<Permission> edit(Permission permission){
         if(Objects.equals(CommonConstant.PERMISSION_OPERATION,permission.getType())) {
             Permission p = iPermissionService.getById(permission.getId());
             if(!Objects.equals(p.getTitle(),permission.getTitle())) {
                 QueryWrapper<Permission> perQw = new QueryWrapper<>();
                 perQw.eq("title",permission.getTitle());
-                perQw.ne("id",permission.getId());
                 long permissionCount = iPermissionService.count(perQw);
                 if(permissionCount > 0L){
                     return new ResultUtil<Permission>().setErrorMsg("名称已存在");

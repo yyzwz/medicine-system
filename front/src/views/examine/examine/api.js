@@ -1,20 +1,24 @@
-// 统一请求路径前缀在libs/axios.js中修改
 import { getRequest, postRequest, putRequest, postBodyRequest, getNoAuthRequest, postNoAuthRequest } from '@/libs/axios';
 
-// 分页获取数据
-export const getMeetingList = (params) => {
+export const getExamineOne = (params) => {
+    return getRequest('/examine/getOne', params)
+}
+export const getExamineList = (params) => {
     return getRequest('/examine/getByPage', params)
 }
-// 添加
-export const addMeeting = (params) => {
+export const getExamineCount = (params) => {
+    return getRequest('/examine/count', params)
+}
+export const addExamine = (params) => {
+    return postRequest('/examine/insert', params)
+}
+export const editExamine = (params) => {
+    return postRequest('/examine/update', params)
+}
+export const addOrEditExamine = (params) => {
     return postRequest('/examine/insertOrUpdate', params)
 }
-// 编辑
-export const editMeeting = (params) => {
-    return postRequest('/examine/insertOrUpdate', params)
-}
-// 删除
-export const deleteMeeting = (params) => {
+export const deleteExamine = (params) => {
     return postRequest('/examine/delByIds', params)
 }
 export const pass = (params) => {

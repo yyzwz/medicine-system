@@ -22,8 +22,8 @@ import java.util.List;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "t_role")
-@TableName("t_role")
+@Table(name = "a_role")
+@TableName("a_role")
 @ApiModel(value = "角色")
 public class Role extends ZwzBaseEntity {
 

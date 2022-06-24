@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 看病登记接口实现
+ * 看病单 服务层接口实现
  * @author 郑为中
  */
 @Slf4j

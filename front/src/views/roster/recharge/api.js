@@ -1,18 +1,27 @@
 import { getRequest, postRequest, putRequest, postBodyRequest, getNoAuthRequest, postNoAuthRequest } from '@/libs/axios';
 
-// 分页获取数据
-export const getMeetingList = (params) => {
-    return getRequest('/insurance/getByPage', params)
+export const getRosterOne = (params) => {
+    return getRequest('/roster/getOne', params)
 }
-// 添加
-export const addMeeting = (params) => {
-    return postRequest('/insurance/insertOrUpdate', params)
+export const getRosterList = (params) => {
+    return getRequest('/roster/getByPage', params)
 }
-// 编辑
-export const editMeeting = (params) => {
-    return postRequest('/insurance/insertOrUpdate', params)
+export const getRosterCount = (params) => {
+    return getRequest('/roster/count', params)
 }
-// 删除
-export const deleteMeeting = (params) => {
-    return postRequest('/insurance/delByIds', params)
+export const addRoster = (params) => {
+    return postRequest('/roster/insert', params)
+}
+export const editRoster = (params) => {
+    return postRequest('/roster/update', params)
+}
+export const addOrEditRoster = (params) => {
+    return postRequest('/roster/insertOrUpdate', params)
+}
+export const deleteRoster = (params) => {
+    return postRequest('/roster/delByIds', params)
+}
+// 医保余额充值接口
+export const addMoney = (params) => {
+    return getRequest('/roster/addMoney', params)
 }

@@ -1,5 +1,7 @@
 package cn.zwz.data.controller;
 
+import cn.zwz.basics.log.LogType;
+import cn.zwz.basics.log.SystemLog;
 import cn.zwz.basics.utils.PageUtil;
 import cn.zwz.basics.utils.ResultUtil;
 import cn.zwz.basics.baseVo.PageVo;
@@ -41,6 +43,7 @@ public class DictDataController {
 
     private static final String REDIS_DIST_DATA_PRE_STR = "dictData::";
 
+    @SystemLog(about = "查询单个数据字典的值", type = LogType.DATA_CENTER,doType = "DICT_DATA-01")
     @RequestMapping(value = "/getByType/{type}", method = RequestMethod.GET)
     @ApiOperation(value = "查询单个数据字典的值")
     public Result<Object> getByType(@PathVariable String type){
@@ -55,6 +58,7 @@ public class DictDataController {
         return ResultUtil.data(iDictDataService.list(dataQw));
     }
 
+    @SystemLog(about = "查询数据字典值", type = LogType.DATA_CENTER,doType = "DICT_DATA-02")
     @RequestMapping(value = "/getByCondition", method = RequestMethod.GET)
     @ApiOperation(value = "查询数据字典值")
     public Result<IPage<DictData>> getByCondition(@ModelAttribute DictData dictData, @ModelAttribute PageVo page) {
@@ -66,11 +70,27 @@ public class DictDataController {
             qw.eq("status",dictData.getStatus());
         }
         if(!ZwzNullUtils.isNull(dictData.getTitle())) {
-            qw.eq("title",dictData.getTitle());
+            qw.like("title",dictData.getTitle());
         }
-        return new ResultUtil<IPage<DictData>>().setData(iDictDataService.page(PageUtil.initMpPage(page),qw));
+        if(!ZwzNullUtils.isNull(dictData.getValue())) {
+            qw.like("value",dictData.getValue());
+        }
+        if(!ZwzNullUtils.isNull(dictData.getDescription())) {
+            qw.like("description",dictData.getDescription());
+        }
+        IPage<DictData> data = iDictDataService.page(PageUtil.initMpPage(page),qw);
+        for (DictData dd : data.getRecords()) {
+            if(dd != null) {
+                Dict dict = iDictService.getById(dd.getDictId());
+                if(dict != null) {
+                    dd.setDictName(dict.getTitle());
+                }
+            }
+        }
+        return new ResultUtil<IPage<DictData>>().setData(data);
     }
 
+    @SystemLog(about = "删除数据字典值", type = LogType.DATA_CENTER,doType = "DICT_DATA-03")
     @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
     @ApiOperation(value = "删除数据字典值")
     public Result<Object> delByIds(@RequestParam String[] ids){
@@ -83,6 +103,7 @@ public class DictDataController {
         return ResultUtil.success();
     }
 
+    @SystemLog(about = "添加数据字典值", type = LogType.DATA_CENTER,doType = "DICT_DATA-04")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加数据字典值")
     public Result<Object> add(DictData dictData){
@@ -95,6 +116,7 @@ public class DictDataController {
         return ResultUtil.success();
     }
 
+    @SystemLog(about = "编辑数据字典值", type = LogType.DATA_CENTER,doType = "DICT_DATA-05")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ApiOperation(value = "编辑数据字典值")
     public Result<Object> edit(DictData dictData){

@@ -1,19 +1,35 @@
-// 统一请求路径前缀在libs/axios.js中修改
 import { getRequest, postRequest, putRequest, postBodyRequest, getNoAuthRequest, postNoAuthRequest } from '@/libs/axios';
 
-// 分页获取数据
-export const getMeetingList = (params) => {
+export const getSeeDoctorOne = (params) => {
+    return getRequest('/seeDoctor/getOne', params)
+}
+export const getSeeDoctorList = (params) => {
     return getRequest('/seeDoctor/getByPage', params)
 }
-// 添加
-export const addMeeting = (params) => {
+export const getSeeDoctorCount = (params) => {
+    return getRequest('/seeDoctor/count', params)
+}
+export const addSeeDoctor = (params) => {
+    return postRequest('/seeDoctor/insert', params)
+}
+export const editSeeDoctor = (params) => {
+    return postRequest('/seeDoctor/update', params)
+}
+export const addOrEditSeeDoctor = (params) => {
     return postRequest('/seeDoctor/insertOrUpdate', params)
 }
-// 编辑
-export const editMeeting = (params) => {
-    return postRequest('/seeDoctor/insertOrUpdate', params)
-}
-// 删除
-export const deleteMeeting = (params) => {
+export const deleteSeeDoctor = (params) => {
     return postRequest('/seeDoctor/delByIds', params)
+}
+// 查询参保人员档案
+export const getRosterList = (params) => {
+    return getRequest('/roster/getByPage', params)
+}
+// 查询药物档案
+export const getMedicineList = (params) => {
+    return getRequest('/operation/getByPage', params)
+}
+// 查询单个医疗保险档案
+export const getInsuranceOne = (params) => {
+    return getRequest('/insurance/getOne', params)
 }

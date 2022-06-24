@@ -20,8 +20,8 @@ import java.math.BigDecimal;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "t_dict")
-@TableName("t_dict")
+@Table(name = "a_dict")
+@TableName("a_dict")
 @ApiModel(value = "数据字典")
 public class Dict extends ZwzBaseEntity {
 

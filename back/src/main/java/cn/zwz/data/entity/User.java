@@ -33,8 +33,8 @@ import java.util.List;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "t_user")
-@TableName("t_user")
+@Table(name = "a_user")
+@TableName("a_user")
 @ApiModel(value = "用户")
 public class User extends ZwzBaseEntity {
 
@@ -54,7 +54,7 @@ public class User extends ZwzBaseEntity {
     @NotNull(message = "密码不能为空")
     private String password;
 
-    @ApiModelProperty(value = "密码的强度")
+    @ApiModelProperty(value = "密码强度")
     @Column(length = 2)
     private String passStrength;
 
@@ -75,28 +75,20 @@ public class User extends ZwzBaseEntity {
     @ApiModelProperty(value = "性别")
     private String sex;
 
-    @ApiModelProperty(value = "家庭地址A")
+    @ApiModelProperty(value = "区县")
     private String address;
-
-    @ApiModelProperty(value = "家庭地址B")
-    private String street;
 
     @ApiModelProperty(value = "用户类型")
     private Integer type;
 
-    @ApiModelProperty(value = "备注")
-    private String description;
+    @ApiModelProperty(value = "个人门户")
+    private String myDoor;
 
     @ApiModelProperty(value = "启用状态")
     private Integer status = CommonConstant.USER_STATUS_NORMAL;
 
     @ApiModelProperty(value = "头像")
     private String avatar = CommonConstant.USER_DEFAULT_AVATAR;
-
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @ApiModelProperty(value = "生日")
-    private Date birth;
 
     @Transient
     @TableField(exist=false)

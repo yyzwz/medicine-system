@@ -2,6 +2,7 @@ package cn.zwz.data.entity;
 
 import cn.zwz.basics.baseClass.ZwzBaseEntity;
 import cn.zwz.basics.parameter.CommonConstant;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 
 /**
@@ -21,8 +23,8 @@ import java.math.BigDecimal;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "t_dict_data")
-@TableName("t_dict_data")
+@Table(name = "a_dict_data")
+@TableName("a_dict_data")
 @ApiModel(value = "数据字典值")
 public class DictData extends ZwzBaseEntity {
 
@@ -30,6 +32,11 @@ public class DictData extends ZwzBaseEntity {
 
     @ApiModelProperty(value = "数据字典ID")
     private String dictId;
+
+    @Transient
+    @TableField(exist=false)
+    @ApiModelProperty(value = "数据字典名称")
+    private String dictName;
 
     @ApiModelProperty(value = "数据字典键")
     private String title;

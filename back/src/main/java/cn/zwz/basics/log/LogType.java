@@ -7,7 +7,27 @@ package cn.zwz.basics.log;
 public enum LogType {
 
     /**
-     * 1 | 系统登录
+     * 1 默认
      */
-    USER_LOGIN
+    DEFAULT_OPERATION,
+
+    /**
+     * 2  登录
+     */
+    LOGIN,
+
+    /**
+     * 3  数据中心
+     */
+    DATA_CENTER,
+
+    /**
+     * 4  扩展模块展示
+     */
+    MORE_MOUDLE,
+
+    /**
+     * 2  图表
+     */
+    CHART
 }

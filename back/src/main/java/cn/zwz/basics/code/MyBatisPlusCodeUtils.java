@@ -29,7 +29,7 @@ public class MyBatisPlusCodeUtils {
 
     @ApiOperation(value = "生成代码")
     public static void main(String[] args) throws Exception {
-        ClasspathResourceLoader resourceLoader = new ClasspathResourceLoader("/btl/");
+        ClasspathResourceLoader resourceLoader = new ClasspathResourceLoader("/template/");
         GroupTemplate gt = new GroupTemplate(resourceLoader, Configuration.defaultConfiguration());
         // 生成代码
         generateCode(gt);
@@ -40,34 +40,34 @@ public class MyBatisPlusCodeUtils {
     }
 
     @ApiModelProperty(value = "类名")
-    private static final String className = "Student";
+    private static final String className = "Examine";
 
     @ApiModelProperty(value = "类备注")
-    private static final String description = "学生";
+    private static final String description = "保险审核单";
 
     @ApiModelProperty(value = "作者")
     private static final String author = "郑为中";
 
     @ApiModelProperty(value = "数据库表前缀")
-    private static final String tablePre = "t_";
+    private static final String tablePre = "a_";
 
     @ApiModelProperty(value = "主键类型")
     private static final String primaryKeyType = "String";
 
     @ApiModelProperty(value = "实体类对应包")
-    private static final String entityPackage = "cn.zwz.data.entity";
+    private static final String entityPackage = "cn.zwz.insurance.entity";
 
     @ApiModelProperty(value = "dao对应包")
-    private static final String daoPackage = "cn.zwz.data.mapper";
+    private static final String daoPackage = "cn.zwz.insurance.mapper";
 
     @ApiModelProperty(value = "service对应包")
-    private static final String servicePackage = "cn.zwz.data.service";
+    private static final String servicePackage = "cn.zwz.insurance.service";
 
     @ApiModelProperty(value = "serviceImpl对应包")
-    private static final String serviceImplPackage = "cn.zwz.data.serviceimpl";
+    private static final String serviceImplPackage = "cn.zwz.insurance.serviceimpl";
 
     @ApiModelProperty(value = "controller对应包")
-    private static final String controllerPackage = "cn.zwz.data.controller";
+    private static final String controllerPackage = "cn.zwz.insurance.controller";
 
     @ApiOperation(value = "生成代码")
     private static void generateCode(GroupTemplate gt) throws IOException{

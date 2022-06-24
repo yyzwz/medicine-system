@@ -20,8 +20,8 @@ import javax.persistence.Table;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "t_role_permission")
-@TableName("t_role_permission")
+@Table(name = "a_role_permission")
+@TableName("a_role_permission")
 @ApiModel(value = "角色权限")
 public class RolePermission extends ZwzBaseEntity {
 

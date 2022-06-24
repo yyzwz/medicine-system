@@ -7,18 +7,18 @@
     <div class="close-all-tag-con">
         <Dropdown transfer @on-click="handleTagsOption">
             <Button size="small" type="primary">
-                {{ $t('tagOption') }}
+                关闭菜单
                 <Icon type="md-arrow-dropdown"></Icon>
             </Button>
             <DropdownMenu slot="list">
-                <DropdownItem name="clearAll">{{ $t('closeAll') }}</DropdownItem>
-                <DropdownItem name="clearOthers">{{ $t('closeOthers') }}</DropdownItem>
+                <DropdownItem name="clearAll">关闭全部</DropdownItem>
+                <DropdownItem name="clearOthers">关闭其他</DropdownItem>
             </DropdownMenu>
         </Dropdown>
     </div>
     <div ref="scrollBody" class="tags-inner-scroll-body" :style="{left: tagBodyLeft + 'px'}">
         <transition-group name="taglist-moving-animation">
-            <Tag type="dot" v-for="(item, index) in pageTagsList" ref="tagsPageOpened" :key="item.name" :name="item.name" @on-close="closePage" @click.native="linkTo(item)" :closable="item.name=='home_index'?false:true" :color="item.children?(item.children[0].name==currentPageName?'primary':'default'):(item.name==currentPageName?'primary':'default')">{{ itemTitle(item) }}</Tag>
+            <Tag type="dot" v-for="(item, index) in pageTagsList" ref="tagsPageOpened" :key="item.name" :name="item.name" @on-close="closePage" @click.native="linkTo(item)" :closable="item.name=='home_index'?false:true" :color="item.children?(item.children[0].name==currentPageName?'primary':'default'):(item.name==currentPageName?'primary':'default')">{{ item.title }}</Tag>
         </transition-group>
     </div>
 </div>
@@ -54,11 +54,10 @@ export default {
     },
     methods: {
         itemTitle(item) {
-            if (typeof item.title == "object") {
-                return this.$t(item.title.i18n);
-            } else {
-                return item.title;
+            if (item.name == "home_index") {
+                return "首页";
             }
+            return item.title;
         },
         closePage(event, name) {
             let pageOpenedList = this.$store.state.app.pageOpenedList;

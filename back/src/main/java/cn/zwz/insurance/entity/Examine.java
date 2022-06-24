@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 
 /**
  * @author 郑为中
@@ -17,9 +18,9 @@ import javax.persistence.Table;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "t_examine")
-@TableName("t_examine")
-@ApiModel(value = "保险审核")
+@Table(name = "a_examine")
+@TableName("a_examine")
+@ApiModel(value = "保险审核单")
 public class Examine extends ZwzBaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -37,10 +38,10 @@ public class Examine extends ZwzBaseEntity {
     private String insuranceName;
 
     @ApiModelProperty(value = "抵扣金额")
-    private String money;
+    private BigDecimal money;
 
     @ApiModelProperty(value = "审核状态")
-    private String status;
+    private Integer status;
 
     @ApiModelProperty(value = "审核意见")
     private String message;

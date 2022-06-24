@@ -1,5 +1,7 @@
 package cn.zwz.data.controller;
 
+import cn.zwz.basics.log.LogType;
+import cn.zwz.basics.log.SystemLog;
 import cn.zwz.basics.parameter.CommonConstant;
 import cn.zwz.basics.exception.ZwzException;
 import cn.zwz.basics.redis.RedisTemplateHelper;
@@ -68,14 +70,14 @@ public class DepartmentController {
 
     private static final String REDIS_STEP_STR = ":";
 
-    @RequestMapping(value = "/getByParentId/{parentId}", method = RequestMethod.GET)
-    @ApiOperation(value = "查询指定父部门下的子部门")
-    public Result<List<Department>> getByParentId(@PathVariable String parentId){
+    @SystemLog(about = "查询子部门", type = LogType.DATA_CENTER,doType = "DEP-01")
+    @RequestMapping(value = "/getByParentId", method = RequestMethod.GET)
+    @ApiOperation(value = "查询子部门")
+    public Result<List<Department>> getByParentId(@RequestParam(required = false,defaultValue = "0") String parentId){
         List<Department> list = null;
         User nowUser = securityUtil.getCurrUser();
         String key = REDIS_DEPARTMENT_PRE_STR + parentId + REDIS_STEP_STR + nowUser.getId();
         String value = redisTemplate.opsForValue().get(key);
-        // 如果缓存还在，优先加载缓存内的数据
         if(!ZwzNullUtils.isNull(value)){
             list = new Gson().fromJson(value, new TypeToken<List<Department>>(){}.getType());
             return new ResultUtil<List<Department>>().setData(list);
@@ -89,6 +91,7 @@ public class DepartmentController {
         return new ResultUtil<List<Department>>().setData(list);
     }
 
+    @SystemLog(about = "模糊搜索部门", type = LogType.DATA_CENTER,doType = "DEP-02")
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     @ApiOperation(value = "模糊搜索部门")
     public Result<List<Department>> search(@RequestParam String title){
@@ -99,6 +102,7 @@ public class DepartmentController {
         return new ResultUtil<List<Department>>().setData(setInfo(departmentList));
     }
 
+    @SystemLog(about = "添加部门", type = LogType.DATA_CENTER,doType = "DEP-03")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加部门")
     public Result<Object> add(Department department){
@@ -115,6 +119,7 @@ public class DepartmentController {
         return ResultUtil.success();
     }
 
+    @SystemLog(about = "编辑部门", type = LogType.DATA_CENTER,doType = "DEP-04")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ApiOperation(value = "编辑部门")
     public Result<Object> edit(Department department,@RequestParam(required = false) String[] mainHeader,@RequestParam(required = false) String[] viceHeader){
@@ -155,6 +160,7 @@ public class DepartmentController {
         return ResultUtil.success();
     }
 
+    @SystemLog(about = "删除部门", type = LogType.DATA_CENTER,doType = "DEP-05")
     @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
     @ApiOperation(value = "删除部门")
     public Result<Object> delByIds(@RequestParam String[] ids){
@@ -170,6 +176,7 @@ public class DepartmentController {
         return ResultUtil.success();
     }
 
+    @ApiOperation(value = "迭代删除部门")
     public void deleteRecursion(String id, String[] ids) {
         QueryWrapper<User> userQw = new QueryWrapper<>();
         userQw.eq("department_id",id);

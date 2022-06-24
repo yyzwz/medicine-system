@@ -115,7 +115,7 @@ public class ZwzVueGenerator {
     }
 
     public String generate(String template, boolean api, String vueName, Integer rowNum, List<Field> fields) throws IOException {
-        ClasspathResourceLoader resourceLoader = new ClasspathResourceLoader("/btl/vue/");
+        ClasspathResourceLoader resourceLoader = new ClasspathResourceLoader("/template/vue/");
         Configuration cfg = Configuration.defaultConfiguration();
         GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
         Template tableTemplate = gt.getTemplate(template);

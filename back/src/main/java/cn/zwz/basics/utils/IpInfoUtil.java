@@ -41,7 +41,7 @@ public class IpInfoUtil {
 
     @ApiOperation(value = "查询IP地址的区县")
     public String getIpCity(HttpServletRequest request){
-        String url = TXDT_URL_PRE + key + "&ip=" + getIpAddr(request);
+        String url = TXDT_URL_PRE + key + "&ip=" + getRequestIpAddress(request);
         String resultStr = "本地测试";
         try {
             JsonObject objectResult = JsonParser.parseString(HttpUtil.get(url, 3000)).getAsJsonObject();
@@ -70,7 +70,7 @@ public class IpInfoUtil {
     }
 
     @ApiOperation(value = "查询请求的IP地址")
-    public String getIpAddr(HttpServletRequest request) {
+    public String getRequestIpAddress(HttpServletRequest request) {
         String ipAddress = request.getHeader(IP_HEADER_PRE_ONE);
         if (ipAddress == null || ipAddress.length() < 1 || IP_HEADER_NONE.equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader(IP_HEADER_PRE_TWO);

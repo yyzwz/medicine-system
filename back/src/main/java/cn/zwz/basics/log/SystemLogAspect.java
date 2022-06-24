@@ -1,5 +1,8 @@
 package cn.zwz.basics.log;
 
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
+import cn.zwz.basics.redis.RedisTemplateHelper;
 import cn.zwz.basics.utils.IpInfoUtil;
 import cn.zwz.basics.utils.ThreadPoolUtil;
 import cn.zwz.data.entity.Log;
@@ -41,6 +44,11 @@ public class SystemLogAspect {
     @Autowired
     private IpInfoUtil ipInfoUtil;
 
+    @Autowired
+    private RedisTemplateHelper redisTemplate;
+
+    private static final String REDIS_USER_PRE = "USER:";
+
     @ApiOperation(value = "控制层切点")
     @Pointcut("@annotation(cn.zwz.basics.log.SystemLog)")
     public void controllerAspect() {
@@ -58,44 +66,46 @@ public class SystemLogAspect {
     @AfterReturning("controllerAspect()")
     public void after(JoinPoint joinPoint){
         try {
-            String username = null;
+            String username = "";
             String description = getControllerMethodInfo(joinPoint).get("description").toString();
             int type = (int)getControllerMethodInfo(joinPoint).get("type");
+            String doType = getControllerMethodInfo(joinPoint).get("doType").toString();
             Map<String, String[]> logParams = request.getParameterMap();
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if(Objects.equals("anonymousUser",principal.toString())){
                 return;
             }
+            String device = "", isMobile = "PC端";
+            UserAgent ua = UserAgentUtil.parse(request.getHeader("user-agent"));
+            if (ua != null) {
+                if (ua.isMobile()) {
+                    isMobile = "移动端";
+                }
+                device = isMobile + " | " + ua.getBrowser().toString() + " " + ua.getVersion() + " | " + ua.getPlatform().toString() + " " + ua.getOs().toString();
+            }
             UserDetails user = (UserDetails) principal;
-            username = user.getUsername();
+            String str = redisTemplate.get(REDIS_USER_PRE + user.getUsername());
+            if(str != null) {
+                username = str;
+            } else {
+                username = user.getUsername();
+            }
             Log log = new Log();
-            // 请求用户
             log.setUsername(username);
-            // 日志标题
             log.setName(description);
-            // 日志类型
             log.setLogType(type);
-            // 日志请求url
+            log.setCode(doType);
             log.setRequestUrl(request.getRequestURI());
-            // 请求方式
             log.setRequestType(request.getMethod());
-            // 请求参数
             log.setMapToParams(logParams);
-            // 请求IP
-            log.setIp(ipInfoUtil.getIpAddr(request));
-            // IP定位
+            log.setIp(ipInfoUtil.getRequestIpAddress(request));
+            log.setDevice(device);
             log.setIpInfo(ipInfoUtil.getIpCity(request));
-            // 请求开始时间
-            long beginTime = beginTimeThreadLocal.get().getTime();
-            long endTime = System.currentTimeMillis();
-            // 请求耗时
-            Long logElapsedTime = endTime - beginTime;
+            Long logElapsedTime = System.currentTimeMillis() - beginTimeThreadLocal.get().getTime();
             log.setCostTime(logElapsedTime.intValue());
-            // 保存日志
             ThreadPoolUtil.getPool().execute(new SaveSystemLogThread(log, logService));
-
         } catch (Exception e) {
-            log.warn("日志记录失败", e);
+            log.error("日志异常", e);
         }
     }
 
@@ -118,18 +128,15 @@ public class SystemLogAspect {
 
     public static Map<String, Object> getControllerMethodInfo(JoinPoint joinPoint) throws Exception{
         Map<String, Object> map = new HashMap<String, Object>(16);
-        //获取目标类名
         String targetName = joinPoint.getTarget().getClass().getName();
-        //获取方法名
         String methodName = joinPoint.getSignature().getName();
-        //获取相关参数
         Object[] arguments = joinPoint.getArgs();
-        //生成类对象
         Class targetClass = Class.forName(targetName);
-        //获取该类中的方法
         Method[] methods = targetClass.getMethods();
         String description = "";
         Integer type = null;
+        String doType = "";
+
         for(Method method : methods) {
             if(!method.getName().equals(methodName)) {
                 continue;
@@ -140,8 +147,11 @@ public class SystemLogAspect {
             }
             description = method.getAnnotation(SystemLog.class).about();
             type = method.getAnnotation(SystemLog.class).type().ordinal();
+            doType = method.getAnnotation(SystemLog.class).doType();
+
             map.put("description", description);
             map.put("type", type);
+            map.put("doType", doType);
         }
         return map;
     }

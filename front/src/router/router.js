@@ -4,7 +4,7 @@ export const loginRouter = {
     path: '/login',
     name: 'login',
     meta: {
-        title: '登录 - 城乡居民大病保险管理系统 '
+        title: '登录 - 大病保险管理系统'
     },
     component: () => import('@/views/login.vue')
 };
@@ -13,36 +13,9 @@ export const registRouter = {
     path: '/regist',
     name: 'regist',
     meta: {
-        title: '注册 - 城乡居民大病保险管理系统'
+        title: '注册 - 大病保险管理系统'
     },
     component: () => import('@/views/regist.vue')
-};
-
-export const registResult = {
-    path: '/regist-result',
-    name: 'regist-result',
-    meta: {
-        title: '注册结果 - 城乡居民大病保险管理系统'
-    },
-    component: () => import('@/views/regist-result.vue')
-};
-
-export const reset = {
-    path: '/reset',
-    name: 'reset',
-    meta: {
-        title: '重置密码 - 城乡居民大病保险管理系统'
-    },
-    component: () => import('@/views/reset.vue')
-};
-
-export const relateRouter = {
-    path: '/relate',
-    name: 'relate',
-    meta: {
-        title: '绑定账号 - 城乡居民大病保险管理系统 '
-    },
-    component: () => import('@/views/relate.vue')
 };
 
 export const page404 = {
@@ -51,7 +24,7 @@ export const page404 = {
     meta: {
         title: '404-页面不存在'
     },
-    component: () => import('@/views/error-page/404.vue')
+    component: () => import('@/views/template/404.vue')
 };
 
 export const page403 = {
@@ -60,7 +33,7 @@ export const page403 = {
         title: '403-权限不足'
     },
     name: 'error-403',
-    component: () => import('@/views/error-page/403.vue')
+    component: () => import('@/views/template/403.vue')
 };
 
 export const page500 = {
@@ -69,7 +42,7 @@ export const page500 = {
         title: '500-服务端错误'
     },
     name: 'error-500',
-    component: () => import('@/views/error-page/500.vue')
+    component: () => import('@/views/template/500.vue')
 };
 
 export const locking = {
@@ -84,25 +57,19 @@ export const otherRouter = {
     redirect: '/home',
     component: Main,
     children: [
-        { path: 'home', title: { i18n: 'home' }, name: 'home_index', component: () => import('@/views/home/home.vue') },
-        { path: 'ownspace', title: '个人中心', name: 'ownspace_index', component: () => import('@/views/own-space/own-space.vue') },
-        { path: 'change-pass', title: '修改密码', name: 'change_pass', component: () => import('@/views/change-pass/change-pass.vue') },
-        { path: 'add', title: '添加', name: 'add', component: () => import('@/views/template/new-window/add.vue') },
-        { path: 'edit', title: '编辑', name: 'edit', component: () => import('@/views/template/new-window/edit.vue') }
+        { path: 'home', title: '主页', name: 'home_index', component: () => import('@/views/home/home.vue') },
+        { path: 'myHome', title: '个人中心', name: 'my_home_index', component: () => import('@/views/home/myHome.vue') },
+        { path: 'password', title: '修改密码', name: 'password', component: () => import('@/views/password/password.vue') },
+        { path: 'add', title: '添加', name: 'add', component: () => import('@/views/template/add.vue') },
+        { path: 'edit', title: '编辑', name: 'edit', component: () => import('@/views/template/edit.vue')}
     ]
 };
-
-export const appRouter = [];
 
 export const routers = [
     loginRouter,
     registRouter,
-    registResult,
-    reset,
-    relateRouter,
     otherRouter,
     locking,
-    ...appRouter,
     page500,
     page403
 ];

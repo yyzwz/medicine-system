@@ -6,8 +6,11 @@ import Cookies from 'js-cookie';
 import { routers } from './router';
 
 Vue.use(VueRouter);
+const routerPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return routerPush.call(this, location).catch(error=> error)
+}
 
-// 路由配置
 const RouterConfig = {
     // mode: 'history',
     routes: routers
@@ -27,9 +30,7 @@ router.beforeEach((to, from, next) => {
     } else if (Cookies.get('locking') == '0' && name == 'locking') {
         next(false);
     } else {
-        // 白名单
-        var whiteList = name != 'login' && name != 'regist' && name != 'regist-result' && name != 'relate' && name != 'reset' && name != 'authorize';
-        if (!Cookies.get('userInfo') && whiteList) {
+        if (!Cookies.get('userInfo') && (name != 'login' && name != 'regist')) {
             next({
                 name: 'login'
             });

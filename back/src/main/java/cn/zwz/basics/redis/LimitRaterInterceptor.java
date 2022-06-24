@@ -56,7 +56,7 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
     @Override
     @ApiOperation(value = "方法执行前过滤")
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,@ApiParam(name = "响应的处理器") Object handler) throws Exception {
-        String ip = ipInfoUtil.getIpAddr(request);
+        String ip = ipInfoUtil.getRequestIpAddress(request);
         // 单IP限流判断
         if(zwzLoginProperties.getOneLimiting()) {
             boolean flag1 = redisRaterLimiter.getLimitFlag(ip,zwzLoginProperties.getOneLimitingSize(), zwzLoginProperties.getOneLimitingTime());

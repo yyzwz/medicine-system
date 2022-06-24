@@ -24,7 +24,7 @@
 <script>
 import {
     getRosterList
-} from "@/api/index";
+} from "./api.js";
 export default {
     name: "userChoose",
     components: {},
@@ -67,7 +67,7 @@ export default {
                 },
                 {
                     title: "身份证号码",
-                    key: "identity",
+                    key: "idCard",
                     minWidth: 140,
                     sortable: true
                 },
@@ -79,20 +79,14 @@ export default {
                 },
                 {
                     title: "余额",
-                    key: "balance",
+                    key: "money",
                     minWidth: 60,
                     sortable: true
                 },
                 {
                     title: "保险类型",
-                    key: "insuranceType",
+                    key: "insuranceName",
                     minWidth: 80,
-                    sortable: true
-                },
-                {
-                    title: "参保情况",
-                    key: "status",
-                    minWidth: 50,
                     sortable: true
                 }
             ],

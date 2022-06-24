@@ -24,8 +24,8 @@ import java.util.List;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "t_department")
-@TableName("t_department")
+@Table(name = "a_department")
+@TableName("a_department")
 @ApiModel(value = "部门")
 public class Department extends ZwzBaseEntity {
 

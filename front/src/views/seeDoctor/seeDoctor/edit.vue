@@ -14,86 +14,54 @@
             </div>
         </div>
         <Form ref="form" :model="form" :label-width="100" :rules="formValidate" label-position="left">
-            <Row :gutter="32">
-                <Col span="12">
-                <FormItem label="看病者">
-                    <Input v-model="form.userName" readonly />
-                </FormItem>
-                </Col>
-                <Col span="12">
-                <FormItem label="手术">
-                    <Input v-model="form.medicineName" readonly />
-                </FormItem>
-                </Col>
-            </Row>
-            <Row :gutter="32">
-                <Col span="12">
-                <FormItem label="保险名称" prop="price">
-                    <Input v-model="form.name" readonly />
-                </FormItem>
-                </Col>
-                <Col span="12">
-                <FormItem label="余额" prop="price">
-                    <Input v-model="form.balance" readonly />
-                </FormItem>
-                </Col>
-                <Col span="12">
-                <FormItem label="门诊类型" prop="type">
-                    <Select v-model="form.type" @on-change="changePrice" disabled>
-                        <Option v-for="(item, i) in this.$store.state.dict.examineType" :key="i" :value="item.value">{{item.title}}</Option>
-                    </Select>
-                </FormItem>
-                </Col>
-                <Col span="12">
-                <FormItem label="诊断原价" prop="priceOld">
-                    <Input v-model="form.priceOld" @on-change="changePrice" readonly />
-                </FormItem>
-                </Col>
-                <Col span="12">
-                <FormItem label="诊断抵扣" prop="priceYou">
-                    <Input v-model="form.priceYou" readonly />
-                </FormItem>
-                </Col>
-                <Col span="12">
-                <FormItem label="诊断费用" prop="price">
-                    <Input v-model="form.price" readonly />
-                </FormItem>
-                </Col>
-                <Col span="12">
-                <FormItem label="手术原价" prop="medicineOld">
-                    <Input v-model="form.medicineOld" readonly />
-                </FormItem>
-                </Col>
-                <Col span="12">
-                <FormItem label="手术抵扣" prop="priceDiscount">
-                    <Input v-model="form.priceDiscount" readonly />
-                </FormItem>
-                </Col>
-                <Col span="12">
-                <FormItem label="手术费用" prop="medicinePrice">
-                    <Input v-model="form.medicinePrice" readonly />
-                </FormItem>
-                </Col>
-                <Col span="12">
-                <FormItem label="费用总计" prop="priceSum">
-                    <Input v-model="form.priceSum" readonly />
-                </FormItem>
-                </Col>
-                <Col span="12">
-                <FormItem label="卡内节余" prop="balanceNew">
-                    <Input v-model="form.balanceNew" readonly />
-                </FormItem>
-                </Col>
-            </Row>
-            <!-- <Form-item class="br">
-          <Button
-            @click="handleSubmit"
-            :loading="submitLoading"
-            type="primary"
-          >提交并保存</Button>
-          <Button @click="handleReset" type="warning">重置</Button>
-          <Button type="dashed" @click="close">关闭</Button>
-        </Form-item> -->
+            <FormItem label="用户ID" prop="userId">
+                <Input v-model="form.userId" readonly style="width:570px" />
+            </FormItem>
+            <FormItem label="用户名" prop="userName">
+                <Input v-model="form.userName" readonly style="width:570px" />
+            </FormItem>
+            <FormItem label="药物" prop="medicineName">
+                <Input v-model="form.medicineName" readonly style="width:570px" />
+            </FormItem>
+            <FormItem label="保险名称" prop="name">
+                <Input v-model="form.name" readonly style="width:570px" />
+            </FormItem>
+            <FormItem label="原余额" prop="balance">
+                <InputNumber v-model="form.balance" readonly min="0" max="5000000" style="width:570px"></InputNumber>
+            </FormItem>
+            <FormItem label="门诊类型" prop="type">
+                <Input v-model="form.type" readonly style="width:570px" />
+            </FormItem>
+            <FormItem label="诊断原价" prop="priceOld">
+                <InputNumber v-model="form.priceOld" readonly min="0" max="5000000" style="width:570px"></InputNumber>
+            </FormItem>
+            <FormItem label="诊断抵扣" prop="priceYou">
+                <InputNumber v-model="form.priceYou" readonly min="0" max="5000000" style="width:570px"></InputNumber>
+            </FormItem>
+            <FormItem label="诊断费用" prop="price">
+                <InputNumber v-model="form.price" readonly min="0" max="5000000" style="width:570px"></InputNumber>
+            </FormItem>
+            <FormItem label="看病日期" prop="date">
+                <Input v-model="form.date" readonly style="width:570px" />
+            </FormItem>
+            <FormItem label="药物费用" prop="medicinePrice">
+                <InputNumber v-model="form.medicinePrice" readonly min="0" max="5000000" style="width:570px"></InputNumber>
+            </FormItem>
+            <FormItem label="药物原价" prop="medicineOld">
+                <InputNumber v-model="form.medicineOld" readonly min="0" max="5000000" style="width:570px"></InputNumber>
+            </FormItem>
+            <FormItem label="药物优惠" prop="priceDiscount">
+                <InputNumber v-model="form.priceDiscount" readonly min="0" max="5000000" style="width:570px"></InputNumber>
+            </FormItem>
+            <FormItem label="费用总计" prop="priceSum">
+                <InputNumber v-model="form.priceSum" readonly min="0" max="5000000" style="width:570px"></InputNumber>
+            </FormItem>
+            <FormItem label="节余" prop="balanceNew">
+                <InputNumber v-model="form.balanceNew" readonly min="0" max="5000000" style="width:570px"></InputNumber>
+            </FormItem>
+            <Form-item class="br">
+                <Button type="dashed" @click="close">关闭</Button>
+            </Form-item>
         </Form>
     </Card>
 </div>
@@ -101,7 +69,7 @@
 
 <script>
 import {
-    editMeeting
+    editSeeDoctor
 } from "./api.js";
 export default {
     name: "edit",
@@ -113,82 +81,24 @@ export default {
         return {
             submitLoading: false, // 表单提交状态
             form: { // 添加或编辑表单对象初始化数据
+                userId: "",
+                userName: "",
+                medicineName: "",
                 name: "",
-                mine: "",
-                common: "",
-                big: ""
+                balance: 0,
+                type: "",
+                priceOld: 0,
+                priceYou: 0,
+                price: 0,
+                date: "",
+                medicinePrice: 0,
+                medicineOld: 0,
+                priceDiscount: 0,
+                priceSum: 0,
+                balanceNew: 0,
             },
             // 表单验证规则
-            formValidate: {
-                name: [{
-                    required: true,
-                    message: "不能为空",
-                    trigger: "blur"
-                }],
-                peopleNum: [{
-                    type: "number",
-                    required: true,
-                    message: "不能为空",
-                    trigger: "blur"
-                }],
-                zuoBiao: [{
-                    required: true,
-                    message: "不能为空",
-                    trigger: "blur"
-                }],
-                guiGe: [{
-                    required: true,
-                    message: "不能为空",
-                    trigger: "blur"
-                }],
-                haoCai: [{
-                    required: true,
-                    message: "不能为空",
-                    trigger: "blur"
-                }],
-                manger: [{
-                    required: true,
-                    message: "不能为空",
-                    trigger: "blur"
-                }],
-            },
-            userColumns: [{
-                    type: "selection",
-                    width: 55,
-                    align: "center",
-                    fixed: "left"
-                },
-                {
-                    title: "姓名",
-                    key: "username",
-                    width: 100,
-                    sortable: true
-                },
-                {
-                    title: "联系电话",
-                    key: "telpublic",
-                    width: 140,
-                    sortable: true
-                },
-                {
-                    title: "创建时间",
-                    key: "createTime",
-                    sortable: true,
-                    sortType: "desc",
-                    width: 200
-                }
-            ],
-            shiOrLing: '',
-            isImportHuaData: false,
-            huasearchForm: {
-                pageNumber: 1,
-                pageSize: 10,
-                username: ""
-            },
-            exportHuaData: [],
-            selectHuaList: [],
-            selectHuaCount: [],
-            huaData: [], //花名册组件的数据
+            formValidate: {}
         };
     },
     methods: {
@@ -199,33 +109,10 @@ export default {
         handleReset() {
             this.$refs.form.resetFields();
         },
-        showHuaModel() {
-            this.shiOrLing = "ling";
-            this.getHuaUserList();
-            this.isImportHuaData = true;
-        },
-        huaAddData() {
-            var that = this;
-            if (this.huaselectCount <= 0) {
-                this.$Message.warning("您还未选择要从花名册导入的数据");
-                return;
-            }
-            let ids = "";
-            this.huaselectList.forEach(function (e) {
-                ids += e.username + ",";
-            });
-            ids = ids.substring(0, ids.length - 1);
-            this.$Message.success("导入成功");
-            this.isImportHuaData = false;
-            that.form.manger = ids;
-        },
-        handleReset() {
-            this.$refs.form.resetFields();
-        },
         handleSubmit() {
             this.$refs.form.validate(valid => {
                 if (valid) {
-                    editMeeting(this.form).then(res => {
+                    editSeeDoctor(this.form).then(res => {
                         this.submitLoading = false;
                         if (res.success) {
                             this.$Message.success("操作成功");
@@ -249,6 +136,8 @@ export default {
 </script>
 
 <style lang="less">
+// 建议引入通用样式 具体路径自行修改 可删除下面样式代码
+// @import "../../../styles/single-common.less";
 .edit-head {
     display: flex;
     align-items: center;

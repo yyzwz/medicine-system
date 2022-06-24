@@ -22,8 +22,8 @@ import javax.persistence.Transient;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "t_user_role")
-@TableName("t_user_role")
+@Table(name = "a_user_role")
+@TableName("a_user_role")
 @ApiModel(value = "用户角色")
 public class UserRole extends ZwzBaseEntity {
 

@@ -24,8 +24,8 @@ import javax.persistence.Transient;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "t_file")
-@TableName("t_file")
+@Table(name = "a_file")
+@TableName("a_file")
 @ApiModel(value = "文件")
 public class File extends ZwzBaseEntity {
 

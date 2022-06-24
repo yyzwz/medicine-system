@@ -15,7 +15,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,8 +24,8 @@ import java.util.List;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "t_permission")
-@TableName("t_permission")
+@Table(name = "a_permission")
+@TableName("a_permission")
 @ApiModel(value = "菜单权限")
 public class Permission extends ZwzBaseEntity {
 
@@ -65,15 +64,9 @@ public class Permission extends ZwzBaseEntity {
     @ApiModelProperty(value = "备注")
     private String description;
 
-    @ApiModelProperty(value = "强制显示")
-    private Boolean showAlways = true;
-
     @ApiModelProperty(value = "菜单排序值")
     @Column(precision = 10, scale = 2)
     private BigDecimal sortOrder;
-
-    @ApiModelProperty(value = "三方网页链接")
-    private String url;
 
     @Transient
     @TableField(exist=false)

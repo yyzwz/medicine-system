@@ -21,8 +21,8 @@ import javax.persistence.Table;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "t_department_header")
-@TableName("t_department_header")
+@Table(name = "a_department_header")
+@TableName("a_department_header")
 @ApiModel(value = "部门负责人")
 public class DepartmentHeader extends ZwzBaseEntity {
 

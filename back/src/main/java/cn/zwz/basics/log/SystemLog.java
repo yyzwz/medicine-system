@@ -1,5 +1,7 @@
 package cn.zwz.basics.log;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.lang.annotation.*;
 
 /**
@@ -11,14 +13,12 @@ import java.lang.annotation.*;
 @Documented
 public @interface SystemLog {
 
-        /**
-         * 日志名称
-         */
-        public String about() default "默认备注内容";
+        @ApiModelProperty(value = "日志名称")
+        public String about() default "系统日志";
 
-        /**
-         * 日志类型
-         * @return
-         */
-        public LogType type() default LogType.USER_LOGIN;
+        @ApiModelProperty(value = "日志类型")
+        public LogType type() default LogType.DEFAULT_OPERATION;
+
+        @ApiModelProperty(value = "操作代码")
+        String doType() default "";
 }

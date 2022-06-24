@@ -19,8 +19,8 @@ import javax.persistence.Table;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "t_setting")
-@TableName("t_setting")
+@Table(name = "a_setting")
+@TableName("a_setting")
 @ApiModel(value = "配置")
 @NoArgsConstructor
 public class Setting extends ZwzBaseEntity {
