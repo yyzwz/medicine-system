@@ -82,12 +82,14 @@ public class RoleController {
     @ApiOperation(value = "配置默认角色")
     public Result<Object> setDefault(@RequestParam String id,@RequestParam Boolean isDefault){
         Role role = iRoleService.getById(id);
-        if(role == null){
-            return ResultUtil.error("角色已被删除");
+        if(role != null) {
+            if(!Objects.equals(role.getDefaultRole(),isDefault)) {
+                role.setDefaultRole(isDefault);
+                iRoleService.saveOrUpdate(role);
+            }
+            return ResultUtil.success();
         }
-        role.setDefaultRole(isDefault);
-        iRoleService.saveOrUpdate(role);
-        return ResultUtil.success();
+        return ResultUtil.error("不存在");
     }
 
     @SystemLog(about = "修改菜单权限", type = LogType.DATA_CENTER,doType = "ROLE-04")

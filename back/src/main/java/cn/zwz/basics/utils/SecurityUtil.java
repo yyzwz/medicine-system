@@ -4,11 +4,14 @@ import cn.zwz.basics.exception.ZwzException;
 import cn.zwz.basics.baseVo.TokenUser;
 import cn.zwz.basics.parameter.ZwzLoginProperties;
 import cn.zwz.data.entity.*;
-import cn.zwz.data.service.UserService;
+import cn.zwz.data.service.IPermissionService;
+import cn.zwz.data.service.IRoleService;
+import cn.zwz.data.service.IUserService;
 import cn.zwz.data.utils.ZwzNullUtils;
 import cn.zwz.data.vo.PermissionDTO;
 import cn.zwz.data.vo.RoleDTO;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.gson.Gson;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +39,51 @@ public class SecurityUtil {
     private StringRedisTemplate redisTemplate;
 
     @Autowired
-    private UserService userService;
+    private IUserService iUserService;
+
+    @Autowired
+    private IRoleService iRoleService;
+
+    @Autowired
+    private IPermissionService iPermissionService;
 
     private static final String TOKEN_REPLACE_FRONT_STR = "-";
 
     private static final String TOKEN_REPLACE_BACK_STR = "";
+
+    private User selectByUserName(String title) {
+        QueryWrapper<User> userQw = new QueryWrapper<>();
+        userQw.eq("username",title);
+        User user = iUserService.getOne(userQw);
+        if(user == null) {
+            return null;
+        }
+        /**
+         * 填充角色
+         */
+        QueryWrapper<Role> roleQw = new QueryWrapper<>();
+        roleQw.inSql("id","SELECT role_id FROM a_user_role WHERE del_flag = 0 AND user_id = '" + user.getId() + "'");
+        List<Role> roleList = iRoleService.list(roleQw);
+        List<RoleDTO> roles = new ArrayList<>();
+        for (Role role : roleList) {
+            roles.add(new RoleDTO(role.getName(),role.getId(),role.getDescription()));
+        }
+        user.setRoles(roles);
+        /**
+         * 填充菜单
+         */
+        QueryWrapper<Permission> permissionQw = new QueryWrapper<>();
+        permissionQw.inSql("id","SELECT role_id FROM a_role_permission WHERE del_flag = 0 AND permission_id = '" + user.getId() + "'");
+        List<Permission> permissionList = iPermissionService.list(permissionQw);
+        List<PermissionDTO> permissions = new ArrayList<>();
+        for (Permission permission : permissionList) {
+            if(!Objects.equals(1,permission.getType())) {
+                permissions.add(new PermissionDTO(permission.getPath(),permission.getTitle()));
+            }
+        }
+        user.setPermissions(permissions);
+        return user;
+    }
 
     @ApiOperation(value = "获取新的用户Token")
     public String getToken(String username, Boolean saveLogin){
@@ -51,7 +94,7 @@ public class SecurityUtil {
         if(saveLogin == null || saveLogin){
             saved = true;
         }
-        User selectUser = userService.findByUsername(username);
+        User selectUser = selectByUserName(username);
         // 菜单和角色的数组
         List<String> permissionTitleList = new ArrayList<>();
         if(tokenProperties.getSaveRoleFlag()){
@@ -86,15 +129,19 @@ public class SecurityUtil {
 
     @ApiOperation(value = "查询指定用户的权限列表")
     public List<GrantedAuthority> getCurrUserPerms(String userName){
-        List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
-        User selectUser = userService.findByUsername(userName);
-        if(selectUser == null || selectUser.getPermissions() == null || selectUser.getPermissions().isEmpty()){
-            return grantedAuthorityList;
+        List<GrantedAuthority> ans = new ArrayList<>();
+        User selectUser = selectByUserName(userName);
+        if(selectUser == null){
+            return ans;
         }
-        for(PermissionDTO permissionDTO : selectUser.getPermissions()){
-            grantedAuthorityList.add(new SimpleGrantedAuthority(permissionDTO.getTitle()));
+        List<PermissionDTO> perList = selectUser.getPermissions();
+        if(perList.size() < 1) {
+            return ans;
         }
-        return grantedAuthorityList;
+        for(PermissionDTO vo : perList){
+            ans.add(new SimpleGrantedAuthority(vo.getTitle()));
+        }
+        return ans;
     }
 
     @ApiOperation(value = "查询当前Token的用户对象")
@@ -104,6 +151,6 @@ public class SecurityUtil {
             throw new ZwzException("登陆失效");
         }
         UserDetails user = (UserDetails) selectUser;
-        return userService.findByUsername(user.getUsername());
+        return selectByUserName(user.getUsername());
     }
 }

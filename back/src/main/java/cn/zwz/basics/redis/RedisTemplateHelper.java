@@ -26,13 +26,13 @@ public class RedisTemplateHelper {
     private StringRedisTemplate redisTemplate;
 
     @ApiOperation(value = "scan实现")
-    private void scan(String pattern, Consumer<byte[]> consumer) {
+    private void scan(String wayForScan, Consumer<byte[]> consumableList) {
         redisTemplate.execute((RedisConnection connection) -> {
-            try (Cursor<byte[]> cursor = connection.scan(ScanOptions.scanOptions().count(Long.MAX_VALUE).match(pattern).build())) {
-                cursor.forEachRemaining(consumer);
+            try (Cursor<byte[]> cursor = connection.scan(ScanOptions.scanOptions().count(Long.MAX_VALUE).match(wayForScan).build())) {
+                cursor.forEachRemaining(consumableList);
                 return null;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            } catch (Exception exception) {
+                throw new RuntimeException(exception);
             }
         });
     }

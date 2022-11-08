@@ -15,6 +15,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 /**
  * 设置
  * @author 郑为中
@@ -40,10 +42,12 @@ public class SettingController {
     public Result<Object> setOne(@RequestParam String id,@RequestParam String value) {
         Setting setting = iSettingService.getById(id);
         if(setting == null) {
-            return ResultUtil.error("设置不存在");
+            return ResultUtil.error("不存在");
         }
-        setting.setValue(value);
-        iSettingService.saveOrUpdate(setting);
+        if(!Objects.equals(value,setting.getValue())) {
+            setting.setValue(value);
+            iSettingService.saveOrUpdate(setting);
+        }
         return ResultUtil.success();
     }
 }

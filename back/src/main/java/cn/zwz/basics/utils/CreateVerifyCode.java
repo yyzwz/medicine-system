@@ -2,7 +2,9 @@ package cn.zwz.basics.utils;
 
 import cn.hutool.core.util.StrUtil;
 import cn.zwz.basics.exception.ZwzException;
+import cn.zwz.data.utils.ZwzNullUtils;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -20,14 +22,14 @@ public class CreateVerifyCode {
     @ApiModelProperty(value = "验证码")
     private String code = null;
 
-    @ApiModelProperty(value = "符个数")
-    private int codeCount = 4;
+    @ApiModelProperty(value = "验证码字符个数")
+    private int charactersNumber = 4;
 
     @ApiModelProperty(value = "图片高度")
-    private int height = 40;
+    private int imagePeripheralHeight = 40;
 
     @ApiModelProperty(value = "图片宽度")
-    private int width = 160;
+    private int imagePeripheralWidth = 160;
 
     @ApiModelProperty(value = "干扰线数")
     private int lineCount = 20;
@@ -42,30 +44,30 @@ public class CreateVerifyCode {
     }
 
     public CreateVerifyCode(int imageWidth, int imageHeight) {
-        this.width = imageWidth;
-        this.height = imageHeight;
+        this.imagePeripheralWidth = imageWidth;
+        this.imagePeripheralHeight = imageHeight;
         creatImage();
     }
 
     public CreateVerifyCode(int imageWidth, int imageHeight, int codeCount) {
-        this.width = imageWidth;
-        this.height = imageHeight;
-        this.codeCount = codeCount;
+        this.imagePeripheralWidth = imageWidth;
+        this.imagePeripheralHeight = imageHeight;
+        this.charactersNumber = codeCount;
         creatImage();
     }
 
     public CreateVerifyCode(int imageWidth, int imageHeight, int codeCount, int lineCount) {
-        this.width = imageWidth;
-        this.height = imageHeight;
-        this.codeCount = codeCount;
+        this.imagePeripheralWidth = imageWidth;
+        this.imagePeripheralHeight = imageHeight;
+        this.charactersNumber = codeCount;
         this.lineCount = lineCount;
         creatImage();
     }
 
     public CreateVerifyCode(int imageWidth, int imageHeight, int codeCount, int lineCount, String code) {
-        this.width = imageWidth;
-        this.height = imageHeight;
-        this.codeCount = codeCount;
+        this.imagePeripheralWidth = imageWidth;
+        this.imagePeripheralHeight = imageHeight;
+        this.charactersNumber = codeCount;
         this.lineCount = lineCount;
         creatImage(code);
     }
@@ -75,18 +77,18 @@ public class CreateVerifyCode {
      */
     private void creatImage() {
         // 字体的宽度
-        int fontWidth = width / codeCount;
+        int fontWidth = imagePeripheralWidth / charactersNumber;
         // 字体的高度
-        int fontHeight = height - 5;
-        int codeY = height - 8;
+        int fontHeight = imagePeripheralHeight - 5;
+        int codeY = imagePeripheralHeight - 8;
 
         // 图像buffer
-        buffImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        buffImg = new BufferedImage(imagePeripheralWidth, imagePeripheralHeight, BufferedImage.TYPE_INT_RGB);
         Graphics g = buffImg.getGraphics();
         //Graphics2D g = buffImg.createGraphics();
         // 设置背景色
         g.setColor(getRandColor(200, 250));
-        g.fillRect(0, 0, width, height);
+        g.fillRect(0, 0, imagePeripheralWidth, imagePeripheralHeight);
 
         // 设置字体
         //Font font1 = getFont(fontHeight);
@@ -95,130 +97,84 @@ public class CreateVerifyCode {
 
         // 设置干扰线
         for (int i = 0; i < lineCount; i++) {
-            int xs = random.nextInt(width);
-            int ys = random.nextInt(height);
-            int xe = xs + random.nextInt(width);
-            int ye = ys + random.nextInt(height);
+            int xs = random.nextInt(imagePeripheralWidth);
+            int ys = random.nextInt(imagePeripheralHeight);
+            int xe = xs + random.nextInt(imagePeripheralWidth);
+            int ye = ys + random.nextInt(imagePeripheralHeight);
             g.setColor(getRandColor(1, 255));
             g.drawLine(xs, ys, xe, ye);
         }
 
         // 添加噪点 噪声率
         float yawpRate = 0.01f;
-        int area = (int) (yawpRate * width * height);
+        int area = (int) (yawpRate * imagePeripheralWidth * imagePeripheralHeight);
         for (int i = 0; i < area; i++) {
-            int x = random.nextInt(width);
-            int y = random.nextInt(height);
+            int x = random.nextInt(imagePeripheralWidth);
+            int y = random.nextInt(imagePeripheralHeight);
 
             buffImg.setRGB(x, y, random.nextInt(255));
         }
 
         // 得到随机字符
-        String str1 = randomStr(codeCount);
+        String str1 = randomStr(charactersNumber);
         this.code = str1;
-        for (int i = 0; i < codeCount; i++) {
+        for (int i = 0; i < charactersNumber; i++) {
             String strRand = str1.substring(i, i + 1);
             g.setColor(getRandColor(1, 255));
-            // g.drawString(a,x,y);
-            // a为要画出来的东西，x和y表示要画的东西最左侧字符的基线位于此图形上下文坐标系的 (x, y) 位置处
             g.drawString(strRand, i*fontWidth+3, codeY);
         }
 
     }
 
-    /**
-     * 生成指定字符图片
-     */
+    @ApiOperation(value = "图片生成工具类")
     private void creatImage(String code) {
-
-        if(StrUtil.isBlank(code)){
-            throw new ZwzException("验证码为空或已过期，请重新获取");
+        if(ZwzNullUtils.isNull(code)){
+            throw new ZwzException("图形验证码过期了，再生成个新的哦!");
         }
-        // 字体的宽度
-        int fontWidth = width / codeCount;
-        // 字体的高度
-        int fontHeight = height - 5;
-        int codeY = height - 8;
-
-        // 图像buffer
-        buffImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        this.code = code;
+        buffImg = new BufferedImage(imagePeripheralWidth, imagePeripheralHeight, BufferedImage.TYPE_INT_RGB);
         Graphics g = buffImg.getGraphics();
-        //Graphics2D g = buffImg.createGraphics();
-        // 设置背景色
         g.setColor(getRandColor(200, 250));
-        g.fillRect(0, 0, width, height);
-
-        // 设置字体
-        //Font font1 = getFont(fontHeight);
-        Font font = new Font("Fixedsys", Font.BOLD, fontHeight);
+        g.fillRect(0, 0, imagePeripheralWidth, imagePeripheralHeight);
+        Font font = new Font("Fixedsys", Font.BOLD, imagePeripheralHeight - 5);
         g.setFont(font);
-
-        // 设置干扰线
+        float yawpRate = 0.01f;
+        int area = (int) (yawpRate * imagePeripheralWidth * imagePeripheralHeight);
+        for (int i = 0; i < area; i++) {
+            buffImg.setRGB(random.nextInt(imagePeripheralWidth), random.nextInt(imagePeripheralHeight), random.nextInt(255));
+        }
         for (int i = 0; i < lineCount; i++) {
-            int xs = random.nextInt(width);
-            int ys = random.nextInt(height);
-            int xe = xs + random.nextInt(width);
-            int ye = ys + random.nextInt(height);
-            g.setColor(getRandColor(1, 255));
+            int xs = random.nextInt(imagePeripheralWidth);
+            int ys = random.nextInt(imagePeripheralHeight);
+            int xe = xs + random.nextInt(imagePeripheralWidth);
+            int ye = ys + random.nextInt(imagePeripheralHeight);
+            g.setColor(getRandColor(2, 254));
             g.drawLine(xs, ys, xe, ye);
         }
-
-        // 添加噪点 噪声率
-        float yawpRate = 0.01f;
-        int area = (int) (yawpRate * width * height);
-        for (int i = 0; i < area; i++) {
-            int x = random.nextInt(width);
-            int y = random.nextInt(height);
-
-            buffImg.setRGB(x, y, random.nextInt(255));
-        }
-
-        this.code = code;
         for (int i = 0; i < code.length(); i++) {
             String strRand = code.substring(i, i + 1);
-            g.setColor(getRandColor(1, 255));
-            // g.drawString(a,x,y);
-            // a为要画出来的东西，x和y表示要画的东西最左侧字符的基线位于此图形上下文坐标系的 (x, y) 位置处
-            g.drawString(strRand, i*fontWidth+3, codeY);
+            g.setColor(getRandColor(2, 254));
+            g.drawString(strRand, i * (imagePeripheralWidth / charactersNumber) + 3, imagePeripheralHeight - 8);
         }
-
     }
 
-    /**
-     * 得到随机字符
-     * @param n
-     * @return
-     */
-    public String randomStr(int n) {
-        String str1 = "1234567890";
+    @ApiOperation(value = "随机生成验证码")
+    public String randomStr(int size) {
+        String str1 = "0123456789";
         String str2 = "";
-        int len = str1.length() - 1;
-        double r;
-        for (int i = 0; i < n; i++) {
-            r = (Math.random()) * len;
-            str2 = str2 + str1.charAt((int) r);
+        for (int i = 0; i < size; i++) {
+            double randomIndex = Math.random();
+            double randomNumber = randomIndex * (str1.length() - 1);
+            str2 += str1.charAt((int) randomNumber);
         }
         return str2;
     }
 
-    /**
-     * 得到随机颜色
-     * @param fc
-     * @param bc
-     * @return
-     */
-    private Color getRandColor(int fc, int bc) {
-        // 给定范围获得随机颜色
-        if (fc > 255){
-            fc = 255;
-        }
-        if (bc > 255){
-            bc = 255;
-        }
-        int r = fc + random.nextInt(bc - fc);
-        int g = fc + random.nextInt(bc - fc);
-        int b = fc + random.nextInt(bc - fc);
-        return new Color(r, g, b);
+    @ApiOperation(value = "随机生成验证码颜色")
+    private Color getRandColor(int color1, int color2) {
+        color1 = color1 > 255 ? 255 : color1;
+        color2 = color2 > 255 ? 255 : color2;
+        return new Color(color1 + random.nextInt(color2 - color1), color1 + random.nextInt(color2 - color1), color1 + random.nextInt(color2 - color1));
     }
 
     /**
@@ -241,51 +197,32 @@ public class CreateVerifyCode {
         shearY(g, w1, h1, color);
     }
 
-    private void shearX(Graphics g, int w1, int h1, Color color) {
-
+    private void shearX(Graphics g, int imageWidth, int imageHeight, Color color) {
         int period = random.nextInt(2);
-
-        boolean borderGap = true;
-        int frames = 1;
-        int phase = random.nextInt(2);
-
-        for (int i = 0; i < h1; i++) {
-            double d = (double) (period >> 1)
-                    * Math.sin((double) i / (double) period
-                    + (6.2831853071795862D * (double) phase)
-                    / (double) frames);
-            g.copyArea(0, i, w1, 1, (int) d, 0);
-            if (borderGap) {
-                g.setColor(color);
-                g.drawLine((int) d, i, 0, i);
-                g.drawLine((int) d + w1, i, w1, i);
-            }
+        for (int i = 0; i < imageHeight; i ++) {
+            double doubleValue = (double) (period >> 1) * Math.sin((double) i / (double) period + (2.0 * Math.PI * (double) random.nextInt(2)));
+            g.copyArea(0, i, imageWidth, 1, doubleToInteger(doubleValue), 0);
+            // 加边框
+            g.setColor(color);
+            g.drawLine(doubleToInteger(doubleValue), i, 0, i);
+            g.drawLine(doubleToInteger(doubleValue) + imageWidth, i, imageWidth, i);
         }
+    }
 
+    private Integer doubleToInteger(double number) {
+        return (int) number;
     }
 
     private void shearY(Graphics g, int w1, int h1, Color color) {
-
-        // 50
         int period = random.nextInt(40) + 10;
-
-        boolean borderGap = true;
-        int frames = 20;
-        int phase = 7;
         for (int i = 0; i < w1; i++) {
-            double d = (double) (period >> 1)
-                    * Math.sin((double) i / (double) period
-                    + (6.2831853071795862D * (double) phase)
-                    / (double) frames);
-            g.copyArea(i, 0, 1, h1, 0, (int) d);
-            if (borderGap) {
-                g.setColor(color);
-                g.drawLine(i, (int) d, i, 0);
-                g.drawLine(i, (int) d + h1, i, h1);
-            }
-
+            double doubleValue = (double) (period >> 1) * Math.sin((double) i / (double) period + (2.0 * Math.PI * 7.0) / 20.0);
+            g.copyArea(i, 0, 1, h1, 0, doubleToInteger(doubleValue));
+            // 加边框
+            g.setColor(color);
+            g.drawLine(i, doubleToInteger(doubleValue), i, 0);
+            g.drawLine(i, doubleToInteger(doubleValue) + h1, i, h1);
         }
-
     }
 
     public void write(OutputStream sos) throws IOException {

@@ -43,15 +43,13 @@ public class ResponseUtil {
         }
     }
 
-    public static Map<String, Object> resultMap(boolean successFlag, Integer code, String msg, Object data){
+    public static Map<String, Object> resultMap(boolean flag, Integer responseCode, String message, Object data){
         Map<String, Object> responseMap = new HashMap<String, Object>(16);
-        responseMap.put("success", successFlag);
-        responseMap.put("message", msg);
-        responseMap.put("code", code);
-        responseMap.put("timestamp", System.currentTimeMillis());
-        if(data != null){
-            responseMap.put("result", data);
-        }
+        responseMap.put("result", data == null ? null : data);
+        responseMap.put("timestamp", System.currentTimeMillis() / 1000L);
+        responseMap.put("success", flag);
+        responseMap.put("code", responseCode);
+        responseMap.put("message", message);
         return responseMap;
     }
 

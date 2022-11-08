@@ -4,7 +4,7 @@
         <Row :gutter="16">
             <Col span="7">
             <Row :gutter="16">
-                <div class="tree-bar" :style="{maxHeight: maxHeight}">
+                <div class="tree-bar" style="overflow-y: scroll;padding-right: 50px;" :style="{maxHeight: maxHeight + 'px'}">
                     <Tree ref="tree" :data="data" show-checkbox :render="renderContent" @on-select-change="selectTree" @on-check-change="changeSelect" :check-strictly="!strict"></Tree>
                     <Spin size="large" fix v-if="loading"></Spin>
                 </div>
@@ -222,7 +222,7 @@ export default {
             userByPermissionLoading: false,
             loading: true,
             strict: true,
-            maxHeight: "500px",
+            maxHeight: 500,
             menuModalVisible: false,
             iconModalVisible: false,
             selectList: [],
@@ -577,7 +577,7 @@ export default {
     },
     mounted() {
         let height = document.documentElement.clientHeight;
-        this.maxHeight = Number(height - 260) + "px";
+        this.maxHeight = Number(height - 260);
         this.init();
     }
 };

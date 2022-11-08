@@ -98,37 +98,32 @@ public class PageUtil {
         }
     }
 
-    @ApiModelProperty(value = "驼峰转下划线")
-    public static String camel2Underline(String sqlStr) {
-        if (ZwzNullUtils.isNull(sqlStr)) {
-            return NULL_STR;
-        }
-        if(sqlStr.length() < 2){
-            return sqlStr.toLowerCase();
-        }
-        StringBuffer stringBuffer = new StringBuffer();
-        for(int index = 1;index < sqlStr.length(); index++){
-            if(Character.isUpperCase(sqlStr.charAt(index))){
-                stringBuffer.append(CAMEL_STEP_STR + Character.toLowerCase(sqlStr.charAt(index)));
-            }else{
-                stringBuffer.append(sqlStr.charAt(index));
-            }
-        }
-        return (sqlStr.charAt(0) + stringBuffer.toString()).toLowerCase();
-    }
-
-    @ApiModelProperty(value = "防MybatisPlus的SQL注入攻击")
+    @ApiModelProperty(value = "防 Mybatis Plus 的 SQL 注入攻击")
     public static void SQLInject(String sqlStr){
         if (ZwzNullUtils.isNull(sqlStr)) {
             return;
         }
-        // 转小写
         sqlStr = sqlStr.toLowerCase();
-        // 判断非法字符
-        for (String word : NO_CAN_USE_WORDS) {
-            if (sqlStr.contains(word)) {
-                throw new ZwzException(sqlStr + " 字符串中含有不能使用的单次");
+        for(int i = 0; i < NO_CAN_USE_WORDS.length; i ++) {
+            if (sqlStr.contains(NO_CAN_USE_WORDS[i])) {
+                throw new ZwzException(sqlStr + " 单词不合法");
             }
         }
+    }
+
+    @ApiModelProperty(value = "驼峰转下划线")
+    public static String camel2Underline(String underlineContent) {
+        if (ZwzNullUtils.isNull(underlineContent)) {
+            return NULL_STR;
+        }
+        if(underlineContent.length() < 2){
+            return underlineContent.toLowerCase();
+        }
+        StringBuffer camelUnderlineTempBuf = new StringBuffer();
+        for(int i = 1; i < underlineContent.length(); i ++){
+            camelUnderlineTempBuf.append(Character.isUpperCase(underlineContent.charAt(i)) ? CAMEL_STEP_STR + Character.toLowerCase(underlineContent.charAt(i)) : underlineContent.charAt(i));
+        }
+        String ans = underlineContent.charAt(0) + camelUnderlineTempBuf.toString();
+        return ans.toLowerCase();
     }
 }

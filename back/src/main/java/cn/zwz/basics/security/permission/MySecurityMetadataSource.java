@@ -65,15 +65,16 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 
     @ApiOperation(value = "URL请求权限过滤")
     @Override
-    public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
+    public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
         if(map == null){
             loadResourceDefine();
         }
-        Iterator<String> iterator = map.keySet().iterator();
-        while (iterator.hasNext()) {
-            String resUrlStr = iterator.next();
-            if (StrUtil.isNotBlank(resUrlStr) && pathMatcher.match(resUrlStr, ((FilterInvocation) o).getRequestUrl())) {
-                return map.get(resUrlStr);
+        Iterator<String> iteratorAttributes = map.keySet().iterator();
+        while (iteratorAttributes.hasNext()) {
+            String iteratorAttributesString = iteratorAttributes.next();
+            FilterInvocation filterInvocation = (FilterInvocation) object;
+            if (!ZwzNullUtils.isNull(iteratorAttributesString) && pathMatcher.match(iteratorAttributesString, filterInvocation.getRequestUrl())) {
+                return map.get(iteratorAttributesString);
             }
         }
         return null;

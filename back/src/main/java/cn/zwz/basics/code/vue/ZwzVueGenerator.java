@@ -5,6 +5,7 @@ import cn.zwz.basics.exception.ZwzException;
 import cn.zwz.basics.utils.ResultUtil;
 import cn.zwz.basics.baseVo.Result;
 import cn.zwz.basics.code.bean.Field;
+import cn.zwz.data.utils.ZwzNullUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -260,33 +261,18 @@ public class ZwzVueGenerator {
         return tableTemplate.render();
     }
 
-    /**
-     * 首字母是否大小写
-     * @param name
-     * @param isFirstUpper
-     * @return
-     */
+
+    @ApiOperation(value = "首字母是否大小写")
     public static String name(String name, boolean isFirstUpper){
-
-        if(StrUtil.isBlank(name)){
-            throw new ZwzException("name不能为空");
+        if(!ZwzNullUtils.isNull(name)){
+            throw new ZwzException("name字段不合法,请修改！");
         }
-
-        if(name.length()==1){
-            if(isFirstUpper){
-                return name.toUpperCase();
-            } else {
-                return name.toLowerCase();
-            }
+        if(Objects.equals(1,name.length())) {
+            return isFirstUpper ? name.toUpperCase() : name.toLowerCase();
         }
-
-        StringBuffer sb = new StringBuffer();
-        if(isFirstUpper){
-            sb.append(Character.toUpperCase(name.charAt(0)));
-        } else {
-            sb.append(Character.toLowerCase(name.charAt(0)));
-        }
-        sb.append(name.substring(1));
-        return sb.toString();
+        StringBuffer nameStringBuffer = new StringBuffer();
+        nameStringBuffer.append(isFirstUpper ? Character.toUpperCase(name.charAt(0)) : Character.toLowerCase(name.charAt(0)));
+        nameStringBuffer.append(name.substring(1));
+        return nameStringBuffer.toString();
     }
 }

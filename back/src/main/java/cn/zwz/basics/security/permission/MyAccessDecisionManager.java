@@ -22,20 +22,21 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
 
     @Override
     @ApiOperation(value = "判断用户有无访问权限")
-    public void decide(Authentication ac, Object o, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
-        if(configAttributes == null){
+    public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> caList) throws AccessDeniedException, InsufficientAuthenticationException {
+        if(caList == null){
             return;
         }
-        Iterator<ConfigAttribute> attributeIterator = configAttributes.iterator();
+        Iterator<ConfigAttribute> attributeIterator = caList.iterator();
         while (attributeIterator.hasNext()){
             ConfigAttribute attribute = attributeIterator.next();
-            for(GrantedAuthority authority : ac.getAuthorities()) {
-                if(Objects.equals(attribute.getAttribute().trim(),authority.getAuthority())) {
+            for(GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
+                String attributeOne = attribute.getAttribute();
+                if(Objects.equals(attributeOne.trim(),grantedAuthority.getAuthority())) {
                     return;
                 }
             }
         }
-        throw new AccessDeniedException("没有访问权限");
+        throw new AccessDeniedException("您无权限访问");
     }
 
     @Override

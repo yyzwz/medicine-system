@@ -1,5 +1,6 @@
 package cn.zwz.basics.log;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import cn.zwz.basics.redis.RedisTemplateHelper;
@@ -7,6 +8,7 @@ import cn.zwz.basics.utils.IpInfoUtil;
 import cn.zwz.basics.utils.ThreadPoolUtil;
 import cn.zwz.data.entity.Log;
 import cn.zwz.data.service.LogService;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -49,6 +51,12 @@ public class SystemLogAspect {
 
     private static final String REDIS_USER_PRE = "USER:";
 
+    private static final String LOG_DES_PRE = "description";
+
+    private static final String LOG_TYPE_PRE = "type";
+
+    private static final String LOG_DO_PRE = "doType";
+
     @ApiOperation(value = "控制层切点")
     @Pointcut("@annotation(cn.zwz.basics.log.SystemLog)")
     public void controllerAspect() {
@@ -71,6 +79,12 @@ public class SystemLogAspect {
             int type = (int)getControllerMethodInfo(joinPoint).get("type");
             String doType = getControllerMethodInfo(joinPoint).get("doType").toString();
             Map<String, String[]> logParams = request.getParameterMap();
+            JSONObject logJo = new JSONObject();
+            for (Map.Entry<String, String[]> keyInMap : logParams.entrySet()) {
+                String keyItemInMap = keyInMap.getKey();
+                String paramValue = (keyInMap.getValue() != null && keyInMap.getValue().length > 0 ? keyInMap.getValue()[0] : "");
+                logJo.put(keyItemInMap,StrUtil.endWithIgnoreCase(keyInMap.getKey(), "password") ? "" : paramValue);
+            }
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if(Objects.equals("anonymousUser",principal.toString())){
                 return;
@@ -97,7 +111,7 @@ public class SystemLogAspect {
             log.setCode(doType);
             log.setRequestUrl(request.getRequestURI());
             log.setRequestType(request.getMethod());
-            log.setMapToParams(logParams);
+            log.setRequestParam(logJo.toJSONString());
             log.setIp(ipInfoUtil.getRequestIpAddress(request));
             log.setDevice(device);
             log.setIpInfo(ipInfoUtil.getIpCity(request));
@@ -126,32 +140,20 @@ public class SystemLogAspect {
         }
     }
 
-    public static Map<String, Object> getControllerMethodInfo(JoinPoint joinPoint) throws Exception{
+    public static Map<String, Object> getControllerMethodInfo(JoinPoint aopLogPoint) throws Exception{
         Map<String, Object> map = new HashMap<String, Object>(16);
-        String targetName = joinPoint.getTarget().getClass().getName();
-        String methodName = joinPoint.getSignature().getName();
-        Object[] arguments = joinPoint.getArgs();
-        Class targetClass = Class.forName(targetName);
-        Method[] methods = targetClass.getMethods();
-        String description = "";
-        Integer type = null;
-        String doType = "";
-
+        Method[] methods = Class.forName(aopLogPoint.getTarget().getClass().getName()).getMethods();
         for(Method method : methods) {
-            if(!method.getName().equals(methodName)) {
+            if(!Objects.equals(aopLogPoint.getSignature().getName(),method.getName())) {
                 continue;
             }
-            Class[] clazzs = method.getParameterTypes();
-            if(clazzs.length != arguments.length) {
+            Class[] aopLogClass = method.getParameterTypes();
+            if(aopLogClass.length != aopLogPoint.getArgs().length) {
                 continue;
             }
-            description = method.getAnnotation(SystemLog.class).about();
-            type = method.getAnnotation(SystemLog.class).type().ordinal();
-            doType = method.getAnnotation(SystemLog.class).doType();
-
-            map.put("description", description);
-            map.put("type", type);
-            map.put("doType", doType);
+            map.put(LOG_DO_PRE, method.getAnnotation(SystemLog.class).doType());
+            map.put(LOG_DES_PRE, method.getAnnotation(SystemLog.class).about());
+            map.put(LOG_TYPE_PRE, method.getAnnotation(SystemLog.class).type().ordinal());
         }
         return map;
     }

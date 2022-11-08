@@ -1,7 +1,8 @@
-/front/dist
-/front/node_modules
-/back/target
-/back/out
-/back/work
-/back/idea
-/back/logs
+/**/dist
+/**/node_modules
+/**/.svn
+/**/target
+/**/out
+/**/work
+/**/logs
+/**/.idea

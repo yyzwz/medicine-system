@@ -31,29 +31,16 @@ public class CommonUtil {
         return str;
     }
 
-    @ApiOperation(value = "查询是否有禁用词")
-    public static void stopwords(String str){
-        if (ZwzNullUtils.isNull(str)) {
-            return;
-        }
-        str = str.toLowerCase();
-        for (String word : CommonConstant.STOP_WORDS) {
-            if (str.contains(word)) {
-                throw new ZwzException("有禁用词-" + str + " ");
-            }
-        }
-    }
-
-    @ApiOperation(value = "避免重复删除 批量递归删除时")
-    public static Boolean judgeIds(String target, String[] ids){
-        boolean flag = false;
-        for(String id : ids){
-            if(Objects.equals(target,id)){
-                flag = true;
+    @ApiOperation(value = "避免删除 DFS 死循环")
+    public static Boolean judgeIds(String tempString, String[] list){
+        boolean flag = true;
+        for(String id : list){
+            if(Objects.equals(tempString,id)){
+                flag = false;
                 break;
             }
         }
-        return flag;
+        return !flag;
     }
 
     @ApiOperation(value = "生成随机6位验证码")

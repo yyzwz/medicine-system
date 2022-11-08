@@ -1,15 +1,6 @@
 # 基于 Vue 和 SpringBoot 的大病保险管理系统
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/53.png)
-
-## 协作资源
-
-```cmd
-# 若图片加载缓慢或无法正常查看，建议移步 GitEE，以下是该项目的同步仓库！
-https://gitee.com/yyzwz/medicineSystem
-# 若您想从零开始学习如何开发本项目，建议移步以下课程进行学习！
-https://www.lanqiao.cn/courses/9099
-```
+![输入图片说明](image/53.png)
 
 ## 技术栈
 
@@ -31,7 +22,7 @@ https://www.lanqiao.cn/courses/9099
 
 ## 课程亮点
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/55.png)
+![输入图片说明](image/55.png)
 
 ## 功能模块
 
@@ -53,23 +44,25 @@ https://www.lanqiao.cn/courses/9099
 - 保险公司：主要负责发布医保信息、维护参保人员档案，设置各类手术的报销比例、医保报销审核
 - 系统管理员：主要负责医保卡充值、对医院医生和保险公司业务员的登入账号、角色、权限进行配置，系统操作日志、维护数据字典
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/54.png)
+![输入图片说明](image/54.png)
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/0.png)
+![输入图片说明](image/0.png)
 
 ## 项目预览
+
+软件开发模板地址：<https://gitee.com/yyzwz/template>，本系统在此模板上进行开发。
 
 ### 首页
 
 支持账号密码登陆和企业微信扫码登陆，其中企微扫码登陆需要配置应用 ID 和密匙。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/2.png)
+![输入图片说明](image/2.png)
 
 ### 登陆后主页
 
 主页左侧展示了几个模块快捷方式，用户点击快捷方式即可进入对应模块，无需再依次选择一级、二级和三级菜单。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/6.png)
+![输入图片说明](image/6.png)
 
 ## 更新日志
 
@@ -79,7 +72,7 @@ https://www.lanqiao.cn/courses/9099
 
 经过几个月的努力，终于上线发布了，并且登上了蓝桥云课官网首页，截图纪念！希望能给学习前后端的同学有所帮助。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/56.png)
+![输入图片说明](image/56.png)
 
 ### V2.0.0 2022-06-24
 
@@ -102,14 +95,18 @@ https://www.lanqiao.cn/courses/9099
 - 前后端依赖更新并适配。
 - 编写项目说明文档。
 
-## 作者有话说
+## 免责声明
 
-- 作者会对本仓库进行不定期更新，若有问题可通过 Issue 留言，代码全部开源，系统安装配置运行方面的问题，提供免费答疑。
-- 可有偿提供各类文档、一对一远程语音教学，支持在此基础上继续定制开发，或定制任何基于 Vue 和 SpringBoot 的管理系统。
-- 寻求一切有价值的合法商业合作，如有需求欢迎联系 Q 916077357。
-- 本项目遵循 GPL-3.0 开源协议，引用本项目请注意项目上层依赖和所引用代码的许可情况，作者已申请软件著作权（登记号 2022SR0097400)，拥有本软件构建后的应用系统全部内容所有权及独立的知识产权，软件著作权证书如下所示。
+- 本项目开源，仅供个人学习使用，遵循 GPL-3.0 开源协议，**转发 / 商用授权请联系作者，否则后果自负**。
+- 作者拥有本软件构建后的应用系统全部内容所有权及独立的知识产权（**软件著作权登记号：2022SR0097400**）。
+- 如有问题，欢迎在仓库 Issue 留言，看到后会第一时间回复。相关意见会酌情考虑，但没有一定被采纳的承诺或保证。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/52.png)
+下载本系统代码的用户，**必须同意以下内容，否则请勿下载**！
+
+1. 出于自愿而使用/开发本软件，了解使用本软件的风险，且同意自己承担使用本软件的风险。
+2. 利用本软件构建的网站的任何信息内容以及导致的任何版权纠纷和法律争议及后果和作者无关，作者对此不承担任何责任。
+3. 在任何情况下，对于因使用或无法使用本软件而导致的任何难以合理预估的损失（包括但不仅限于商业利润损失、业务中断与业务信息丢失），作者概不承担任何责任。
+4. 必须了解使用本软件的风险，作者不承诺提供一对一的技术支持、使用担保，也不承担任何因本软件而产生的难以预料的问题的相关责任。
 
 ## 登陆界面
 
@@ -123,37 +120,37 @@ https://www.lanqiao.cn/courses/9099
 
 首先是管理员，对医保卡进行充值、对医院医生和保险公司业务员的账号、角色、权限进行配置是他的主要职责。此外可以操作日志，对数据字典进行维护；医院医生最主要职责就是对就医的患者进行看病登记；保险审核员则是发布医保信息，对参保人员的档案进行维护，各类手术的报销比例由他们来规定，以及医保报销审核通过与否由审核员决定。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/1.png)
+![输入图片说明](image/1.png)
 
 用户也可以选择使用企业微信扫码方式进行登陆系统。（需要自行配置企业微信的 ID 和秘钥）
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/2.png)
+![输入图片说明](image/2.png)
 
 如果用户没有输入账号、密码或验证码，点击登陆按钮，系统会给与提示。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/3.png)
+![输入图片说明](image/3.png)
 
 如果用户账号密码填写错误，系统给与提示，直到输入正确通过系统效验。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/4.png)
+![输入图片说明](image/4.png)
 
 如果用户输入错误的验证码，系统也会给与提示，要求重新输入
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/5.png)
+![输入图片说明](image/5.png)
 
 ## 首页
 
 登入成功后，进入到系统的首页，顶部是系统的标题栏，用于显示系统“大病保险”的图标和一级菜单，左侧是二级、三级菜单栏，用于存放用户拥有权限的菜单列表，右下角为主区域，存放了带背景图的系统首页。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/6.png)
+![输入图片说明](image/6.png)
 
 原首页（即图片滚动页面，在 V2.0.0 版本中移动至原首页模块（文件管理-原首页），如下图所示。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/7.png)
+![输入图片说明](image/7.png)
 
 可以点击左侧滑动的按钮，进行切换图片操作
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/8.png)
+![输入图片说明](image/8.png)
 
 本系统使用了当下热门的 View UI 组件库，该组件库基于 Vue 这一主流前端技术框架进行编程开发。大病保险管理系统的主页包括上导航页、左侧子页面以及中间模块显示区域。中间模块显示区域设置了 banner，在没有进入具体模块时，该区域的背景的图片会定时进行切换。背景图片为本人日常随拍，无特殊意义。
 
@@ -161,99 +158,99 @@ https://www.lanqiao.cn/courses/9099
 
 登入成功后，用户可以自助修改自己的密码。点击右上角的修改密码按钮，
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/9.png)
+![输入图片说明](image/9.png)
 
 出现修改密码弹框，用户可以再次输入自己的新密码，完成账户密码修改。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/10.png)
+![输入图片说明](image/10.png)
 
 ## 用户管理模块
 
 登入成功后，有权限的用户可以进入登入用户管理模块。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/11.png)
+![输入图片说明](image/11.png)
 
 用户可以点击“添加用户”按钮，在弹框中完成用户的添加。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/12.png)
+![输入图片说明](image/12.png)
 
 点击每一行的编辑按钮，可以对用户信息进行编辑。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/13.png)
+![输入图片说明](image/13.png)
 
 点击每一行的启用/禁用按钮，可以对用户信息进行启用/禁用。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/14.png)
+![输入图片说明](image/14.png)
 
 点击每一行的删除按钮，可以对用户进行删除操作。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/15.png)
+![输入图片说明](image/15.png)
 
 V1.1.0 新增部门和员工的对应模块
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/16.png)
+![输入图片说明](image/16.png)
 
 ## 权限管理模块
 系统管理包括登入用户、角色权限、系统菜单、数据字典等功能，主要功能为对系统的登入账户的信息维护。管理员可以根据需要对各个部分进行编辑。系统的用户管理模块负责维护系统登入用户的删改，前端将操作的数据通过 Axios 发送到后端的控制器层，后逐层深入操作底层数据库，再将返回结果给视图层渲染。管理员可以在该模块中对用户进行日常的维护工作。对于登入用户管理功能，管理员可以对用户的信息进行编辑、删除、禁用等操作；对于角色权限管理，管理员可以根据用户，选择对该用户进行添加或是删除某项权限。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/17.png)
+![输入图片说明](image/17.png)
 
 管理员可以点击“添加角色”按钮，完成角色的添加。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/18.png)
+![输入图片说明](image/18.png)
 
 管理员可以点击每一行的“菜单权限”按钮，完成对角色的菜单权限分配。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/19.png)
+![输入图片说明](image/19.png)
 
 管理员可以点击每一行的“编辑”按钮，完成对角色数据的更新。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/20.png)
+![输入图片说明](image/20.png)
 
 管理员可以点击每一行的“设置默认”按钮，将角色设置为默认角色，新用户自动会赋予该角色。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/21.png)
+![输入图片说明](image/21.png)
 
 ## 系统菜单模块
 
 系统菜单模块用于控制系统菜单的代码位置、图表、模块名称等信息，该模块功能面向开发者。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/22.png)
+![输入图片说明](image/22.png)
 
 ## 数据字典模块
 
 该模块用户存放下拉框的常用数据，完成快捷开发。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/23.png)
+![输入图片说明](image/23.png)
 
 管理员可以添加数据字典，需要和代码中的字段进行匹配。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/24.png)
+![输入图片说明](image/24.png)
 
 管理员可以对数据字典下的数据值进行编辑操作。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/25.png)
+![输入图片说明](image/25.png)
 
 ## 参保人员模块
 
 参保人员档案包含了参保人员的信息，其中中间区域上部分含有添加、搜索、筛选功能按钮，下方显示参保人员的相关医保信息，下侧窗口为参保人员详细信息，点击参保人员，会将该参保人员的基础信息、社保情况、参保情况显示在该中间区域的下方，可对这些进行信息进行修改，包括基础信息的修改，社保情况的修改，参保情况的修改。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/26.png)
+![输入图片说明](image/26.png)
 
 点击“添加人员”，则可以录入大病患者的基础信息，包括姓名、手机号、身份证号码、社保卡号、家庭住址、以及保险类型。然后点击“提交”则可以进行参保人员信息了录入
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/27.png)
+![输入图片说明](image/27.png)
 
 ## 医保充值模块
 
 医保充值界面中，同样包含了参保人的一些基本信息，如姓名、电话、身份证、社保卡及余额等，管理人员可以点击右侧的充值按钮给参保人员进行充值。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/28.png)
+![输入图片说明](image/28.png)
 
 管理员可以点击每一行的充值按钮，完成医保卡的充值操作。
 下面是模拟医保充值模块的实现，以上步骤已经讲需要参保人员信息录入了，但是医保卡里没有钱，无法进行看病报销。所以需要进行医保充值。选择需要充值的社保卡，点击后方“充值”按钮，弹出“医保充值”的框，输入充值价格就可以了。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/29.png)
+![输入图片说明](image/29.png)
 
 ## 大病保险模块
 
@@ -261,77 +258,73 @@ V1.1.0 新增部门和员工的对应模块
 
 其中，保险名称有三种，分别是最低医疗保险、高档医疗保险、基本医疗保险，ABC 三类大病门诊百分比也不同。保险审核员可以对其进行编辑和删除。此模块是医保管理员进行操作的。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/30.png)
+![输入图片说明](image/30.png)
 
 此外还有手术档案小模块，包括手术名称，手术价格，功能主治的介绍，以及手术类型，例如关节穿刺术，手术价格为 6750 元，对人体关键骨节进行复位的穿刺，属于一级手术，其中手术价格超过 5000 用红色字体突出渲染，小于等于 5000 的用绿色字体渲染。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/31.png)
+![输入图片说明](image/31.png)
 
 ## 看病登记模块
 
 大病登记模块包含了参保人员看病时的具体信息，该部分可帮助医疗相关工作者查看查找相关参保人员的就医信息，包括门诊的类型、费用总计以及看病的日期。如图 5-9 所示，当前页面为看病登记的信息，在这个页面可以对参保人员的就医信息进行查看，该模块也可对数据进行增删查功能，在查找部分，管理员可根据门诊的类型来选择患者查看患者。该模块可点击查看按钮即可进行更加详细的查看，例如手术类型，诊断费用，费用抵扣等。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/32.png)
+![输入图片说明](image/32.png)
 
 点击“添加”的按钮，可以为患者添加就医信息，弹出界面，如下图所示，选择“患者”、 “手术”以及“门诊类型”和“诊断原价”来进行添加。剩下的信息会自动带出，自动结算报销后的价格。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/33.png)
+![输入图片说明](image/33.png)
 
 点击选择“选择患者”，弹出如下界面，该界面包含了参保人员的信息，包括姓名，联系电话，身份证号以及相关社保等信息，双击完成选择。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/34.png)
+![输入图片说明](image/34.png)
 
 点击“选择手术”，可以选择需要导入档案的手术信息，点击手术并输入数量，选择“暂存”，“从手术档案导入”，即可添加手术。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/35.png)
+![输入图片说明](image/35.png)
 
 门诊类型根据设置来对不同的门诊类型进行选择，对应不同的自付比例，如下图所示。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/36.png)
+![输入图片说明](image/36.png)
 
 输入“诊断原价”，例如输入“6000”，系统根据所选择的门诊类型的不同，计算不同的报销比，自动计算报销后的费用总计“1200”，最后点击“提交与保存”即可完成看病的档案登记。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/37.png)
+![输入图片说明](image/37.png)
 
 ## 保险审核模块
 
 保险审核模块是相关工作人员对参保人员提出的大病保险相关的审核，所以该部分的功能主要是对参保人的保险审核。该部分同样包括了对参保人员的基础查找功能，该部分的最主要的功能是为了方便保险管理人员对参保人提出的保险抵扣进行审核，所以该部分为了便于相关保险工作者进行高效审核，在查找部分的时候，可以直接查找审核状态，提高审核的工作效率。在审核参保人员的信息准去无误后，相关保险工作者可以直接点击审核通过或选择不通过，并同时批注上不通过的理由。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/38.png)
+![输入图片说明](image/38.png)
 
 如果保险审核员对于申请的医保报销无法进行通过，则可以点击“退回”，输入退回的原因：该病不予报销，点击“确定”，则可以退回申请。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/39.png)
+![输入图片说明](image/39.png)
 
 如果某个医保保险申请符合要求，则可以审核通过，点击“审核通过”按钮，再点击“确认”即可。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/40.png)
+![输入图片说明](image/40.png)
 
 ## 医疗设备档案模块【V1.1.0 新增】
 
 医疗资产品类模块如下所示。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/41.png)
+![输入图片说明](image/41.png)
 
 资料资产入库模块如下所示。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/42.png)
+![输入图片说明](image/42.png)
 
 入库单主界面如下图所示。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/43.png)
+![输入图片说明](image/43.png)
 
 医疗资产出库操作界面如下图所示。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/44.png)
+![输入图片说明](image/44.png)
 
 出库单主界面如下图所示。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/45.png)
-
-
-
-
+![输入图片说明](image/45.png)
 
 ## 安装说明
 
@@ -339,43 +332,24 @@ V1.1.0 新增部门和员工的对应模块
 
 2. 运行 Redis。即使用 cmd 窗口，进入到 redis 解压目录，输入 redis-server.exe redis.windows.conf 即可。出现下图所示界面则为运行成功。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/46.png)
+![输入图片说明](image/46.png)
 
 3. 使用 VsCode 打开前端项目目录，新建终端，输入 npm i 安装依赖，后输入 npm run dev 运行项目。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/47.png)
+![输入图片说明](image/47.png)
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/48.png)
+![输入图片说明](image/48.png)
 
 4. 使用 Idea 打开后端项目目录，检查 Maven 配置和 JDK 配置是否正常。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/49.png)
+![输入图片说明](image/49.png)
 
 5. 检查后端数据库配置是否符合开发环境要求。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/50.png)
+![输入图片说明](image/50.png)
 
 6. 启动后端项目。
 
-![输入图片说明](https://artskyhome.com/yyzwz/medicineSystem/51.png)
+![输入图片说明](image/51.png)
 
-7. 打开浏览器，输入项目前端地址。
-
-```java
-http://localhost:8080/
-```
-
-## 说明
-
-1. 本项目开源，仅供个人学习使用，遵循 GPL-3.0 开源协议，二次开发请注明原项目的来源。
-2. 作者拥有本软件构建后的应用系统全部内容所有权及独立的知识产权。
-3. 如有问题，欢迎在仓库 Issue 留言，看到后会第一时间回复。相关意见会酌情考虑，但没有一定被采纳的承诺或保证。
-
-## 免责声明
-
-下载本系统代码的用户，必须同意以下内容，否则请勿下载！
-
-1. 出于自愿而使用/开发本软件，了解使用本软件的风险，且同意自己承担使用本软件的风险。
-2. 利用本软件构建的网站的任何信息内容以及导致的任何版权纠纷和法律争议及后果和作者无关，作者对此不承担任何责任。
-3. 在任何情况下，对于因使用或无法使用本软件而导致的任何难以合理预估的损失（包括但不仅限于商业利润损失、业务中断与业务信息丢失），作者概不承担任何责任。
-4. 必须了解使用本软件的风险，作者不承诺提供一对一的技术支持、使用担保，也不承担任何因本软件而产生的难以预料的问题的相关责任。
+7. 打开浏览器，运行项目，默认 8080 端口。

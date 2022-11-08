@@ -137,17 +137,16 @@ public class RedisController {
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ApiOperation(value = "获取Redis信息")
     public Result<Object> info(){
-        List<RedisInfo> redisInfoList = new ArrayList<>();
-        Properties properties = redisTemplate.getConnectionFactory().getConnection().info();
-        Set<Object> keys = properties.keySet();
+        List<RedisInfo> ans = new ArrayList<>();
+        Properties redisSetting = redisTemplate.getConnectionFactory().getConnection().info();
+        Set<Object> keys = redisSetting.keySet();
         for(Object key : keys){
-            String valueInRedis = properties.get(key).toString();
-            RedisInfo ri = new RedisInfo();
-            ri.setKey(key.toString());
-            ri.setValue(valueInRedis);
-            redisInfoList.add(ri);
+            RedisInfo redisInfo = new RedisInfo();
+            redisInfo.setValue(redisSetting.get(key).toString());
+            redisInfo.setKey(key.toString());
+            ans.add(redisInfo);
         }
-        return ResultUtil.data(redisInfoList);
+        return new ResultUtil<Object>().setData(ans);
     }
 
     @RequestMapping(value = "/getByKey/{key}", method = RequestMethod.GET)

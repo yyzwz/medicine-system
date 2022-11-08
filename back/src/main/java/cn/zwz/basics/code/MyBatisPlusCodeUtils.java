@@ -4,6 +4,7 @@ import cn.zwz.basics.code.bean.Entity;
 import cn.zwz.basics.code.bean.Item;
 import cn.hutool.core.util.StrUtil;
 import cn.zwz.basics.exception.ZwzException;
+import cn.zwz.data.utils.ZwzNullUtils;
 import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 代码生成器
@@ -40,10 +42,10 @@ public class MyBatisPlusCodeUtils {
     }
 
     @ApiModelProperty(value = "类名")
-    private static final String className = "Examine";
+    private static final String className = "Teacher";
 
     @ApiModelProperty(value = "类备注")
-    private static final String description = "保险审核单";
+    private static final String description = "教师";
 
     @ApiModelProperty(value = "作者")
     private static final String author = "郑为中";
@@ -55,19 +57,23 @@ public class MyBatisPlusCodeUtils {
     private static final String primaryKeyType = "String";
 
     @ApiModelProperty(value = "实体类对应包")
-    private static final String entityPackage = "cn.zwz.insurance.entity";
+    private static final String entityPackage = "cn.zwz.test.entity";
 
     @ApiModelProperty(value = "dao对应包")
-    private static final String daoPackage = "cn.zwz.insurance.mapper";
+    private static final String daoPackage = "cn.zwz.test.mapper";
 
     @ApiModelProperty(value = "service对应包")
-    private static final String servicePackage = "cn.zwz.insurance.service";
+    private static final String servicePackage = "cn.zwz.test.service";
 
     @ApiModelProperty(value = "serviceImpl对应包")
-    private static final String serviceImplPackage = "cn.zwz.insurance.serviceimpl";
+    private static final String serviceImplPackage = "cn.zwz.test.serviceimpl";
 
     @ApiModelProperty(value = "controller对应包")
-    private static final String controllerPackage = "cn.zwz.insurance.controller";
+    private static final String controllerPackage = "cn.zwz.test.controller";
+
+    private static final String NULL_STR = "";
+
+    private static final String CAMEL_STEP_STR = "_";
 
     @ApiOperation(value = "生成代码")
     private static void generateCode(GroupTemplate gt) throws IOException{
@@ -243,17 +249,13 @@ public class MyBatisPlusCodeUtils {
     }
 
     @ApiOperation(value = "构建代码")
-    private static void generatePlus(GroupTemplate gt){
-        try {
-            generateMPlus(gt);
-        }catch (Exception e){
-            System.out.println("请确保实体类存在并且已完善填入字段后再生成条件构造代码哦！");
-        }
+    private static void generatePlus(GroupTemplate gt) throws Exception {
+        generateMPlus(gt);
     }
 
     @ApiOperation(value = "构建代码")
-    private static void generateMPlus(GroupTemplate gt) throws Exception{
-        Template plusTemplate = gt.getTemplate("mplus.btl");
+    private static void generateMPlus(GroupTemplate groupTemplate) throws Exception{
+        Template myBatisPlusUtils = groupTemplate.getTemplate("mplus.btl");
 
         Entity entity = new Entity();
 
@@ -264,105 +266,75 @@ public class MyBatisPlusCodeUtils {
         String path = entityPackage + "." + name(className, true);
         Class c = Class.forName(path);
         Object obj = c.getDeclaredConstructor().newInstance();
-        java.lang.reflect.Field[] fields = obj.getClass().getDeclaredFields();
-
-        for (int i = 0; i < fields.length; i++) {
-
-            java.lang.reflect.Field field = fields[i];
+        java.lang.reflect.Field[] declaredFields = obj.getClass().getDeclaredFields();
+        for (int i = 0; i < declaredFields.length; i++) {
+            java.lang.reflect.Field field = declaredFields[i];
             field.setAccessible(true);
-            // 字段名
-            String fieldName = field.getName();
-            String fieldType = field.getType().getName();
-            // 白名单
-            if("serialVersionUID".equals(fieldName)){
+            if(Objects.equals("serialVersionUID",field.getName())) {
                 continue;
             }
             TableField tableField = field.getAnnotation(TableField.class);
-            if(tableField!=null&&!tableField.exist()){
+            if(tableField != null && ! tableField.exist()){
                 continue;
             }
-
-            // 获得字段注解
-            ApiModelProperty myFieldAnnotation = field.getAnnotation(ApiModelProperty.class);
-            String fieldNameCN = fieldName;
-            if (myFieldAnnotation != null) {
-                fieldNameCN = myFieldAnnotation.value();
+            ApiModelProperty apiModelProperty = field.getAnnotation(ApiModelProperty.class);
+            String fieldNameCN = field.getName();
+            if (apiModelProperty != null) {
+                fieldNameCN = apiModelProperty.value();
             }
-            fieldNameCN = (fieldNameCN == null || fieldNameCN == "") ? fieldName : fieldNameCN;
-
-            if(fieldType.startsWith("java.lang.")){
-                fieldType = StrUtil.subAfter(fieldType, "java.lang.", false);
+            fieldNameCN = (ZwzNullUtils.isNull(fieldNameCN)) ? field.getName() : fieldNameCN;
+            String tempTypeName = field.getType().getName();
+            if(field.getType().getName().startsWith("java.lang.")){
+                tempTypeName = StrUtil.subAfter(field.getType().getName(), "java.lang.", false);
             }
 
-            Item item = new Item();
-            item.setType(fieldType);
-            item.setUpperName(name(fieldName, true));
-            item.setLowerName(name(fieldName, false));
-            item.setLineName(camel2Underline(fieldName));
-            item.setTitle(fieldNameCN);
-
-            items.add(item);
+            Item myFieldItem = new Item();
+            myFieldItem.setTitle(fieldNameCN);
+            myFieldItem.setLineName(camel2Underline(field.getName()));
+            myFieldItem.setUpperName(name(field.getName(), true));
+            myFieldItem.setLowerName(name(field.getName(), false));
+            myFieldItem.setType(tempTypeName);
+            items.add(myFieldItem);
         }
 
         // 绑定参数
-        plusTemplate.binding("entity", entity);
-        plusTemplate.binding("items", items);
-        String result = plusTemplate.render();
-
-        System.out.println("=================================================================================");
-        System.out.println("=====生成条件构造代码Plus成功！请根据需要自行复制添加以下代码至控制层方法Controller中======");
-        System.out.println("=================================条件构造代码起始线=================================");
-
-        System.out.println(result);
-
-        System.out.println("=================================条件构造代码终止线=================================");
-        System.out.println("【代码方法添加位置："+ controllerPackage + "." + className +"Controller.java】");
+        myBatisPlusUtils.binding("entity", entity);
+        myBatisPlusUtils.binding("items", items);
+        myBatisPlusUtils.render();
     }
-
 
     @ApiOperation(value = "点转斜线")
     public static String dotToLine(String str){
         return str.replace(".", "/");
     }
 
-    @ApiOperation(value = "驼峰法转下划线")
-    public static String camel2Underline(String str) {
-        if (StrUtil.isBlank(str)) {
-            return "";
+    @ApiModelProperty(value = "驼峰转下划线")
+    public static String camel2Underline(String underlineContent) {
+        if (ZwzNullUtils.isNull(underlineContent)) {
+            return NULL_STR;
         }
-        if(str.length()==1){
-            return str.toLowerCase();
+        if(underlineContent.length() < 2){
+            return underlineContent.toLowerCase();
         }
-        StringBuffer sb = new StringBuffer();
-        for(int i=1;i<str.length();i++){
-            if(Character.isUpperCase(str.charAt(i))){
-                sb.append("_"+Character.toLowerCase(str.charAt(i)));
-            }else{
-                sb.append(str.charAt(i));
-            }
+        StringBuffer camelUnderlineTempBuf = new StringBuffer();
+        for(int i = 1; i < underlineContent.length(); i ++){
+            camelUnderlineTempBuf.append(Character.isUpperCase(underlineContent.charAt(i)) ? CAMEL_STEP_STR + Character.toLowerCase(underlineContent.charAt(i)) : underlineContent.charAt(i));
         }
-        return (str.charAt(0)+sb.toString()).toLowerCase();
+        String ans = underlineContent.charAt(0) + camelUnderlineTempBuf.toString();
+        return ans.toLowerCase();
     }
 
     @ApiOperation(value = "首字母是否大小写")
     public static String name(String name, boolean isFirstUpper){
-        if(StrUtil.isBlank(name)){
-            throw new ZwzException("name不能为空");
+        if(!ZwzNullUtils.isNull(name)){
+            throw new ZwzException("name字段不合法,请修改！");
         }
-        if(name.length()==1){
-            if(isFirstUpper){
-                return name.toUpperCase();
-            } else {
-                return name.toLowerCase();
-            }
+        if(Objects.equals(1,name.length())) {
+            return isFirstUpper ? name.toUpperCase() : name.toLowerCase();
         }
-        StringBuffer sb = new StringBuffer();
-        if(isFirstUpper){
-            sb.append(Character.toUpperCase(name.charAt(0)));
-        } else {
-            sb.append(Character.toLowerCase(name.charAt(0)));
-        }
-        sb.append(name.substring(1));
-        return sb.toString();
+        StringBuffer nameStringBuffer = new StringBuffer();
+        nameStringBuffer.append(isFirstUpper ? Character.toUpperCase(name.charAt(0)) : Character.toLowerCase(name.charAt(0)));
+        nameStringBuffer.append(name.substring(1));
+        return nameStringBuffer.toString();
     }
 }

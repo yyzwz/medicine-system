@@ -81,6 +81,14 @@ public class UserController {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+    private static final String REDIS_PRE_1 = "userRole::";
+
+    private static final String REDIS_PRE_2 = "userRole::depIds:";
+
+    private static final String REDIS_PRE_3 = "permission::userMenuList:";
+
+    private static final String REDIS_PRE_4 = "user::";
+
     @SystemLog(about = "获取当前登录用户", type = LogType.DATA_CENTER,doType = "USER-02")
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ApiOperation(value = "获取当前登录用户")
@@ -95,7 +103,11 @@ public class UserController {
     @ApiOperation(value = "注册用户")
     public Result<Object> regist(@Valid User u){
         u.setEmail(u.getMobile() + "@qq.com");
-        checkUserInfo(u.getUsername(), u.getMobile(), u.getEmail());
+        QueryWrapper<User> userQw = new QueryWrapper<>();
+        userQw.and(wrapper -> wrapper.eq("username", u.getUsername()).or().eq("mobile",u.getMobile()));
+        if(iUserService.count(userQw) > 0L) {
+            return ResultUtil.error("登陆账号/手机号重复");
+        }
         String encryptPass = new BCryptPasswordEncoder().encode(u.getPassword());
         u.setPassword(encryptPass).setType(0);
         iUserService.saveOrUpdate(u);
@@ -125,11 +137,14 @@ public class UserController {
     @RequestMapping(value = "/resetPass", method = RequestMethod.POST)
     @ApiOperation(value = "重置密码")
     public Result<Object> resetPass(@RequestParam String[] ids){
-        for(String id:ids){
-            User u = iUserService.getById(id);
-            u.setPassword(new BCryptPasswordEncoder().encode("123456"));
-            iUserService.saveOrUpdate(u);
-            redisTemplate.delete("user::"+u.getUsername());
+        for(String id : ids){
+            User userForReset = iUserService.getById(id);
+            if(userForReset == null) {
+                return ResultUtil.error("不存在");
+            }
+            userForReset.setPassword(new BCryptPasswordEncoder().encode("123456"));
+            iUserService.saveOrUpdate(userForReset);
+            redisTemplate.delete(REDIS_PRE_4 + userForReset.getUsername());
         }
         return ResultUtil.success();
     }
@@ -158,7 +173,7 @@ public class UserController {
         user.setPassword(newEncryptPass);
         user.setPassStrength(passStrength);
         iUserService.saveOrUpdate(user);
-        redisTemplate.delete("user::"+user.getUsername());
+        redisTemplate.delete(REDIS_PRE_4 + user.getUsername());
         return ResultUtil.success();
     }
 
@@ -232,37 +247,44 @@ public class UserController {
     @ApiOperation(value = "管理员修改资料")
     @CacheEvict(key = "#u.username")
     public Result<Object> edit(User u,@RequestParam(required = false) String[] roleIds){
-        User old = iUserService.getById(u.getId());
-        u.setUsername(old.getUsername());
-        if(!old.getMobile().equals(u.getMobile()) && findByMobile(u.getMobile())!=null){
-            return ResultUtil.error("手机号重复");
-        }
-        if(!old.getEmail().equals(u.getEmail()) && findByEmail(u.getEmail())!=null){
-            return ResultUtil.error("邮箱重复");
-        }
-        if(StrUtil.isNotBlank(u.getDepartmentId())){
-            Department d = iDepartmentService.getById(u.getDepartmentId());
-            if(d != null) {
-                u.setDepartmentTitle(d.getTitle());
+        User customaryUser = iUserService.getById(u.getId());
+        // 登陆账号和密码不能发生变更
+        u.setUsername(customaryUser.getUsername());
+        u.setPassword(customaryUser.getPassword());
+        if(!Objects.equals(customaryUser.getMobile(),u.getMobile())) {
+            QueryWrapper<User> customaryUserQw = new QueryWrapper<>();
+            customaryUserQw.ne("id",customaryUser.getId());
+            customaryUserQw.eq("mobile",u.getMobile());
+            long customaryUserCount = iUserService.count(customaryUserQw);
+            if(customaryUserCount > 0) {
+                return ResultUtil.error("手机号重复");
             }
-        }else{
-            u.setDepartmentId(null);
+        }
+        if(!ZwzNullUtils.isNull(u.getDepartmentId())) {
+            Department department = iDepartmentService.getById(u.getDepartmentId());
+            if(department != null) {
+                u.setDepartmentTitle(department.getTitle());
+            }
+        } else {
+            u.setDepartmentId("");
             u.setDepartmentTitle("");
         }
-        u.setPassword(old.getPassword());
+        // 吃哦就花
         iUserService.saveOrUpdate(u);
-        QueryWrapper<UserRole> urQw = new QueryWrapper<>();
-        urQw.eq("user_id",u.getId());
-        iUserRoleService.remove(urQw);
-        if(roleIds != null){
-            List<UserRole> userRoles = Arrays.asList(roleIds).stream().map(e -> {
-                return new UserRole().setRoleId(e).setUserId(u.getId());
-            }).collect(Collectors.toList());
-            iUserRoleService.saveOrUpdateBatch(userRoles);
+        QueryWrapper<UserRole> userRoleQw = new QueryWrapper<>();
+        userRoleQw.eq("user_id",u.getId());
+        iUserRoleService.remove(userRoleQw);
+        if(roleIds != null && roleIds.length > 0) {
+            for (String roleId : roleIds) {
+                UserRole ur = new UserRole();
+                ur.setUserId(u.getId());
+                ur.setRoleId(roleId);
+                iUserRoleService.saveOrUpdate(ur);
+            }
         }
-        redisTemplate.delete("userRole::"+u.getId());
-        redisTemplate.delete("userRole::depIds:"+u.getId());
-        redisTemplate.delete("permission::userMenuList:"+u.getId());
+        redisTemplate.delete(REDIS_PRE_1 + u.getId());
+        redisTemplate.delete(REDIS_PRE_2 + u.getId());
+        redisTemplate.delete(REDIS_PRE_3 + u.getId());
         return ResultUtil.success();
     }
 
@@ -270,47 +292,31 @@ public class UserController {
     @RequestMapping(value = "/admin/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加用户")
     public Result<Object> add(@Valid User u,@RequestParam(required = false) String[] roleIds) {
-        checkUserInfo(u.getUsername(), u.getMobile(), u.getEmail());
-        String encryptPass = new BCryptPasswordEncoder().encode(u.getPassword());
-        u.setPassword(encryptPass);
-        if(StrUtil.isNotBlank(u.getDepartmentId())){
-            Department d = iDepartmentService.getById(u.getDepartmentId());
-            if(d!=null){
-                u.setDepartmentTitle(d.getTitle());
+        QueryWrapper<User> userQw = new QueryWrapper<>();
+        userQw.and(wrapper -> wrapper.eq("username", u.getUsername()).or().eq("mobile",u.getMobile()));
+        if(iUserService.count(userQw) > 0L) {
+            return ResultUtil.error("登陆账号/手机号重复");
+        }
+        if(!ZwzNullUtils.isNull(u.getDepartmentId())){
+            Department department = iDepartmentService.getById(u.getDepartmentId());
+            if(department != null){
+                u.setDepartmentTitle(department.getTitle());
             }
         }else{
-            u.setDepartmentId(null);
+            u.setDepartmentId("");
             u.setDepartmentTitle("");
         }
+        u.setPassword(new BCryptPasswordEncoder().encode(u.getPassword()));
         iUserService.saveOrUpdate(u);
-        if(roleIds != null) {
-            List<UserRole> userRoles = Arrays.asList(roleIds).stream().map(e -> {
-                return new UserRole().setUserId(u.getId()).setRoleId(e);
-            }).collect(Collectors.toList());
-            iUserRoleService.saveOrUpdateBatch(userRoles);
+        if(roleIds != null && roleIds.length > 0) {
+            for (String roleId : roleIds) {
+                UserRole userRole = new UserRole();
+                userRole.setUserId(u.getId());
+                userRole.setRoleId(roleId);
+                iUserRoleService.saveOrUpdate(userRole);
+            }
         }
         return ResultUtil.success();
-    }
-
-    @ApiOperation(value = "根据账号查询用户")
-    private User findByUsername(String username) {
-        QueryWrapper<User> userQw = new QueryWrapper<>();
-        userQw.eq("username",username);
-        return userToDTO(iUserService.getOne(userQw));
-    }
-
-    @ApiOperation(value = "根据手机号查询用户")
-    private User findByMobile(String mobile) {
-        QueryWrapper<User> userQw = new QueryWrapper<>();
-        userQw.eq("mobile",mobile);
-        return userToDTO(iUserService.getOne(userQw));
-    }
-
-    @ApiOperation(value = "根据邮箱查询用户")
-    private User findByEmail(String email) {
-        QueryWrapper<User> userQw = new QueryWrapper<>();
-        userQw.eq("email",email);
-        return userToDTO(iUserService.getOne(userQw));
     }
 
     @SystemLog(about = "禁用用户", type = LogType.DATA_CENTER,doType = "USER-13")
@@ -378,7 +384,10 @@ public class UserController {
                 reasons.add("账号密码为空");
                 continue;
             }
-            if(findByUsername(u.getUsername())!=null){
+
+            QueryWrapper<User> userQw = new QueryWrapper<>();
+            userQw.eq("username",u.getUsername());
+            if(iUserService.count(userQw) > 0L) {
                 errors.add(count);
                 reasons.add("用户名已存在");
                 continue;
@@ -418,20 +427,6 @@ public class UserController {
             message = failMessage;
         }
         return ResultUtil.success(message);
-    }
-
-    @ApiOperation(value = "校验")
-    public void checkUserInfo(String username, String mobile, String email){
-        CommonUtil.stopwords(username);
-        if(StrUtil.isNotBlank(username) && findByUsername(username)!=null){
-            throw new ZwzException("账户重复");
-        }
-        if(StrUtil.isNotBlank(email) && findByEmail(email)!=null){
-            throw new ZwzException("邮箱重复");
-        }
-        if(StrUtil.isNotBlank(mobile) && findByMobile(mobile)!=null){
-            throw new ZwzException("手机号重复");
-        }
     }
 
     @ApiOperation(value = "添加用户的角色和菜单信息")

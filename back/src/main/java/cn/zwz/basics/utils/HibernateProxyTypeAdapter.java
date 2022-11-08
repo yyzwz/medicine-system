@@ -39,15 +39,15 @@ public class HibernateProxyTypeAdapter extends TypeAdapter<HibernateProxy> {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
-    public void write(JsonWriter jsonWriter, HibernateProxy proxy) throws IOException {
-        if (proxy == null) {
-            jsonWriter.nullValue();
+    public void write(JsonWriter w, HibernateProxy hibernateAgent) throws IOException {
+        if (hibernateAgent == null) {
+            w.nullValue();
             return;
         }
-        Class<?> baseType = Hibernate.getClass(proxy);
-        TypeAdapter delegate = context.getAdapter(TypeToken.get(baseType));
-        Object unproxiedValue = ((HibernateProxy) proxy).getHibernateLazyInitializer().getImplementation();
-        delegate.write(jsonWriter, unproxiedValue);
+        Class<?> HibernateClass = Hibernate.getClass(hibernateAgent);
+        TypeAdapter typeAdapter = context.getAdapter(TypeToken.get(HibernateClass));
+        Object hibernateProxy = ((HibernateProxy) hibernateAgent).getHibernateLazyInitializer().getImplementation();
+        typeAdapter.write(w, hibernateProxy);
     }
 
     private HibernateProxyTypeAdapter(Gson gsonContext) {

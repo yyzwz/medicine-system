@@ -2,8 +2,9 @@ package cn.zwz.basics.security;
 
 import cn.zwz.basics.exception.ZwzException;
 import cn.zwz.data.entity.User;
-import cn.zwz.data.service.UserService;
+import cn.zwz.data.service.IUserService;
 import cn.zwz.data.utils.ZwzNullUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -25,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private StringRedisTemplate redisTemplate;
 
     @Autowired
-    private UserService userService;
+    private IUserService iUserService;
 
     private static final String LOGIN_FAIL_DISABLED_PRE = "userLoginDisableFlag:";
 
@@ -38,10 +39,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(!ZwzNullUtils.isNull(value)){
             throw new ZwzException("试错超限，请您在" + timeRest + "分钟后再登");
         }
-        User user = userService.findByMobile(username);
-        if(user == null) {
-            user = userService.findByUsername(username);
-        }
-        return new SecurityUserDetails(user);
+        QueryWrapper<User> userQw = new QueryWrapper<>();
+        userQw.and(wrapper -> wrapper.eq("username", username).or().eq("mobile",username));
+        userQw.orderByDesc("create_time");
+        userQw.last("limit 1");
+        return new SecurityUserDetails(iUserService.getOne(userQw));
     }
 }
